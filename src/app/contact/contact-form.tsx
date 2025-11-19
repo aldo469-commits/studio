@@ -1,0 +1,141 @@
+'use client';
+
+import { useFormState, useFormStatus } from 'react-dom';
+import { useEffect, useRef } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { submitContactForm, type ContactFormState } from './actions';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { useToast } from '@/hooks/use-toast';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Terminal } from 'lucide-react';
+
+const contactSchema = z.object({
+  name: z.string().min(2, "El nombre es requerido."),
+  email: z.string().email("El correo electrónico no es válido."),
+  subject: z.string().min(1, "Debe seleccionar un asunto."),
+  message: z.string().min(10, "El mensaje debe tener al menos 10 caracteres."),
+});
+
+type ContactFormData = z.infer<typeof contactSchema>;
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+  return (
+    <Button type="submit" disabled={pending} className="w-full sm:w-auto bg-accent hover:bg-accent/90 text-accent-foreground">
+      {pending ? 'Enviando...' : 'Enviar Mensaje'}
+    </Button>
+  );
+}
+
+export function ContactForm() {
+  const { toast } = useToast();
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const [state, formAction] = useFormState<ContactFormState, FormData>(
+    submitContactForm,
+    {
+      message: '',
+    }
+  );
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm<ContactFormData>({
+    resolver: zodResolver(contactSchema),
+    defaultValues: {
+      name: state.fields?.name || '',
+      email: state.fields?.email || '',
+      subject: state.fields?.subject || '',
+      message: state.fields?.message || '',
+    },
+  });
+
+  useEffect(() => {
+    if (state.message) {
+      if (state.issues) {
+        toast({
+          title: 'Error en el formulario',
+          description: state.message,
+          variant: 'destructive',
+        });
+      } else {
+        toast({
+          title: 'Éxito',
+          description: state.message,
+        });
+        formRef.current?.reset();
+      }
+    }
+  }, [state, toast]);
+
+  return (
+    <form
+      ref={formRef}
+      action={formAction}
+      className="space-y-4"
+    >
+        {state.issues && (
+        <Alert variant="destructive">
+          <Terminal className="h-4 w-4" />
+          <AlertTitle>Error al enviar el formulario</AlertTitle>
+          <AlertDescription>
+            <ul className="list-disc pl-5">
+              {state.issues.map((issue, index) => (
+                <li key={index}>{issue}</li>
+              ))}
+            </ul>
+          </AlertDescription>
+        </Alert>
+      )}
+
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
+          <Input placeholder="Su Nombre" {...register('name')} aria-invalid={!!errors.name} />
+          {errors.name && <p className="mt-1 text-sm text-destructive">{errors.name.message}</p>}
+        </div>
+        <div>
+          <Input type="email" placeholder="Su Correo Electrónico" {...register('email')} aria-invalid={!!errors.email} />
+          {errors.email && <p className="mt-1 text-sm text-destructive">{errors.email.message}</p>}
+        </div>
+      </div>
+
+      <div>
+        <Select onValueChange={(value) => setValue('subject', value)} {...register('subject')}>
+            <SelectTrigger aria-invalid={!!errors.subject}>
+                <SelectValue placeholder="Seleccione un asunto" />
+            </SelectTrigger>
+            <SelectContent>
+                <SelectItem value="Consulta General">Consulta General</SelectItem>
+                <SelectItem value="Soporte Técnico">Soporte Técnico</SelectItem>
+                <SelectItem value="Solicitud de Presupuesto">Solicitud de Presupuesto</SelectItem>
+                <SelectItem value="Prensa">Prensa</SelectItem>
+            </SelectContent>
+        </Select>
+        {errors.subject && <p className="mt-1 text-sm text-destructive">{errors.subject.message}</p>}
+      </div>
+
+      <div>
+        <Textarea placeholder="Su Mensaje" rows={6} {...register('message')} aria-invalid={!!errors.message} />
+        {errors.message && <p className="mt-1 text-sm text-destructive">{errors.message.message}</p>}
+      </div>
+
+      <div>
+        <SubmitButton />
+      </div>
+    </form>
+  );
+}

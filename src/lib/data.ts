@@ -1,5 +1,5 @@
 import type { LucideIcon } from 'lucide-react';
-import { Truck, Ship, Plane, Warehouse, FileCheck2, Construction, Facebook, Twitter, Linkedin } from 'lucide-react';
+import { Truck, Ship, Plane, Warehouse, FileCheck2, Construction, Facebook, Twitter, Linkedin, MessageSquare } from 'lucide-react';
 
 export const navLinks = [
   { href: '/', label: 'Inicio' },
@@ -8,6 +8,8 @@ export const navLinks = [
   { href: '/about', label: 'Nosotros' },
   { href: '/tracking', label: 'Seguimiento' },
   { href: '/contact', label: 'Contacto' },
+  { href: '/incidents', label: 'Incidencias', auth: true },
+  { href: '/login', label: 'Área Clientes', public: true },
 ];
 
 export type Service = {

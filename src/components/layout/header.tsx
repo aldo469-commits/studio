@@ -3,16 +3,38 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, LogOut } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Logo } from '@/components/icons';
-import { navLinks } from '@/lib/data';
+import { navLinks as defaultNavLinks } from '@/lib/data';
+import { useUser, useAuth } from '@/firebase';
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
+  const { user, isUserLoading } = useUser();
+  const auth = useAuth();
+
+  const handleLogout = () => {
+    if (auth) {
+      auth.signOut();
+    }
+    setIsMenuOpen(false);
+  }
+
+  const navLinks = defaultNavLinks.filter(link => {
+      if (link.href === '/incidents' || link.href === '/login') {
+          return false; // Always hide these from the main nav
+      }
+      return true;
+  });
+
+  const authNav = user 
+    ? { href: '/incidents', label: 'Mis Incidencias' }
+    : { href: '/login', label: 'Área Clientes' };
+
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -62,7 +84,7 @@ export function Header() {
             </div>
             <div className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6">
               <div className="flex flex-col space-y-3">
-                {navLinks.map((link) => (
+                {[...navLinks, authNav].map((link) => (
                   <Link
                     key={link.href}
                     href={link.href}
@@ -75,17 +97,38 @@ export function Header() {
                     {link.label}
                   </Link>
                 ))}
+                 {user && (
+                    <button
+                        onClick={handleLogout}
+                        className="text-lg text-left text-foreground/60 transition-colors hover:text-foreground/80"
+                    >
+                        Cerrar Sesión
+                    </button>
+                )}
               </div>
-            </div>
-            <div className="pl-6">
-                <Button asChild className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
-                    <Link href="/quote" onClick={() => setIsMenuOpen(false)}>Solicitar Cotización</Link>
-                </Button>
             </div>
           </SheetContent>
         </Sheet>
 
-        <div className="flex flex-1 items-center justify-end space-x-2">
+        <div className="flex flex-1 items-center justify-end space-x-4">
+          <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
+             <Link
+                href={authNav.href}
+                className={cn(
+                  'transition-colors hover:text-foreground/80',
+                  pathname.startsWith(authNav.href) ? 'text-foreground font-semibold' : 'text-foreground/60'
+                )}
+              >
+                {authNav.label}
+              </Link>
+          </nav>
+
+          {user && !isUserLoading && (
+            <Button onClick={handleLogout} variant="ghost" size="icon" className="hidden md:inline-flex" title="Cerrar Sesión">
+                <LogOut className="h-5 w-5" />
+            </Button>
+          )}
+
           <Button asChild className="hidden md:inline-flex bg-accent hover:bg-accent/90 text-accent-foreground">
             <Link href="/quote">Solicitar Cotización</Link>
           </Button>

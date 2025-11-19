@@ -1,0 +1,236 @@
+{
+  "entities": {
+    "Customer": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Customer",
+      "type": "object",
+      "description": "Represents a customer of EJA GlobalTrans.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the customer."
+        },
+        "firstName": {
+          "type": "string",
+          "description": "First name of the customer."
+        },
+        "lastName": {
+          "type": "string",
+          "description": "Last name of the customer."
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address of the customer.",
+          "format": "email"
+        },
+        "phone": {
+          "type": "string",
+          "description": "Phone number of the customer."
+        },
+        "companyName": {
+          "type": "string",
+          "description": "Company name of the customer (if applicable)."
+        }
+      },
+      "required": [
+        "id",
+        "firstName",
+        "lastName",
+        "email"
+      ]
+    },
+    "Incident": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Incident",
+      "type": "object",
+      "description": "Represents an incident reported by a customer.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the incident."
+        },
+        "customerId": {
+          "type": "string",
+          "description": "Reference to Customer. (Relationship: Customer 1:N Incident)"
+        },
+        "dateReported": {
+          "type": "string",
+          "description": "Date and time the incident was reported.",
+          "format": "date-time"
+        },
+        "status": {
+          "type": "string",
+          "description": "Current status of the incident (e.g., Open, In Progress, Resolved)."
+        },
+        "description": {
+          "type": "string",
+          "description": "Detailed description of the incident."
+        },
+        "shipmentId": {
+          "type": "string",
+          "description": "Reference to Shipment if the incident is related to one."
+        }
+      },
+      "required": [
+        "id",
+        "customerId",
+        "dateReported",
+        "status",
+        "description"
+      ]
+    },
+    "ChatMessage": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "ChatMessage",
+      "type": "object",
+      "description": "Represents a chat message within an incident.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the chat message."
+        },
+        "incidentId": {
+          "type": "string",
+          "description": "Reference to Incident. (Relationship: Incident 1:N ChatMessage)"
+        },
+        "senderId": {
+          "type": "string",
+          "description": "Reference to Customer or Employee who sent the message."
+        },
+        "sentDate": {
+          "type": "string",
+          "description": "Date and time the message was sent.",
+          "format": "date-time"
+        },
+        "messageText": {
+          "type": "string",
+          "description": "The text content of the chat message."
+        }
+      },
+      "required": [
+        "id",
+        "incidentId",
+        "senderId",
+        "sentDate",
+        "messageText"
+      ]
+    },
+    "Shipment": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Shipment",
+      "type": "object",
+      "description": "Represents a shipment.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the shipment."
+        },
+        "trackingNumber": {
+          "type": "string",
+          "description": "The tracking number for the shipment."
+        },
+        "customerId": {
+          "type": "string",
+          "description": "Reference to Customer. (Relationship: Customer 1:N Shipment)"
+        },
+        "origin": {
+          "type": "string",
+          "description": "Origin location of the shipment."
+        },
+        "destination": {
+          "type": "string",
+          "description": "Destination location of the shipment."
+        },
+        "estimatedDeliveryDate": {
+          "type": "string",
+          "description": "Estimated delivery date of the shipment.",
+          "format": "date-time"
+        },
+        "currentStatus": {
+          "type": "string",
+          "description": "Current status of the shipment (e.g., In Transit, Delivered)."
+        }
+      },
+      "required": [
+        "id",
+        "trackingNumber",
+        "customerId",
+        "origin",
+        "destination",
+        "estimatedDeliveryDate",
+        "currentStatus"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/customers/{customerId}",
+        "definition": {
+          "entityName": "Customer",
+          "schema": {
+            "$ref": "#/backend/entities/Customer"
+          },
+          "description": "Stores customer profile information. CustomerId is used for path-based ownership.",
+          "params": [
+            {
+              "name": "customerId",
+              "description": "The unique identifier for the customer."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/customers/{customerId}/incidents/{incidentId}",
+        "definition": {
+          "entityName": "Incident",
+          "schema": {
+            "$ref": "#/backend/entities/Incident"
+          },
+          "description": "Stores incidents reported by customers. CustomerId and IncidentId are used for path-based ownership.",
+          "params": [
+            {
+              "name": "customerId",
+              "description": "The unique identifier for the customer."
+            },
+            {
+              "name": "incidentId",
+              "description": "The unique identifier for the incident."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/customers/{customerId}/incidents/{incidentId}/messages/{messageId}",
+        "definition": {
+          "entityName": "ChatMessage",
+          "schema": {
+            "$ref": "#/backend/entities/ChatMessage"
+          },
+          "description": "Stores chat messages related to incidents. CustomerId, IncidentId and MessageId are used for path-based ownership.",
+          "params": [
+            {
+              "name": "customerId",
+              "description": "The unique identifier for the customer."
+            },
+            {
+              "name": "incidentId",
+              "description": "The unique identifier for the incident."
+            },
+            {
+              "name": "messageId",
+              "description": "The unique identifier for the chat message."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "This Firestore data structure is designed to support EJA GlobalTrans's customer incident management chat feature. It uses path-based ownership for customers and their associated incidents and chat messages, providing a clear and secure hierarchical structure. The design prioritizes authorization independence, enabling atomic operations and simplifying security rules. The key principle is to use path-based ownership where a user ID determines ownership of data. This structure provides clear segregation between customer data. Additionally, it supports secure listing and querying of data based on user roles. \n\nSpecifically:\n\n*   `/customers/{customerId}`: Stores customer profile information.\n*   `/customers/{customerId}/incidents/{incidentId}`: Each incident is owned by a specific customer, making security rules straightforward based on path ownership. This structure facilitates listing incidents associated with a customer without requiring complex queries or filters.\n*   `/customers/{customerId}/incidents/{incidentId}/messages/{messageId}`: Chat messages are nested under incidents, maintaining the ownership hierarchy. This allows retrieval of messages associated with a specific incident.  Security rules can easily enforce that only the customer (or authorized employees - not modeled here but would require another collection and security rule) can access the messages within their incidents. The structure achieves Authorization Independence because access control is based on the path itself (`/customers/{customerId}`), not on data retrieved from other documents, avoiding `get()` calls in security rules.\n\nThis design ensures that QAPs (Rules are not Filters) are satisfied because listing operations can be secured based on the path structure. For example, listing incidents under a customer is naturally limited to that customer's incidents only. The separation of concerns (customer data, incident data, and chat messages) simplifies the creation and maintenance of security rules, enhancing the overall security posture."
+  }
+}

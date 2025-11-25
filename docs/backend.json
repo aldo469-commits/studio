@@ -73,6 +73,10 @@
         "shipmentId": {
           "type": "string",
           "description": "Reference to Shipment if the incident is related to one."
+        },
+        "category": {
+          "type": "string",
+          "description": "The category of the incident (e.g., Seguimiento del pedido, Estado de la entrega)."
         }
       },
       "required": [
@@ -81,7 +85,8 @@
         "dateReported",
         "status",
         "title",
-        "description"
+        "description",
+        "category"
       ]
     },
     "ChatMessage": {

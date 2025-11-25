@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { ArrowLeft, Send } from 'lucide-react';
+import { ArrowLeft, Send, Tag } from 'lucide-react';
 import Link from 'next/link';
 import { addDocumentNonBlocking } from '@/firebase/non-blocking-updates';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -86,9 +86,17 @@ export default function IncidentChatPage() {
         <CardHeader>
           <CardTitle className="font-headline text-2xl">{incident.title}</CardTitle>
           <p className="text-muted-foreground">{incident.description}</p>
-          <div className="flex items-center text-sm pt-2">
-            <span className={`mr-2 h-2 w-2 rounded-full ${incident.status === 'Open' ? 'bg-green-500' : 'bg-gray-500'}`}></span>
-            {incident.status}
+          <div className="flex items-center text-sm pt-2 gap-4">
+            <div className="flex items-center">
+              <span className={`mr-2 h-2 w-2 rounded-full ${incident.status === 'Open' ? 'bg-green-500' : 'bg-gray-500'}`}></span>
+              {incident.status}
+            </div>
+            {incident.category && (
+              <div className="flex items-center gap-1.5 text-muted-foreground bg-muted px-2 py-1 rounded-md">
+                  <Tag className="size-3"/>
+                  <span>{incident.category}</span>
+              </div>
+            )}
           </div>
         </CardHeader>
         <CardContent className="h-[50vh] overflow-y-auto p-6 flex flex-col gap-4">

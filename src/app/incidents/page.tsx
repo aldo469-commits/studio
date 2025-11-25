@@ -7,12 +7,13 @@ import { useCollection, useUser, useFirestore, useMemoFirebase } from '@/firebas
 import { collection, serverTimestamp } from 'firebase/firestore';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
-import { PlusCircle, MessageSquare, ArrowRight } from 'lucide-react';
+import { PlusCircle, MessageSquare, ArrowRight, Tag } from 'lucide-react';
 import { addDocumentNonBlocking } from '@/firebase/non-blocking-updates';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 export default function IncidentsPage() {
   const { user, isUserLoading } = useUser();
@@ -21,6 +22,7 @@ export default function IncidentsPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [newIncidentTitle, setNewIncidentTitle] = useState('');
   const [newIncidentDescription, setNewIncidentDescription] = useState('');
+  const [newIncidentCategory, setNewIncidentCategory] = useState('');
 
   const incidentsQuery = useMemoFirebase(() => {
     if (!user) return null;
@@ -39,7 +41,7 @@ export default function IncidentsPage() {
   }
 
   const handleCreateIncident = async () => {
-    if (!user || !newIncidentTitle || !newIncidentDescription) return;
+    if (!user || !newIncidentTitle || !newIncidentDescription || !newIncidentCategory) return;
     const incidentsCollection = collection(firestore, `customers/${user.uid}/incidents`);
     const newIncident = {
       customerId: user.uid,
@@ -47,12 +49,14 @@ export default function IncidentsPage() {
       status: 'Open',
       title: newIncidentTitle,
       description: newIncidentDescription,
+      category: newIncidentCategory,
     };
     
     const docRefPromise = addDocumentNonBlocking(incidentsCollection, newIncident);
     setIsDialogOpen(false);
     setNewIncidentTitle('');
     setNewIncidentDescription('');
+    setNewIncidentCategory('');
 
     docRefPromise.then(docRef => {
         if(docRef) {
@@ -93,9 +97,17 @@ export default function IncidentsPage() {
               <CardDescription>{incident.description}</CardDescription>
             </CardHeader>
             <CardContent className="flex-grow">
-                <div className="flex items-center text-sm text-muted-foreground">
-                    <span className={`mr-2 h-2 w-2 rounded-full ${incident.status === 'Open' ? 'bg-green-500' : 'bg-gray-500'}`}></span>
-                    {incident.status}
+                <div className="flex justify-between items-center text-sm text-muted-foreground">
+                    <div className="flex items-center">
+                        <span className={`mr-2 h-2 w-2 rounded-full ${incident.status === 'Open' ? 'bg-green-500' : 'bg-gray-500'}`}></span>
+                        {incident.status}
+                    </div>
+                    {incident.category && (
+                        <div className="flex items-center gap-1.5 bg-muted px-2 py-1 rounded-md">
+                            <Tag className="size-3"/>
+                            <span>{incident.category}</span>
+                        </div>
+                    )}
                 </div>
                  <p className="text-sm text-muted-foreground mt-2">
                     Reportado: {incident.dateReported ? new Date(incident.dateReported.seconds * 1000).toLocaleDateString('es-ES') : 'N/A'}
@@ -121,26 +133,38 @@ export default function IncidentsPage() {
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="title" className="text-right">
-                Asunto
-              </Label>
+            <div className="space-y-2">
+              <Label htmlFor="title">Asunto</Label>
               <Input
                 id="title"
                 value={newIncidentTitle}
                 onChange={(e) => setNewIncidentTitle(e.target.value)}
-                className="col-span-3"
+                className="w-full"
               />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="description" className="text-right">
-                Descripción
-              </Label>
+             <div className="space-y-2">
+              <Label htmlFor="category">Categoría</Label>
+               <Select value={newIncidentCategory} onValueChange={setNewIncidentCategory}>
+                  <SelectTrigger id="category">
+                      <SelectValue placeholder="Seleccione una categoría" />
+                  </SelectTrigger>
+                  <SelectContent>
+                      <SelectItem value="Seguimiento del pedido">Seguimiento del pedido</SelectItem>
+                      <SelectItem value="Estado de la entrega">Estado de la entrega</SelectItem>
+                      <SelectItem value="Albarán">Albarán</SelectItem>
+                      <SelectItem value="Mercancía">Mercancía</SelectItem>
+                      <SelectItem value="Otro">Otro</SelectItem>
+                  </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="description">Descripción</Label>
               <Textarea
                 id="description"
                 value={newIncidentDescription}
                 onChange={(e) => setNewIncidentDescription(e.target.value)}
-                className="col-span-3"
+                className="w-full"
+                rows={4}
               />
             </div>
           </div>
@@ -148,7 +172,7 @@ export default function IncidentsPage() {
             <DialogClose asChild>
                 <Button variant="outline">Cancelar</Button>
             </DialogClose>
-            <Button onClick={handleCreateIncident} disabled={!newIncidentTitle || !newIncidentDescription}>Crear Incidencia</Button>
+            <Button onClick={handleCreateIncident} disabled={!newIncidentTitle || !newIncidentDescription || !newIncidentCategory}>Crear Incidencia</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

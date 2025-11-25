@@ -9,19 +9,20 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { ArrowRight, Tag, ShieldCheck, HardHat } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
 
-// IMPORTANT: Replace this with the actual UID of the admin user in a real application.
-const ADMIN_UID = 'REPLACE_WITH_YOUR_ADMIN_USER_ID';
+// Admin user is identified by this email address.
+const ADMIN_EMAIL = 'admin@ejaglobaltrans.com';
 
 export default function AdminIncidentsPage() {
   const { user, isUserLoading } = useUser();
   const router = useRouter();
   const firestore = useFirestore();
 
-  const isAdmin = user?.uid === ADMIN_UID;
+  const isAdmin = user?.email === ADMIN_EMAIL;
 
   const incidentsQuery = useMemoFirebase(() => {
-    if (!isAdmin) return null;
+    if (!firestore || !isAdmin) return null;
     return query(collectionGroup(firestore, `incidents`));
   }, [firestore, isAdmin]);
 

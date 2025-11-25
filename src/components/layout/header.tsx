@@ -11,8 +11,8 @@ import { Logo } from '@/components/icons';
 import { navLinks as defaultNavLinks } from '@/lib/data';
 import { useUser, useAuth } from '@/firebase';
 
-// IMPORTANT: Replace this with the actual UID of the admin user in a real application.
-const ADMIN_UID = 'REPLACE_WITH_YOUR_ADMIN_USER_ID';
+// Admin user is identified by this email address.
+const ADMIN_EMAIL = 'admin@ejaglobaltrans.com';
 
 
 export function Header() {
@@ -28,7 +28,7 @@ export function Header() {
     setIsMenuOpen(false);
   }
   
-  const isAdmin = user?.uid === ADMIN_UID;
+  const isAdmin = user?.email === ADMIN_EMAIL;
 
   const navLinks = defaultNavLinks.filter(link => {
       // Hide auth-related, public, and admin links from the main nav

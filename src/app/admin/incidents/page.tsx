@@ -102,7 +102,7 @@ export default function AdminIncidentsPage() {
             </CardContent>
             <CardFooter>
               <Button asChild className="w-full">
-                <Link href={`/incidents/${incident.id}`}>
+                <Link href={`/admin/incidents/${incident.customerId}/${incident.id}`}>
                   Gestionar Incidencia <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>

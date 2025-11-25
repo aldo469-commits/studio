@@ -17,6 +17,12 @@ const MessageSchema = z.object({
 
 const ChatInputSchema = z.object({
   history: z.array(MessageSchema),
+  incidentContext: z.object({
+    title: z.string(),
+    description: z.string(),
+    category: z.string(),
+    status: z.string(),
+  }).optional(),
 });
 export type ChatInput = z.infer<typeof ChatInputSchema>;
 
@@ -35,10 +41,24 @@ const chatFlow = ai.defineFlow(
     inputSchema: ChatInputSchema,
     outputSchema: ChatOutputSchema,
   },
-  async ({ history }) => {
+  async ({ history, incidentContext }) => {
+    
+    let incidentDetails = '';
+    if (incidentContext) {
+      incidentDetails = `
+Contexto de la incidencia actual:
+- Título: ${incidentContext.title}
+- Categoría: ${incidentContext.category}
+- Estado: ${incidentContext.status}
+- Descripción: ${incidentContext.description}
+`;
+    }
+    
     const systemPrompt = `You are a helpful and friendly customer service assistant for EJA GlobalTrans, a global logistics and transportation company.
 Your name is EJA-Bot.
 Your goal is to assist users with their questions about the company's services, shipment tracking, and general inquiries.
+${incidentDetails}
+When responding to an incident, be empathetic and professional. Provide clear, step-by-step solutions if possible.
 Keep your answers concise and helpful.
 The user is interacting with you through a chat widget on the company website.
 The current date is ${new Date().toLocaleDateString('es-ES')}.

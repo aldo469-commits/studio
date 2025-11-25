@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect, useRef } from 'react';
 import { useParams } from 'next/navigation';
 import { useCollection, useDoc, useUser, useFirestore, useMemoFirebase } from '@/firebase';
 import { collection, doc, serverTimestamp, query, orderBy } from 'firebase/firestore';
@@ -8,16 +8,26 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { ArrowLeft, Send, Tag } from 'lucide-react';
+import { ArrowLeft, Send, Tag, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { addDocumentNonBlocking } from '@/firebase/non-blocking-updates';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { chat } from '@/ai/flows/chatbot';
+import type { ChatInput } from '@/ai/flows/chatbot';
 
 export default function IncidentChatPage() {
   const { incidentId } = useParams();
   const { user, isUserLoading } = useUser();
   const firestore = useFirestore();
   const [newMessage, setNewMessage] = useState('');
+  const [isAiReplying, setIsAiReplying] = useState(false);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (scrollAreaRef.current) {
+      scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight;
+    }
+  }, [isAiReplying]);
 
   const incidentRef = useMemoFirebase(() => {
     if (!user || !incidentId) return null;
@@ -35,17 +45,59 @@ export default function IncidentChatPage() {
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newMessage.trim() || !user || !incidentRef) return;
+    if (!newMessage.trim() || !user || !incidentRef || !incident) return;
 
-    const messageData = {
+    const userMessageText = newMessage;
+    setNewMessage('');
+
+    const userMessageData = {
       senderId: user.uid,
-      messageText: newMessage,
+      messageText: userMessageText,
       sentDate: serverTimestamp(),
     };
     
     const messagesCollection = collection(incidentRef, 'messages');
-    addDocumentNonBlocking(messagesCollection, messageData);
-    setNewMessage('');
+    addDocumentNonBlocking(messagesCollection, userMessageData);
+    
+    setIsAiReplying(true);
+
+    try {
+        const history = (messages || []).map(m => ({
+            role: m.senderId === user.uid ? 'user' : 'model',
+            content: m.messageText
+        }));
+        history.push({ role: 'user', content: userMessageText });
+
+        const chatInput: ChatInput = {
+            history,
+            incidentContext: {
+                title: incident.title,
+                description: incident.description,
+                category: incident.category,
+                status: incident.status,
+            }
+        };
+
+        const result = await chat(chatInput);
+        
+        const botMessageData = {
+            senderId: 'EJA-Bot',
+            messageText: result.response,
+            sentDate: serverTimestamp(),
+        };
+        addDocumentNonBlocking(messagesCollection, botMessageData);
+
+    } catch (error) {
+        console.error("AI reply error:", error);
+        const errorMessageData = {
+            senderId: 'EJA-Bot',
+            messageText: "Lo siento, ha ocurrido un error al procesar mi respuesta. Un agente humano revisará su mensaje pronto.",
+            sentDate: serverTimestamp(),
+        };
+        addDocumentNonBlocking(messagesCollection, errorMessageData);
+    } finally {
+        setIsAiReplying(false);
+    }
   };
 
   const getInitials = (name: string) => {
@@ -99,7 +151,7 @@ export default function IncidentChatPage() {
             )}
           </div>
         </CardHeader>
-        <CardContent className="h-[50vh] overflow-y-auto p-6 flex flex-col gap-4">
+        <CardContent ref={scrollAreaRef} className="h-[50vh] overflow-y-auto p-6 flex flex-col gap-4">
           {areMessagesLoading && <p>Cargando mensajes...</p>}
           {messages?.map(message => (
             <div
@@ -108,7 +160,7 @@ export default function IncidentChatPage() {
             >
               {message.senderId !== user?.uid && (
                 <Avatar className="h-8 w-8">
-                  <AvatarFallback>SP</AvatarFallback>
+                  <AvatarFallback>EJA</AvatarFallback>
                 </Avatar>
               )}
               <div
@@ -130,6 +182,16 @@ export default function IncidentChatPage() {
               )}
             </div>
           ))}
+           {isAiReplying && (
+                <div className="flex items-end gap-2 justify-start">
+                    <Avatar className="h-8 w-8">
+                        <AvatarFallback>EJA</AvatarFallback>
+                    </Avatar>
+                    <div className="bg-muted rounded-lg px-3 py-2 flex items-center justify-center">
+                        <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+                    </div>
+                </div>
+            )}
         </CardContent>
         <CardFooter>
           <form onSubmit={handleSendMessage} className="flex w-full items-center space-x-2">
@@ -138,8 +200,9 @@ export default function IncidentChatPage() {
               onChange={e => setNewMessage(e.target.value)}
               placeholder="Escriba su mensaje..."
               autoComplete="off"
+              disabled={isAiReplying}
             />
-            <Button type="submit" size="icon" disabled={!newMessage.trim()}>
+            <Button type="submit" size="icon" disabled={!newMessage.trim() || isAiReplying}>
               <Send className="h-4 w-4" />
             </Button>
           </form>

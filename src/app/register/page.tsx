@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth, initiateEmailSignUp } from '@/firebase';
 import { doc } from 'firebase/firestore';
-import { setDocumentNonBlocking } from '@/firebase/non-blocking-updates';
+import { setDocumentNonBlocking } from '@/firebase';
 import { useFirestore } from '@/firebase';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -13,6 +13,7 @@ import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { TriangleAlert } from 'lucide-react';
 import Link from 'next/link';
+import { updateProfile } from 'firebase/auth';
 
 export default function RegisterPage() {
   const [email, setEmail] = useState('');
@@ -30,14 +31,22 @@ export default function RegisterPage() {
     setError(null);
     setIsLoading(true);
 
+    if (password.length < 6) {
+      setError("La contraseña debe tener al menos 6 caracteres.");
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const userCredential = await initiateEmailSignUp(auth, email, password);
-      
-      // The user object is available in the userCredential
       const user = userCredential.user;
 
-      // Create user profile in Firestore
+      await updateProfile(user, {
+        displayName: `${firstName} ${lastName}`
+      });
+
       const userProfile = {
+        id: user.uid,
         firstName,
         lastName,
         email,
@@ -45,10 +54,17 @@ export default function RegisterPage() {
       const userDocRef = doc(firestore, 'customers', user.uid);
       setDocumentNonBlocking(userDocRef, userProfile, { merge: true });
 
-      // onAuthStateChanged in provider will handle redirect
       router.push('/incidents');
     } catch (err: any) {
-      setError(err.message);
+      let errorMessage = "Ocurrió un error desconocido.";
+      if (err.code === 'auth/email-already-in-use') {
+        errorMessage = "Este correo electrónico ya está registrado.";
+      } else if (err.code === 'auth/invalid-email') {
+        errorMessage = "El formato del correo electrónico no es válido.";
+      } else if (err.message) {
+        errorMessage = err.message;
+      }
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -92,7 +108,7 @@ export default function RegisterPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Contraseña</Label>
+              <Label htmlFor="password">Contraseña (mín. 6 caracteres)</Label>
               <Input
                 id="password"
                 type="password"

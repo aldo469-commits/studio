@@ -29,7 +29,13 @@ export default function LoginPage() {
       // onAuthStateChanged in provider will handle redirect
       router.push('/incidents');
     } catch (err: any) {
-      setError(err.message);
+      let errorMessage = "Ocurrió un error desconocido.";
+      if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
+        errorMessage = "El correo electrónico o la contraseña son incorrectos.";
+      } else if (err.message) {
+        errorMessage = err.message;
+      }
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }

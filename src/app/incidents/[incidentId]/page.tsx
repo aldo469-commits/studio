@@ -3,14 +3,14 @@
 import { useMemo, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { useCollection, useDoc, useUser, useFirestore, useMemoFirebase } from '@/firebase';
-import { collection, doc, addDoc, serverTimestamp, query, orderBy } from 'firebase/firestore';
+import { collection, doc, serverTimestamp, query, orderBy } from 'firebase/firestore';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { ArrowLeft, Send } from 'lucide-react';
 import Link from 'next/link';
-import { addDocumentNonBlocking } from '@/firebase/non-blocking-updates';
+import { addDocumentNonBlocking } from '@/firebase';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 export default function IncidentChatPage() {
@@ -49,6 +49,7 @@ export default function IncidentChatPage() {
   };
 
   const getInitials = (name: string) => {
+    if (!name) return '';
     return name.split(' ').map(n => n[0]).join('').toUpperCase();
   }
 
@@ -114,7 +115,7 @@ export default function IncidentChatPage() {
                     {message.sentDate ? new Date(message.sentDate.seconds * 1000).toLocaleTimeString('es-ES') : 'Enviando...'}
                 </p>
               </div>
-              {message.senderId === user?.uid && (
+              {message.senderId === user?.uid && user && (
                 <Avatar className="h-8 w-8">
                   <AvatarFallback>{user.displayName ? getInitials(user.displayName) : 'TÚ'}</AvatarFallback>
                 </Avatar>

@@ -1,40 +1,63 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { MessageSquare, Send, X } from 'lucide-react';
+import { MessageSquare, Send, X, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback } from '../ui/avatar';
+import { chat, type ChatInput } from '@/ai/flows/chatbot';
 
 type Message = {
-    text: string;
-    sender: 'user' | 'bot';
+    role: 'user' | 'model';
+    content: string;
 };
 
 export function ChatWidget() {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<Message[]>([
-        { text: "¡Hola! Soy el asistente virtual de EJA TransGlobal. ¿Cómo puedo ayudarte hoy?", sender: 'bot' }
+        { content: "¡Hola! Soy el asistente virtual de EJA TransGlobal. ¿Cómo puedo ayudarte hoy?", role: 'model' }
     ]);
     const [input, setInput] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const scrollAreaRef = useRef<HTMLDivElement>(null);
 
-    const handleSendMessage = (e: React.FormEvent) => {
+    useEffect(() => {
+        if (scrollAreaRef.current) {
+            scrollAreaRef.current.scrollTo({
+                top: scrollAreaRef.current.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
+    }, [messages]);
+
+    const handleSendMessage = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!input.trim()) return;
+        if (!input.trim() || isLoading) return;
 
-        const userMessage: Message = { text: input, sender: 'user' };
-        setMessages(prev => [...prev, userMessage]);
+        const userMessage: Message = { content: input, role: 'user' };
+        const newMessages = [...messages, userMessage];
+        setMessages(newMessages);
         setInput('');
+        setIsLoading(true);
 
-        // Placeholder for bot response
-        setTimeout(() => {
-            const botMessage: Message = { text: "Gracias por tu mensaje. Estoy procesando tu solicitud...", sender: 'bot' };
+        try {
+            const chatInput: ChatInput = {
+                history: newMessages.map(m => ({ role: m.role, content: m.content })),
+            };
+            const result = await chat(chatInput);
+            const botMessage: Message = { content: result.response, role: 'model' };
             setMessages(prev => [...prev, botMessage]);
-        }, 1000);
+        } catch (error) {
+            console.error("Chatbot error:", error);
+            const errorMessage: Message = { content: "Lo siento, ha ocurrido un error. Por favor, inténtelo de nuevo más tarde.", role: 'model' };
+            setMessages(prev => [...prev, errorMessage]);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -63,17 +86,17 @@ export function ChatWidget() {
                             <X className="h-4 w-4" />
                         </Button>
                     </CardHeader>
-                    <ScrollArea className="flex-1 px-4">
-                        <div className="space-y-4 py-4">
+                    <ScrollArea className="flex-1" ref={scrollAreaRef}>
+                        <div className="space-y-4 py-4 px-4">
                             {messages.map((message, index) => (
                                 <div
                                     key={index}
                                     className={cn(
                                         "flex items-end gap-2",
-                                        message.sender === 'user' ? 'justify-end' : 'justify-start'
+                                        message.role === 'user' ? 'justify-end' : 'justify-start'
                                     )}
                                 >
-                                    {message.sender === 'bot' && (
+                                    {message.role === 'model' && (
                                         <Avatar className="h-8 w-8">
                                             <AvatarFallback>EJA</AvatarFallback>
                                         </Avatar>
@@ -81,15 +104,25 @@ export function ChatWidget() {
                                     <div
                                         className={cn(
                                             "max-w-[80%] rounded-lg px-3 py-2 text-sm",
-                                            message.sender === 'user'
+                                            message.role === 'user'
                                                 ? "bg-primary text-primary-foreground"
                                                 : "bg-muted"
                                         )}
                                     >
-                                        {message.text}
+                                        {message.content}
                                     </div>
                                 </div>
                             ))}
+                             {isLoading && (
+                                <div className="flex items-end gap-2 justify-start">
+                                    <Avatar className="h-8 w-8">
+                                        <AvatarFallback>EJA</AvatarFallback>
+                                    </Avatar>
+                                    <div className="bg-muted rounded-lg px-3 py-2 flex items-center justify-center">
+                                       <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </ScrollArea>
                     <CardFooter className="pt-4 border-t">
@@ -99,8 +132,9 @@ export function ChatWidget() {
                                 onChange={(e) => setInput(e.target.value)}
                                 placeholder="Escribe un mensaje..."
                                 autoComplete="off"
+                                disabled={isLoading}
                             />
-                            <Button type="submit" size="icon" disabled={!input.trim()}>
+                            <Button type="submit" size="icon" disabled={!input.trim() || isLoading}>
                                 <Send className="h-4 w-4" />
                             </Button>
                         </form>

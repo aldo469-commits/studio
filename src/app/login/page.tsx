@@ -68,7 +68,7 @@ export default function LoginPage() {
                 id="password"
                 type="password"
                 value={password}
-                onChange={(e) => setPassword(e.taget.value)}
+                onChange={(e) => setPassword(e.target.value)}
                 required
               />
             </div>

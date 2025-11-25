@@ -138,9 +138,46 @@ export type BlogPost = {
   date: string;
   author: BlogAuthor;
   category: string;
+  content?: string;
 };
 
 export const blogPosts: BlogPost[] = [
+  {
+    slug: 'alifarma-innovacion-alimentaria',
+    title: 'ALIFARMA: Innovar en alimentación desde 1988',
+    excerpt: 'Desde hace más de 30 años, ALIFARMA trabaja para hacer que la alimentación sea algo más que comer: una experiencia que conecte con los sentidos.',
+    imageUrl: 'https://images.unsplash.com/photo-1576092762791-ddc214d2494b?q=80&w=1080&auto=format&fit=crop&ixlib=rb-4.1.0',
+    imageHint: 'food laboratory',
+    date: '2025-11-25',
+    author: { name: 'Elena García', avatarUrl: 'https://i.pravatar.cc/150?u=elena-garcia' },
+    category: 'Innovación',
+    content: `
+<p>Desde hace más de 30 años, <strong>ALIFARMA</strong> trabaja para hacer que la alimentación sea algo más que comer: una experiencia que conecte con los sentidos. Nació en 1988 y, desde entonces, se ha convertido en una empresa referente en el mundo de la innovación alimentaria. Su objetivo es ayudar a otras marcas a crear productos diferentes, más sabrosos, saludables y adaptados a lo que busca el consumidor de hoy.</p>
+
+<h3 class="font-headline text-2xl mt-8 mb-4">Logística de Precisión</h3>
+<p>En su centro logístico de Reus, de unos 4.000 m², gestionan hasta 3.200 toneladas de productos. Desde allí se encargan de importar y exportar materias primas a diferentes países, asegurando que todo llegue a tiempo y en las mejores condiciones. Además, cuentan con un almacén robotizado, zonas para productos ecológicos, y transporte a temperatura controlada, lo que garantiza que la calidad se mantenga en todo momento.</p>
+
+<h3 class="font-headline text-2xl mt-8 mb-4">Idealis: El Laboratorio de Ideas</h3>
+<p>Pero lo que realmente hace especial a ALIFARMA es su laboratorio <strong>Idealis</strong>. En este espacio se desarrollan nuevas ideas para mejorar los alimentos: se trabaja en su conservación, en hacerlos más nutritivos o estables, y en probar nuevas formulaciones que ayuden a las empresas a innovar más rápido. Es un lugar donde la ciencia y la creatividad se unen para transformar ideas en productos reales.</p>
+<p>Hace unos meses, personalmente visité el laboratorio y pude ver una operativa de la creación de un pan tipo briox, con diferentes bandejas del producto. A los días nos dejaron probar el producto final, y realmente fue una experiencia grata. Así mismo como hice yo, nuestros clientes tienen la posibilidad de realizar visitas y probar sus productos.</p>
+
+<h3 class="font-headline text-2xl mt-8 mb-4">Siempre a la Vanguardia</h3>
+<p>ALIFARMA también participa en ferias y eventos del sector, tanto en España como fuera, lo que les permite estar siempre al día de las últimas tendencias y tecnologías. Gracias a esto, puede ofrecer a sus clientes soluciones modernas y adaptadas a las necesidades del mercado actual.</p>
+
+<h3 class="font-headline text-2xl mt-8 mb-4">¿Qué vas a obtener como cliente en ALIFARMA?</h3>
+<ul class="list-disc pl-6 space-y-2 mt-4">
+  <li><strong>Calidad y Seguridad:</strong> Garantizar que los ingredientes suministrados cumplan con estándares estrictos de calidad, seguridad alimentaria y normativas vigentes es una preocupación clave para evitar riesgos regulatorios y mantener la confianza del consumidor.</li>
+  <li><strong>Innovación y Personalización:</strong> Buscan soluciones innovadoras y a medida que mejoren el perfil nutricional, estabilidad y conservación de sus productos. Necesitan un partner técnico que adapte los desarrollos a sus procesos reales para obtener resultados efectivos.</li>
+  <li><strong>Soporte Técnico y Desarrollo:</strong> Quieren apoyo práctico en formulación, pruebas y desarrollo para acelerar sus proyectos y reducir tiempos y recursos, con acompañamiento desde la idea hasta el producto final.</li>
+  <li><strong>Eficiencia Logística:</strong> Requieren una cadena de suministro confiable con capacidad para gestionar importación/exportación, almacenamiento avanzado (como almacén robotizado) y transporte con temperatura controlada, para asegurar la entrega en condiciones óptimas.</li>
+  <li><strong>Formación y Conocimiento:</strong> Les interesa acceder a formación especializada en técnicas como el uso de espesantes, saborizantes, conservantes y colorantes para mejorar la calidad y rendimiento de sus productos.</li>
+  <li><strong>Cumplimiento Normativo y Etiquetado:</strong> Necesitan asegurarse de que sus productos cumplan con las regulaciones en etiquetado y seguridad alimentaria, y que los ingredientes estén respaldados por evidencia científica y certificaciones adecuadas.</li>
+</ul>
+
+<p class="mt-6">Colaborar con ALIFARMA significa contar con un socio técnico y humano, capaz de aportar soluciones reales y adaptadas al ritmo de cada empresa.</p>
+<p class="font-semibold mt-4">Esperamos tu mensaje.</p>
+`
+  },
   {
     slug: 'optimizando-cadena-suministro',
     title: '5 Claves para Optimizar tu Cadena de Suministro en 2025',

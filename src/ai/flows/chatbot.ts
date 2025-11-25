@@ -45,14 +45,12 @@ The current date is ${new Date().toLocaleDateString('es-ES')}.
 If you don't know the answer, say that you will connect them with a human agent.`;
 
     const { output } = await ai.generate({
-      prompt: {
-        system: systemPrompt,
-        messages: history.map(m => ({
-            role: m.role,
-            content: [{ text: m.content }],
-          })),
-      },
       model: 'googleai/gemini-2.5-flash',
+      prompt: history.map(m => ({
+          role: m.role,
+          content: [{ text: m.content }],
+        })),
+      system: systemPrompt,
       config: {
         temperature: 0.7,
       },

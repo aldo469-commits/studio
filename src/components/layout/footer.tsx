@@ -57,7 +57,7 @@ export function Footer() {
           <div>
             <h3 className="font-headline font-semibold text-lg mb-4">Contacto</h3>
             <div className="text-sm text-muted-foreground space-y-2">
-                <p><strong>Email:</strong> info@ejatransglobal.com</p>
+                <p><strong>Email:</strong> info@ejaglobaltrans.com</p>
                 <p><strong>Teléfono:</strong> +34 91 234 56 78</p>
                 <p>Calle de la Logística 123, 28001 Madrid, España</p>
             </div>
@@ -67,7 +67,7 @@ export function Footer() {
 
         <div className="mt-8 pt-8 border-t">
           <p className="text-center text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} EJA TransGlobal. Todos los derechos reservados.
+            &copy; {new Date().getFullYear()} EJA GlobalTrans. Todos los derechos reservados.
           </p>
         </div>
       </div>

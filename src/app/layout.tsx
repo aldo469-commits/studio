@@ -19,8 +19,8 @@ const fontHeadline = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: 'EJA TransGlobal - Soluciones de Transporte y Logística',
-  description: 'EJA TransGlobal ofrece soluciones integrales de transporte y logística a nivel mundial. Expertos en carga terrestre, marítima y aérea.',
+  title: 'EJA GlobalTrans - Soluciones de Transporte y Logística',
+  description: 'EJA GlobalTrans ofrece soluciones integrales de transporte y logística a nivel mundial. Expertos en carga terrestre, marítima y aérea.',
 };
 
 export default function RootLayout({

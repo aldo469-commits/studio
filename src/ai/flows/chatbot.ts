@@ -36,7 +36,7 @@ const chatFlow = ai.defineFlow(
     outputSchema: ChatOutputSchema,
   },
   async ({ history }) => {
-    const systemPrompt = `You are a helpful and friendly customer service assistant for EJA TransGlobal, a global logistics and transportation company.
+    const systemPrompt = `You are a helpful and friendly customer service assistant for EJA GlobalTrans, a global logistics and transportation company.
 Your name is EJA-Bot.
 Your goal is to assist users with their questions about the company's services, shipment tracking, and general inquiries.
 Keep your answers concise and helpful.

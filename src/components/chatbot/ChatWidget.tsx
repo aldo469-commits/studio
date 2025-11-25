@@ -19,7 +19,7 @@ type Message = {
 export function ChatWidget() {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<Message[]>([
-        { content: "¡Hola! Soy el asistente virtual de EJA TransGlobal. ¿Cómo puedo ayudarte hoy?", role: 'model' }
+        { content: "¡Hola! Soy el asistente virtual de EJA GlobalTrans. ¿Cómo puedo ayudarte hoy?", role: 'model' }
     ]);
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -80,7 +80,7 @@ export function ChatWidget() {
                     <CardHeader className="flex flex-row items-center justify-between">
                         <div>
                             <CardTitle className="font-headline text-lg">Asistente Virtual</CardTitle>
-                            <CardDescription>EJA TransGlobal</CardDescription>
+                            <CardDescription>EJA GlobalTrans</CardDescription>
                         </div>
                         <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)}>
                             <X className="h-4 w-4" />

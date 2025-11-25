@@ -7,7 +7,7 @@ export function Logo({ className }: { className?: string }) {
       viewBox="0 0 200 50"
       className={cn("h-auto", className)}
     >
-      <title>EJA TransGlobal Logo</title>
+      <title>EJA GlobalTrans Logo</title>
       <g>
         <text
           x="0"
@@ -29,7 +29,7 @@ export function Logo({ className }: { className?: string }) {
           fill="hsl(var(--foreground))"
            className="dark:fill-hsl(var(--foreground))"
         >
-          TransGlobal
+          GlobalTrans
         </text>
         <path
           d="M 0 45 L 200 45"

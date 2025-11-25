@@ -60,7 +60,7 @@ export default function Home() {
             Conectando su Mundo, Moviendo su Futuro
           </h1>
           <p className="mt-4 max-w-2xl text-lg md:text-xl text-primary-foreground/90">
-            EJA TransGlobal: Su socio de confianza en soluciones de transporte y logística a nivel mundial.
+            EJA GlobalTrans: Su socio de confianza en soluciones de transporte y logística a nivel mundial.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row gap-4">
             <Button asChild size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground">
@@ -105,7 +105,7 @@ export default function Home() {
       <section id="why-us" className="py-16 md:py-24 bg-card">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="font-headline text-3xl md:text-4xl font-bold">¿Por Qué Elegir EJA TransGlobal?</h2>
+            <h2 className="font-headline text-3xl md:text-4xl font-bold">¿Por Qué Elegir EJA GlobalTrans?</h2>
             <p className="mt-2 text-lg text-muted-foreground max-w-3xl mx-auto">
               Somos más que una empresa de logística, somos su socio estratégico para el éxito.
             </p>

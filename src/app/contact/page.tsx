@@ -59,7 +59,7 @@ export default function ContactPage() {
                   <Mail className="size-6 text-primary mt-1" />
                   <div>
                     <h4 className="font-semibold text-foreground">Correo Electrónico</h4>
-                    <p>info@ejatransglobal.com</p>
+                    <p>info@ejaglobaltrans.com</p>
                   </div>
                 </div>
               </div>

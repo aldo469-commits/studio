@@ -2,7 +2,8 @@ import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { services } from '@/lib/data';
-import { ArrowRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 export default function ServicesPage() {
   const heroImage = PlaceHolderImages.find(p => p.id === 'services-hero');
@@ -36,38 +37,48 @@ export default function ServicesPage() {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {services.map((service) => {
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+            {services.map((service, index) => {
               const serviceImage = PlaceHolderImages.find(p => p.id === service.image);
               return (
-                <Card key={service.slug} className="flex flex-col overflow-hidden group">
-                  {serviceImage && (
-                    <div className="relative h-48 w-full overflow-hidden">
-                      <Image
-                        src={serviceImage.imageUrl}
-                        alt={serviceImage.description}
-                        fill
-                        className="object-cover transition-transform duration-300 group-hover:scale-105"
-                        data-ai-hint={serviceImage.imageHint}
-                      />
-                    </div>
-                  )}
-                  <CardHeader>
-                    <div className="flex items-center gap-4">
+                <div key={service.slug} className={`grid md:grid-cols-2 gap-8 items-center ${index % 2 !== 0 ? 'md:grid-flow-col-dense' : ''}`}>
+                  <div className={`relative h-64 w-full rounded-lg overflow-hidden shadow-lg ${index % 2 !== 0 ? 'md:col-start-2' : ''}`}>
+                    {serviceImage && (
+                        <Image
+                            src={serviceImage.imageUrl}
+                            alt={serviceImage.description}
+                            fill
+                            className="object-cover"
+                            data-ai-hint={serviceImage.imageHint}
+                        />
+                    )}
+                  </div>
+                  <div className="prose dark:prose-invert">
+                    <div className="flex items-center gap-4 mb-2">
                         <div className="bg-primary/10 p-3 rounded-full">
                             <service.icon className="size-6 text-primary" />
                         </div>
-                        <CardTitle className="font-headline text-xl">{service.title}</CardTitle>
+                        <h3 className="font-headline text-2xl mt-0 mb-0">{service.title}</h3>
                     </div>
-                  </CardHeader>
-                  <CardContent className="flex-grow flex flex-col">
-                    <p className="text-muted-foreground flex-grow">{service.longDescription}</p>
-                  </CardContent>
-                </Card>
+                    <p className="text-muted-foreground">{service.longDescription}</p>
+                  </div>
+                </div>
               );
             })}
           </div>
         </div>
+      </section>
+
+        <section className="py-16 md:py-24 bg-primary text-primary-foreground">
+            <div className="container mx-auto px-4 text-center">
+                <h2 className="font-headline text-3xl md:text-4xl font-bold">¿Listo para optimizar su logística?</h2>
+                <p className="mt-4 max-w-2xl mx-auto text-lg text-primary-foreground/80">
+                Contáctenos hoy y descubra cómo nuestras soluciones pueden impulsar su negocio.
+                </p>
+                <Button asChild size="lg" className="mt-8 bg-accent hover:bg-accent/90 text-accent-foreground">
+                    <Link href="/quote">Obtener una Cotización Gratuita</Link>
+                </Button>
+            </div>
       </section>
     </div>
   );

@@ -6,6 +6,7 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { ArrowRight, Calendar, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 export default function BlogPage() {
   const featuredPost = blogPosts[0];
@@ -18,6 +19,8 @@ export default function BlogPage() {
       day: 'numeric',
     });
   };
+
+  const featuredPostImage = PlaceHolderImages.find(p => p.id === featuredPost.image);
 
   return (
     <div className="container mx-auto px-4 py-8 md:py-12">
@@ -32,13 +35,15 @@ export default function BlogPage() {
       <section className="mb-16">
         <Card className="grid md:grid-cols-2 overflow-hidden border-2 border-primary/20 shadow-lg">
           <div className="relative h-64 md:h-auto">
-            <Image
-              src={featuredPost.imageUrl}
-              alt={`Imagen para ${featuredPost.title}`}
-              fill
-              className="object-cover"
-              data-ai-hint={featuredPost.imageHint}
-            />
+            {featuredPostImage && (
+                <Image
+                src={featuredPostImage.imageUrl}
+                alt={featuredPostImage.description}
+                fill
+                className="object-cover"
+                data-ai-hint={featuredPostImage.imageHint}
+                />
+            )}
           </div>
           <div className="p-8 flex flex-col justify-center">
             <Badge variant="secondary" className="w-fit mb-2">{featuredPost.category}</Badge>
@@ -51,7 +56,7 @@ export default function BlogPage() {
             <div className="flex items-center justify-between text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <Avatar className="h-8 w-8">
-                  <AvatarImage src={featuredPost.author.avatarUrl} alt={featuredPost.author.name} />
+                  {featuredPost.author.avatarUrl && <AvatarImage src={featuredPost.author.avatarUrl} alt={featuredPost.author.name} />}
                   <AvatarFallback>{featuredPost.author.name.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <span>{featuredPost.author.name}</span>
@@ -74,40 +79,45 @@ export default function BlogPage() {
       <section>
         <h2 className="text-3xl font-bold font-headline mb-8 text-center">Más Artículos</h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {otherPosts.map((post) => (
-            <Card key={post.slug} className="flex flex-col group">
-              <CardHeader className="p-0">
-                <div className="relative h-48 w-full overflow-hidden rounded-t-lg">
-                  <Image
-                    src={post.imageUrl}
-                    alt={`Imagen para ${post.title}`}
-                    fill
-                    className="object-cover transition-transform duration-300 group-hover:scale-105"
-                    data-ai-hint={post.imageHint}
-                  />
-                   <Badge variant="secondary" className="absolute top-3 right-3">{post.category}</Badge>
-                </div>
-              </CardHeader>
-              <CardContent className="p-6 flex-grow">
-                <CardTitle className="font-headline text-xl mb-3">
-                    <Link href={`/blog/${post.slug}`} className="hover:text-primary transition-colors">
-                        {post.title}
-                    </Link>
-                </CardTitle>
-                <CardDescription>{post.excerpt}</CardDescription>
-              </CardContent>
-              <CardFooter className="p-6 pt-0 text-xs text-muted-foreground flex justify-between">
-                <div className="flex items-center gap-2">
-                    <User className="size-3" />
-                    <span>{post.author.name}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                    <Calendar className="size-3" />
-                    <time dateTime={post.date}>{formatDate(post.date)}</time>
-                </div>
-              </CardFooter>
-            </Card>
-          ))}
+          {otherPosts.map((post) => {
+            const postImage = PlaceHolderImages.find(p => p.id === post.image);
+            return (
+                <Card key={post.slug} className="flex flex-col group">
+                <CardHeader className="p-0">
+                    <div className="relative h-48 w-full overflow-hidden rounded-t-lg">
+                    {postImage && (
+                        <Image
+                            src={postImage.imageUrl}
+                            alt={postImage.description}
+                            fill
+                            className="object-cover transition-transform duration-300 group-hover:scale-105"
+                            data-ai-hint={postImage.imageHint}
+                        />
+                    )}
+                    <Badge variant="secondary" className="absolute top-3 right-3">{post.category}</Badge>
+                    </div>
+                </CardHeader>
+                <CardContent className="p-6 flex-grow">
+                    <CardTitle className="font-headline text-xl mb-3">
+                        <Link href={`/blog/${post.slug}`} className="hover:text-primary transition-colors">
+                            {post.title}
+                        </Link>
+                    </CardTitle>
+                    <CardDescription>{post.excerpt}</CardDescription>
+                </CardContent>
+                <CardFooter className="p-6 pt-0 text-xs text-muted-foreground flex justify-between">
+                    <div className="flex items-center gap-2">
+                        <User className="size-3" />
+                        <span>{post.author.name}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <Calendar className="size-3" />
+                        <time dateTime={post.date}>{formatDate(post.date)}</time>
+                    </div>
+                </CardFooter>
+                </Card>
+            )
+          })}
         </div>
       </section>
     </div>

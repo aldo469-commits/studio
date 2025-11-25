@@ -37,7 +37,7 @@ export default function LocationsPage() {
             </p>
           </div>
           
-          <Card className="overflow-hidden">
+          <Card className="overflow-hidden shadow-lg border">
             <CardContent className="p-0">
               <div className="relative w-full aspect-[2/1]">
                 {mapImage && (
@@ -56,7 +56,7 @@ export default function LocationsPage() {
                     style={{ top: loc.coords.top, left: loc.coords.left, transform: 'translate(-50%, -50%)' }}
                   >
                     <MapPin className="size-8 text-accent drop-shadow-lg cursor-pointer transition-transform group-hover:scale-125" />
-                    <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 w-48 bg-background p-2 rounded-md shadow-lg text-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                    <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 w-48 bg-background p-2 rounded-md shadow-lg text-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none border">
                       <p className="font-bold text-sm">{loc.city}</p>
                       <p className="text-xs text-muted-foreground">{loc.type}</p>
                     </div>

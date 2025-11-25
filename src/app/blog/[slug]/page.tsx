@@ -3,10 +3,11 @@ import Image from 'next/image';
 import { blogPosts } from '@/lib/data';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, User } from 'lucide-react';
+import { Calendar } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 export default function BlogPostPage({ params }: { params: { slug: string } }) {
   const post = blogPosts.find((p) => p.slug === params.slug);
@@ -14,6 +15,9 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
   if (!post) {
     notFound();
   }
+
+  const postImage = PlaceHolderImages.find(p => p.id === post.image);
+
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('es-ES', {
@@ -40,7 +44,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         <div className="flex flex-col sm:flex-row sm:items-center sm:gap-6 text-sm text-muted-foreground">
           <div className="flex items-center gap-2 mb-2 sm:mb-0">
             <Avatar className="h-8 w-8">
-              <AvatarImage src={post.author.avatarUrl} alt={post.author.name} />
+              {post.author.avatarUrl && <AvatarImage src={post.author.avatarUrl} alt={post.author.name} />}
               <AvatarFallback>{post.author.name.charAt(0)}</AvatarFallback>
             </Avatar>
             <span>{post.author.name}</span>
@@ -52,15 +56,17 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         </div>
       </header>
 
-      <div className="relative h-64 md:h-96 w-full mb-8 rounded-lg overflow-hidden">
-        <Image
-          src={post.imageUrl}
-          alt={`Imagen para ${post.title}`}
-          fill
-          className="object-cover"
-          data-ai-hint={post.imageHint}
-        />
-      </div>
+      {postImage && (
+        <div className="relative h-64 md:h-96 w-full mb-8 rounded-lg overflow-hidden">
+            <Image
+            src={postImage.imageUrl}
+            alt={postImage.description}
+            fill
+            className="object-cover"
+            data-ai-hint={postImage.imageHint}
+            />
+        </div>
+      )}
       
       {post.content ? (
         <div

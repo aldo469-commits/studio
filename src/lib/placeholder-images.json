@@ -3,92 +3,122 @@
     {
       "id": "hero-home",
       "description": "A wide-angle shot of a busy highway with multiple trucks at sunset, representing logistics and transport.",
-      "imageUrl": "https://images.unsplash.com/photo-1636070762406-4262052fa6ef?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHx0cnVja3MlMjBoaWdod2F5fGVufDB8fHx8MTc2MzQ3OTE5OXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1636070762406-4262052fa6ef?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHx0cnVja3MlMjBoaWdod2F5fGVufDB8fHx8MTc2MzQ3OTE5OXww&ixlib=rb-4.1.0&q=80&w=1920",
       "imageHint": "trucks highway"
     },
     {
       "id": "services-hero",
       "description": "An aerial view of a massive container port with ships, cranes, and containers.",
-      "imageUrl": "https://images.unsplash.com/photo-1703226741497-6de4f67c6e11?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8Y29udGFpbmVyJTIwcG9ydHxlbnwwfHx8fDE3NjM1ODAwODV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1703226741497-6de4f67c6e11?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8Y29udGFpbmVyJTIwcG9ydHxlbnwwfHx8fDE3NjM1ODAwODV8MA&ixlib=rb-4.1.0&q=80&w=1920",
       "imageHint": "container port"
     },
     {
       "id": "about-hero",
       "description": "A modern glass office building reflecting the sky.",
-      "imageUrl": "https://images.unsplash.com/photo-1549757521-4160565ff3de?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxvZmZpY2UlMjBidWlsZGluZ3xlbnwwfHx8fDE3NjM0OTAwMjd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1549757521-4160565ff3de?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxvZmZpY2UlMjBidWlsZGluZ3xlbnwwfHx8fDE3NjM0OTAwMjd8MA&ixlib=rb-4.1.0&q=80&w=1920",
       "imageHint": "office building"
     },
     {
       "id": "locations-hero",
       "description": "A stylized illuminated globe showing connecting lines across continents.",
-      "imageUrl": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxnbG9iYWwlMjBuZXR3b3JrfGVufDB8fHx8MTc2MzU2MDAxMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxnbG9iYWwlMjBuZXR3b3JrfGVufDB8fHx8MTc2MzU2MDAxMXww&ixlib=rb-4.1.0&q=80&w=1920",
       "imageHint": "global network"
     },
     {
       "id": "contact-hero",
       "description": "A close-up of a person's hands typing on a laptop.",
-      "imageUrl": "https://images.unsplash.com/photo-1625297673112-06b459140555?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxwZXJzb24lMjB0eXBpbmd8ZW58MHx8fHwxNzYzNTgwMDg1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1625297673112-06b459140555?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxwZXJzb24lMjB0eXBpbmd8ZW58MHx8fHwxNzYzNTgwMDg1fDA&ixlib=rb-4.1.0&q=80&w=1920",
       "imageHint": "person typing"
     },
     {
       "id": "quote-hero",
       "description": "A person signing a document on a clipboard in a warehouse setting.",
-      "imageUrl": "https://images.unsplash.com/photo-1564846824194-346b7871b855?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxzaWduaW5nJTIwZG9jdW1lbnR8ZW58MHx8fHwxNzYzNTc4MTA1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1564846824194-346b7871b855?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxzaWduaW5nJTIwZG9jdW1lbnR8ZW58MHx8fHwxNzYzNTc4MTA1fDA&ixlib=rb-4.1.0&q=80&w=1920",
       "imageHint": "signing document"
     },
     {
       "id": "tracking-hero",
       "description": "A map on a digital screen with a highlighted route and tracking points.",
-      "imageUrl": "https://images.unsplash.com/photo-1631016800686-1b3524982956?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8ZGlnaXRhbCUyMG1hcHxlbnwwfHx8fDE3NjM1MjEyMjB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1631016800686-1b3524982956?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8ZGlnaXRhbCUyMG1hcHxlbnwwfHx8fDE3NjM1MjEyMjB8MA&ixlib=rb-4.1.0&q=80&w=1920",
       "imageHint": "digital map"
     },
     {
       "id": "world-map",
       "description": "A flat, clean world map in shades of blue and gray.",
-      "imageUrl": "https://images.unsplash.com/photo-1650526087824-163941841b52?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHx3b3JsZCUyMG1hcHxlbnwwfHx8fDE3NjM1NjkxNzJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1650526087824-163941841b52?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHx3b3JsZCUyMG1hcHxlbnwwfHx8fDE3NjM1NjkxNzJ8MA&ixlib=rb-4.1.0&q=80&w=1920",
       "imageHint": "world map"
     },
     {
       "id": "about-us-team",
       "description": "A diverse group of professionals in a modern office, smiling and looking at the camera.",
-      "imageUrl": "https://images.unsplash.com/photo-1603201667141-5a2d4c673378?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxvZmZpY2UlMjB0ZWFtfGVufDB8fHx8MTc2MzU4MDA4NXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1603201667141-5a2d4c673378?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxvZmZpY2UlMjB0ZWFtfGVufDB8fHx8MTc2MzU4MDA4NXww&ixlib=rb-4.1.0&q=80&w=600",
       "imageHint": "office team"
     },
     {
       "id": "service-land",
       "description": "A fleet of modern white trucks parked in a row.",
-      "imageUrl": "https://images.unsplash.com/photo-1591419478162-a4dd21b7ec0a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx0cnVjayUyMGZsZWV0fGVufDB8fHx8MTc2MzU4MDA4NXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1591419478162-a4dd21b7ec0a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx0cnVjayUyMGZsZWV0fGVufDB8fHx8MTc2MzU4MDA4NXww&ixlib=rb-4.1.0&q=80&w=800",
       "imageHint": "truck fleet"
     },
     {
       "id": "service-sea",
       "description": "A large container ship sailing on the open ocean.",
-      "imageUrl": "https://images.unsplash.com/photo-1594110336951-5bc8c12d6b27?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8Y29udGFpbmVyJTIwc2hpcHxlbnwwfHx8fDE3NjM1NDEyNzR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1594110336951-5bc8c12d6b27?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8Y29udGFpbmVyJTIwc2hpcHxlbnwwfHx8fDE3NjM1NDEyNzR8MA&ixlib=rb-4.1.0&q=80&w=800",
       "imageHint": "container ship"
     },
     {
       "id": "service-air",
       "description": "A cargo plane being loaded with containers at an airport.",
-      "imageUrl": "https://images.unsplash.com/photo-1482351437900-d57cf1b9cd37?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxjYXJnbyUyMHBsYW5lfGVufDB8fHx8MTc2MzQ3OTE5OXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1482351437900-d57cf1b9cd37?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxjYXJnbyUyMHBsYW5lfGVufDB8fHx8MTc2MzQ3OTE5OXww&ixlib=rb-4.1.0&q=80&w=800",
       "imageHint": "cargo plane"
     },
     {
       "id": "service-logistics",
       "description": "A vast, well-organized warehouse with tall shelves and forklifts.",
-      "imageUrl": "https://images.unsplash.com/photo-1645736315000-6f788915923b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx3YXJlaG91c2UlMjBsb2dpc3RpY3N8ZW58MHx8fHwxNzYzNDg3MzgxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1645736315000-6f788915923b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx3YXJlaG91c2UlMjBsb2dpc3RpY3N8ZW58MHx8fHwxNzYzNDg3MzgxfDA&ixlib=rb-4.1.0&q=80&w=800",
       "imageHint": "warehouse logistics"
     },
     {
       "id": "service-customs",
       "description": "A customs officer inspecting documents at a border control point.",
-      "imageUrl": "https://images.unsplash.com/photo-1574850183045-b3a7bcc4b93d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxjdXN0b21zJTIwaW5zcGVjdGlvbnxlbnwwfHx8fDE3NjM1ODAwODV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1574850183045-b3a7bcc4b93d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxjdXN0b21zJTIwaW5zcGVjdGlvbnxlbnwwfHx8fDE3NjM1ODAwODV8MA&ixlib=rb-4.1.0&q=80&w=800",
       "imageHint": "customs inspection"
     },
     {
       "id": "service-projects",
       "description": "Oversized industrial equipment being transported on a specialized truck.",
-      "imageUrl": "https://images.unsplash.com/photo-1643283468140-5b85b03dff83?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8b3ZlcnNpemVkJTIwY2FyZ298ZW58MHx8fHwxNzYzNTgwMDg2fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1643283468140-5b85b03dff83?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8b3ZlcnNpemVkJTIwY2FyZ298ZW58MHx8fHwxNzYzNTgwMDg2fDA&ixlib=rb-4.1.0&q=80&w=800",
       "imageHint": "oversized cargo"
+    },
+    {
+      "id": "blog-alifarma",
+      "description": "A scientist looking at a beaker in a food science laboratory.",
+      "imageUrl": "https://images.unsplash.com/photo-1576092762791-ddc214d2494b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxmb29kJTIwbGFib3JhdG9yeXxlbnwwfHx8fDE3NjM4NDg1OTB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "food laboratory"
+    },
+    {
+      "id": "blog-supply-chain",
+      "description": "A bird's eye view of a warehouse with workers and forklifts moving around.",
+      "imageUrl": "https://images.unsplash.com/photo-1577563908411-57924c53b3c3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx3YXJlaG91c2UlMjBsb2dpc3RpY3N8ZW58MHx8fHwxNzYzODQ4NzAyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "warehouse logistics"
+    },
+    {
+      "id": "blog-sea-freight",
+      "description": "A large container ship with a green hull, suggesting sustainability.",
+      "imageUrl": "https://images.unsplash.com/photo-1611703372231-18cf1b3c8fce?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzdXN0YWluYWJsZSUyMHNoaXBwaW5nfGVufDB8fHx8MTc2Mzg0ODc4OHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "container ship"
+    },
+    {
+      "id": "blog-ai",
+      "description": "An abstract visualization of an artificial intelligence network.",
+      "imageUrl": "https://images.unsplash.com/photo-1677756119517-756a188d2d94?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxhcnRpZmljaWFsJTIwaW50ZWxsaWdlbmNlfGVufDB8fHx8MTc2Mzg0ODg2M3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "artificial intelligence"
+    },
+    {
+      "id": "blog-customs",
+      "description": "A close up on a passport being stamped at a customs checkpoint.",
+      "imageUrl": "https://images.unsplash.com/photo-1564846824194-346b7871b855?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjdXN0b21zJTIwZG9jdW1lbnRzfGVufDB8fHx8MTc2Mzg0ODkyN3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "customs documents"
     }
   ]
 }

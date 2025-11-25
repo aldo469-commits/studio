@@ -25,8 +25,9 @@ export function Header() {
   }
 
   const navLinks = defaultNavLinks.filter(link => {
-      if (link.href === '/incidents' || link.href === '/login') {
-          return false; // Always hide these from the main nav
+      // Hide auth-related links from the main nav, they will be handled separately
+      if (link.auth || link.public) {
+          return false;
       }
       return true;
   });
@@ -59,58 +60,63 @@ export function Header() {
           </nav>
         </div>
         
-        {/* Mobile Menu */}
-        <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-          <SheetTrigger asChild>
-            <Button variant="ghost" className="md:hidden">
-              <Menu className="h-6 w-6" />
-              <span className="sr-only">Abrir menú</span>
-            </Button>
-          </SheetTrigger>
-          <div className="flex-1 md:hidden">
-            <Link href="/" className="flex justify-center">
-              <Logo className="w-32" />
-            </Link>
-          </div>
-          <SheetContent side="left" className="pr-0">
-            <div className="flex items-center justify-between">
-                <Link href="/" className="mr-6" onClick={() => setIsMenuOpen(false)}>
-                    <Logo className="w-40" />
-                </Link>
-                <Button variant="ghost" onClick={() => setIsMenuOpen(false)}>
-                    <X className="h-6 w-6" />
-                    <span className="sr-only">Cerrar menú</span>
+        {/* Mobile Menu Trigger */}
+        <div className="flex-1 flex items-center md:hidden">
+            <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <Menu className="h-6 w-6" />
+                  <span className="sr-only">Abrir menú</span>
                 </Button>
-            </div>
-            <div className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6">
-              <div className="flex flex-col space-y-3">
-                {[...navLinks, authNav].map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => setIsMenuOpen(false)}
-                    className={cn(
-                      'text-lg transition-colors hover:text-foreground/80',
-                      pathname === link.href ? 'text-foreground font-semibold' : 'text-foreground/60'
+              </SheetTrigger>
+              <SheetContent side="left" className="pr-0 pt-0">
+                  <div className="flex h-16 items-center justify-between pl-6 pr-4 border-b">
+                      <Link href="/" onClick={() => setIsMenuOpen(false)}>
+                          <Logo className="w-32" />
+                      </Link>
+                      <Button variant="ghost" size="icon" onClick={() => setIsMenuOpen(false)}>
+                          <X className="h-5 w-5" />
+                          <span className="sr-only">Cerrar menú</span>
+                      </Button>
+                  </div>
+                  <div className="h-[calc(100vh-4rem)] p-6">
+                  <div className="flex flex-col space-y-4">
+                    {[...navLinks, authNav].map((link) => (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        onClick={() => setIsMenuOpen(false)}
+                        className={cn(
+                          'text-lg transition-colors hover:text-foreground/80',
+                          pathname === link.href ? 'text-foreground font-semibold' : 'text-foreground/60'
+                        )}
+                      >
+                        {link.label}
+                      </Link>
+                    ))}
+                    {user && (
+                        <button
+                            onClick={handleLogout}
+                            className="text-lg text-left text-foreground/60 transition-colors hover:text-foreground/80"
+                        >
+                            Cerrar Sesión
+                        </button>
                     )}
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-                 {user && (
-                    <button
-                        onClick={handleLogout}
-                        className="text-lg text-left text-foreground/60 transition-colors hover:text-foreground/80"
-                    >
-                        Cerrar Sesión
-                    </button>
-                )}
-              </div>
-            </div>
-          </SheetContent>
-        </Sheet>
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
+        </div>
 
-        <div className="flex flex-1 items-center justify-end space-x-4">
+        {/* Mobile Logo */}
+        <div className="flex-1 flex justify-center md:hidden">
+             <Link href="/">
+                <Logo className="w-32" />
+            </Link>
+        </div>
+
+
+        <div className="flex flex-1 items-center justify-end space-x-2 md:space-x-4">
           <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
              <Link
                 href={authNav.href}
@@ -132,6 +138,9 @@ export function Header() {
           <Button asChild className="hidden md:inline-flex bg-accent hover:bg-accent/90 text-accent-foreground">
             <Link href="/quote">Solicitar Cotización</Link>
           </Button>
+          
+          {/* Placeholder for mobile layout spacing */}
+          <div className="w-8 h-8 md:hidden"></div>
         </div>
       </div>
     </header>

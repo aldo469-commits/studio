@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { ArrowRight, Ship, Truck, Plane, Warehouse } from 'lucide-react';
+import { ArrowRight, Ship, Truck, Plane, Warehouse, CheckCircle } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -110,11 +110,11 @@ export default function Home() {
               Somos más que una empresa de logística, somos su socio estratégico para el éxito.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {whyChooseUs.map((item, index) => (
-              <div key={index} className="flex items-start gap-4">
-                <div className="flex-shrink-0 size-12 rounded-full bg-primary text-primary-foreground flex items-center justify-center">
-                  <span className="font-bold text-xl">{index + 1}</span>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {whyChooseUs.map((item) => (
+              <div key={item.title} className="flex flex-col items-center text-center p-4">
+                <div className="flex-shrink-0 size-12 rounded-full bg-primary/10 text-primary flex items-center justify-center mb-4">
+                  <CheckCircle className="size-6" />
                 </div>
                 <div>
                   <h3 className="font-headline text-xl font-semibold">{item.title}</h3>

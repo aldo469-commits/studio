@@ -27,7 +27,7 @@ export default function TrackingPage() {
 
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4 max-w-4xl">
-            <div className="text-center">
+            <div className="text-center mb-8">
               <h2 className="font-headline text-3xl font-bold">Rastree su Mercancía en Tiempo Real</h2>
               <p className="mt-2 text-muted-foreground">
                 Introduzca su número de seguimiento para ver el estado actual de su envío.

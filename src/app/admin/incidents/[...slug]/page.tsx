@@ -6,7 +6,7 @@ import { useCollection, useDoc, useUser, useFirestore, useMemoFirebase } from '@
 import { collection, doc, serverTimestamp, query, orderBy } from 'firebase/firestore';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { ArrowLeft, Send, Tag, Loader2, HardHat } from 'lucide-react';
 import Link from 'next/link';

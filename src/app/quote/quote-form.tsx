@@ -2,13 +2,14 @@
 
 import { useFormState, useFormStatus } from 'react-dom';
 import { useEffect, useRef } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { submitQuoteForm, type QuoteFormState } from './actions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
@@ -50,17 +51,17 @@ export function QuoteForm() {
     { message: '' }
   );
 
-  const { register, formState: { errors }, setValue } = useForm<QuoteFormData>({
+  const { control, register, handleSubmit, formState: { errors }, reset } = useForm<QuoteFormData>({
     resolver: zodResolver(quoteSchema),
     defaultValues: {
-      fullName: state.fields?.fullName || '',
-      companyName: state.fields?.companyName || '',
-      email: state.fields?.email || '',
-      phone: state.fields?.phone || '',
-      origin: state.fields?.origin || '',
-      destination: state.fields?.destination || '',
-      shipmentType: state.fields?.shipmentType || '',
-      notes: state.fields?.notes || '',
+      fullName: '',
+      companyName: '',
+      email: '',
+      phone: '',
+      origin: '',
+      destination: '',
+      shipmentType: '',
+      notes: '',
     },
   });
 
@@ -78,16 +79,26 @@ export function QuoteForm() {
           description: state.message,
           duration: 8000
         });
-        formRef.current?.reset();
+        reset();
       }
     }
-  }, [state, toast]);
-
+  }, [state, toast, reset]);
+  
+  const onFormSubmit = (data: QuoteFormData) => {
+    const formData = new FormData();
+    Object.entries(data).forEach(([key, value]) => {
+        if(value) {
+            formData.append(key, value);
+        }
+    });
+    formAction(formData);
+  };
+  
   const renderError = (field: keyof QuoteFormData) =>
     errors[field] && <p className="mt-1 text-sm text-destructive">{errors[field]?.message}</p>;
 
   return (
-    <form ref={formRef} action={formAction} className="space-y-6">
+    <form ref={formRef} action={formAction} onSubmit={handleSubmit(onFormSubmit)} className="space-y-6">
       {state.issues && (
         <Alert variant="destructive">
           <Terminal className="h-4 w-4" />
@@ -103,19 +114,23 @@ export function QuoteForm() {
       <fieldset className="space-y-4">
         <legend className="font-headline text-lg font-semibold mb-2 border-b pb-2">Información de Contacto</legend>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <div>
-            <Input placeholder="Nombre Completo *" {...register('fullName')} />
+          <div className="space-y-2">
+            <Label htmlFor="fullName">Nombre Completo *</Label>
+            <Input id="fullName" placeholder="John Doe" {...register('fullName')} />
             {renderError('fullName')}
           </div>
-          <div>
-            <Input placeholder="Nombre de la Empresa" {...register('companyName')} />
+          <div className="space-y-2">
+            <Label htmlFor="companyName">Nombre de la Empresa</Label>
+            <Input id="companyName" placeholder="ACME Inc." {...register('companyName')} />
           </div>
-          <div>
-            <Input type="email" placeholder="Correo Electrónico *" {...register('email')} />
+          <div className="space-y-2">
+            <Label htmlFor="email">Correo Electrónico *</Label>
+            <Input id="email" type="email" placeholder="su@email.com" {...register('email')} />
             {renderError('email')}
           </div>
-          <div>
-            <Input type="tel" placeholder="Teléfono *" {...register('phone')} />
+          <div className="space-y-2">
+            <Label htmlFor="phone">Teléfono *</Label>
+            <Input id="phone" type="tel" placeholder="+34 600 000 000" {...register('phone')} />
             {renderError('phone')}
           </div>
         </div>
@@ -124,32 +139,42 @@ export function QuoteForm() {
       <fieldset className="space-y-4">
         <legend className="font-headline text-lg font-semibold mb-2 border-b pb-2">Detalles del Envío</legend>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div>
-                <Input placeholder="Ciudad de Origen *" {...register('origin')} />
+            <div className="space-y-2">
+                <Label htmlFor="origin">Ciudad de Origen *</Label>
+                <Input id="origin" placeholder="Madrid" {...register('origin')} />
                 {renderError('origin')}
             </div>
-            <div>
-                <Input placeholder="Ciudad de Destino *" {...register('destination')} />
+            <div className="space-y-2">
+                <Label htmlFor="destination">Ciudad de Destino *</Label>
+                <Input id="destination" placeholder="Nueva York" {...register('destination')} />
                 {renderError('destination')}
             </div>
         </div>
-        <div>
-            <Select onValueChange={(value) => setValue('shipmentType', value)} {...register('shipmentType')}>
-                <SelectTrigger>
-                    <SelectValue placeholder="Tipo de Envío *" />
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectItem value="Terrestre">Transporte Terrestre</SelectItem>
-                    <SelectItem value="Marítimo">Transporte Marítimo</SelectItem>
-                    <SelectItem value="Aéreo">Transporte Aéreo</SelectItem>
-                    <SelectItem value="Logística y Almacén">Logística y Almacén</SelectItem>
-                    <SelectItem value="Otro">Otro</SelectItem>
-                </SelectContent>
-            </Select>
+        <div className="space-y-2">
+            <Label htmlFor="shipmentType">Tipo de Envío *</Label>
+             <Controller
+                name="shipmentType"
+                control={control}
+                render={({ field }) => (
+                    <Select onValueChange={field.onChange} value={field.value}>
+                        <SelectTrigger id="shipmentType">
+                            <SelectValue placeholder="Seleccione un tipo de envío" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="Terrestre">Transporte Terrestre</SelectItem>
+                            <SelectItem value="Marítimo">Transporte Marítimo</SelectItem>
+                            <SelectItem value="Aéreo">Transporte Aéreo</SelectItem>
+                            <SelectItem value="Logística y Almacén">Logística y Almacén</SelectItem>
+                            <SelectItem value="Otro">Otro</SelectItem>
+                        </SelectContent>
+                    </Select>
+                )}
+            />
             {renderError('shipmentType')}
         </div>
-        <div>
-            <Textarea placeholder="Notas adicionales (ej. tipo de mercancía, peso, dimensiones, etc.)" rows={4} {...register('notes')} />
+        <div className="space-y-2">
+            <Label htmlFor="notes">Notas Adicionales</Label>
+            <Textarea id="notes" placeholder="Ej. tipo de mercancía, peso, dimensiones, etc." rows={4} {...register('notes')} />
         </div>
       </fieldset>
       

@@ -2,7 +2,7 @@
 
 import { useFormState, useFormStatus } from 'react-dom';
 import { useEffect, useRef } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { submitContactForm, type ContactFormState } from './actions';
@@ -19,6 +19,7 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Terminal } from 'lucide-react';
+import { Label } from '@/components/ui/label';
 
 const contactSchema = z.object({
   name: z.string().min(2, "El nombre es requerido."),
@@ -50,17 +51,18 @@ export function ContactForm() {
   );
 
   const {
+    control,
     register,
     handleSubmit,
     formState: { errors },
-    setValue,
+    reset,
   } = useForm<ContactFormData>({
     resolver: zodResolver(contactSchema),
     defaultValues: {
-      name: state.fields?.name || '',
-      email: state.fields?.email || '',
-      subject: state.fields?.subject || '',
-      message: state.fields?.message || '',
+      name: '',
+      email: '',
+      subject: '',
+      message: '',
     },
   });
 
@@ -77,15 +79,27 @@ export function ContactForm() {
           title: 'Éxito',
           description: state.message,
         });
-        formRef.current?.reset();
+        reset(); // Reset form fields on success
       }
     }
-  }, [state, toast]);
+  }, [state, toast, reset]);
+  
+  const onFormSubmit = (data: ContactFormData) => {
+    const formData = new FormData();
+    Object.entries(data).forEach(([key, value]) => {
+        if(value) {
+            formData.append(key, value);
+        }
+    });
+    formAction(formData);
+  };
+
 
   return (
     <form
       ref={formRef}
-      action={formAction}
+      action={formAction} // We can still use the action for progressive enhancement
+      onSubmit={handleSubmit(onFormSubmit)}
       className="space-y-4"
     >
         {state.issues && (
@@ -103,33 +117,43 @@ export function ContactForm() {
       )}
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div>
-          <Input placeholder="Su Nombre" {...register('name')} aria-invalid={!!errors.name} />
+        <div className="space-y-2">
+          <Label htmlFor="name">Su Nombre</Label>
+          <Input id="name" placeholder="John Doe" {...register('name')} aria-invalid={!!errors.name} />
           {errors.name && <p className="mt-1 text-sm text-destructive">{errors.name.message}</p>}
         </div>
-        <div>
-          <Input type="email" placeholder="Su Correo Electrónico" {...register('email')} aria-invalid={!!errors.email} />
+        <div className="space-y-2">
+          <Label htmlFor="email">Su Correo Electrónico</Label>
+          <Input id="email" type="email" placeholder="su@email.com" {...register('email')} aria-invalid={!!errors.email} />
           {errors.email && <p className="mt-1 text-sm text-destructive">{errors.email.message}</p>}
         </div>
       </div>
 
-      <div>
-        <Select onValueChange={(value) => setValue('subject', value)} {...register('subject')}>
-            <SelectTrigger aria-invalid={!!errors.subject}>
-                <SelectValue placeholder="Seleccione un asunto" />
-            </SelectTrigger>
-            <SelectContent>
-                <SelectItem value="Consulta General">Consulta General</SelectItem>
-                <SelectItem value="Soporte Técnico">Soporte Técnico</SelectItem>
-                <SelectItem value="Solicitud de Presupuesto">Solicitud de Presupuesto</SelectItem>
-                <SelectItem value="Prensa">Prensa</SelectItem>
-            </SelectContent>
-        </Select>
+      <div className="space-y-2">
+        <Label htmlFor="subject">Asunto</Label>
+        <Controller
+            name="subject"
+            control={control}
+            render={({ field }) => (
+                <Select onValueChange={field.onChange} value={field.value}>
+                    <SelectTrigger id="subject" aria-invalid={!!errors.subject}>
+                        <SelectValue placeholder="Seleccione un asunto" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="Consulta General">Consulta General</SelectItem>
+                        <SelectItem value="Soporte Técnico">Soporte Técnico</SelectItem>
+                        <SelectItem value="Solicitud de Presupuesto">Solicitud de Presupuesto</SelectItem>
+                        <SelectItem value="Prensa">Prensa</SelectItem>
+                    </SelectContent>
+                </Select>
+            )}
+        />
         {errors.subject && <p className="mt-1 text-sm text-destructive">{errors.subject.message}</p>}
       </div>
 
-      <div>
-        <Textarea placeholder="Su Mensaje" rows={6} {...register('message')} aria-invalid={!!errors.message} />
+      <div className="space-y-2">
+        <Label htmlFor="message">Su Mensaje</Label>
+        <Textarea id="message" placeholder="Escriba aquí su consulta..." rows={6} {...register('message')} aria-invalid={!!errors.message} />
         {errors.message && <p className="mt-1 text-sm text-destructive">{errors.message.message}</p>}
       </div>
 

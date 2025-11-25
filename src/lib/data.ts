@@ -7,6 +7,7 @@ export const navLinks = [
   { href: '/locations', label: 'Ubicaciones' },
   { href: '/about', label: 'Nosotros' },
   { href: '/tracking', label: 'Seguimiento' },
+  { href: '/blog', label: 'Blog' },
   { href: '/contact', label: 'Contacto' },
   { href: '/incidents', label: 'Incidencias', auth: true },
   { href: '/login', label: 'Área Clientes', public: true },
@@ -121,4 +122,63 @@ export const socialLinks = [
     { name: "Facebook", icon: Facebook, href: "#" },
     { name: "Twitter", icon: Twitter, href: "#" },
     { name: "LinkedIn", icon: Linkedin, href: "#" },
+];
+
+export type BlogAuthor = {
+  name: string;
+  avatarUrl: string;
+}
+
+export type BlogPost = {
+  slug: string;
+  title: string;
+  excerpt: string;
+  imageUrl: string;
+  imageHint: string;
+  date: string;
+  author: BlogAuthor;
+  category: string;
+};
+
+export const blogPosts: BlogPost[] = [
+  {
+    slug: 'optimizando-cadena-suministro',
+    title: '5 Claves para Optimizar tu Cadena de Suministro en 2025',
+    excerpt: 'Descubre estrategias probadas para aumentar la eficiencia, reducir costes y mejorar la resiliencia de tu cadena de suministro en el competitivo mercado actual.',
+    imageUrl: 'https://images.unsplash.com/photo-1577563908411-57924c53b3c3?q=80&w=1080&auto=format&fit=crop&ixlib=rb-4.1.0',
+    imageHint: 'warehouse logistics',
+    date: '2025-11-20',
+    author: { name: 'Elena García', avatarUrl: 'https://i.pravatar.cc/150?u=elena-garcia' },
+    category: 'Logística',
+  },
+  {
+    slug: 'transporte-maritimo-sostenible',
+    title: 'El Futuro del Transporte Marítimo: Hacia una Logística más Sostenible',
+    excerpt: 'El transporte marítimo se enfrenta a una transformación verde. Analizamos las últimas innovaciones en combustibles alternativos y tecnologías para un futuro más limpio.',
+    imageUrl: 'https://images.unsplash.com/photo-1611703372231-18cf1b3c8fce?q=80&w=1080&auto=format&fit=crop&ixlib=rb-4.1.0',
+    imageHint: 'container ship',
+    date: '2025-11-15',
+    author: { name: 'Marcos Reyes', avatarUrl: 'https://i.pravatar.cc/150?u=marcos-reyes' },
+    category: 'Sostenibilidad',
+  },
+  {
+    slug: 'impacto-ia-logistica',
+    title: 'Inteligencia Artificial: La Revolución Silenciosa en la Logística',
+    excerpt: 'Desde la optimización de rutas en tiempo real hasta la predicción de la demanda, la IA está redefiniendo la eficiencia en el sector logístico. ¿Está tu empresa preparada?',
+    imageUrl: 'https://images.unsplash.com/photo-1677756119517-756a188d2d94?q=80&w=1080&auto=format&fit=crop&ixlib=rb-4.1.0',
+    imageHint: 'artificial intelligence',
+    date: '2025-11-10',
+    author: { name: 'Sofía Navarro', avatarUrl: 'https://i.pravatar.cc/150?u=sofia-navarro' },
+    category: 'Tecnología',
+  },
+  {
+    slug: 'gestion-aduanas-eficiente',
+    title: 'Cómo Evitar Retrasos: Guía para una Gestión de Aduanas Eficiente',
+    excerpt: 'Los trámites aduaneros son un punto crítico en el comercio internacional. Te damos consejos prácticos para asegurar que tu mercancía cruce las fronteras sin problemas.',
+    imageUrl: 'https://images.unsplash.com/photo-1564846824194-346b7871b855?q=80&w=1080&auto=format&fit=crop&ixlib=rb-4.1.0',
+    imageHint: 'customs documents',
+    date: '2025-11-05',
+    author: { name: 'Carlos Jiménez', avatarUrl: 'https://i.pravatar.cc/150?u=carlos-jimenez' },
+    category: 'Comercio Internacional',
+  },
 ];

@@ -83,7 +83,7 @@ export default function IncidentChatPage() {
         </Button>
       <Card>
         <CardHeader>
-          <CardTitle className="font-headline text-2xl">Incidencia #{incident.id.substring(0, 8)}</CardTitle>
+          <CardTitle className="font-headline text-2xl">{incident.title}</CardTitle>
           <p className="text-muted-foreground">{incident.description}</p>
           <div className="flex items-center text-sm pt-2">
             <span className={`mr-2 h-2 w-2 rounded-full ${incident.status === 'Open' ? 'bg-green-500' : 'bg-gray-500'}`}></span>

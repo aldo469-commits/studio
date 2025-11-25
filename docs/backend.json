@@ -62,6 +62,10 @@
           "type": "string",
           "description": "Current status of the incident (e.g., Open, In Progress, Resolved)."
         },
+        "title": {
+          "type": "string",
+          "description": "The title or subject of the incident."
+        },
         "description": {
           "type": "string",
           "description": "Detailed description of the incident."
@@ -76,6 +80,7 @@
         "customerId",
         "dateReported",
         "status",
+        "title",
         "description"
       ]
     },

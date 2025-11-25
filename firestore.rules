@@ -3,7 +3,8 @@
  *
  * Core Philosophy:
  * This ruleset enforces a strict user-ownership model. Customers can only access
- * their own profile data, incidents, and chat messages.
+ * their own profile data, incidents, and chat messages. A designated admin user
+ * is granted broader read access for management purposes.
  *
  * Data Structure:
  * All data is nested under /customers/{customerId}.
@@ -14,28 +15,22 @@
  *
  * Key Security Decisions:
  * - Users can only create, read, update, and delete data under their own user ID.
+ * - An admin user (defined by ADMIN_UID) can read all incidents and messages.
  * - Listing of other users is disallowed.
  * - Schema validation is relaxed to allow for rapid prototyping.
- *
- * Denormalization for Authorization:
- * This ruleset relies on path-based ownership, avoiding the need for denormalization.
  */
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    // IMPORTANT: Replace this with the actual UID of the admin user in a real application.
+    function isAdmin() {
+      return request.auth.uid == 'REPLACE_WITH_YOUR_ADMIN_USER_ID';
+    }
+
     /**
      * @description Controls access to customer profile information.
      * @path /customers/{customerId}
-     * @allow (create) User with ID 'user_abc' can create their profile at /customers/user_abc.
-     * @deny (create) User with ID 'user_def' cannot create a profile at /customers/user_abc.
-     * @allow (get) User with ID 'user_abc' can read their profile at /customers/user_abc.
-     * @deny (get) User with ID 'user_def' cannot read the profile at /customers/user_abc.
-     * @allow (update) User with ID 'user_abc' can update their profile at /customers/user_abc.
-     * @deny (update) User with ID 'user_def' cannot update the profile at /customers/user_abc.
-     * @allow (delete) User with ID 'user_abc' can delete their profile at /customers/user_abc.
-     * @deny (delete) User with ID 'user_def' cannot delete the profile at /customers/user_abc.
-     * @principle Enforces document ownership for all operations.
      */
     match /customers/{customerId} {
       allow get: if isOwner(customerId);
@@ -48,43 +43,33 @@ service cloud.firestore {
     /**
      * @description Controls access to incidents reported by customers.
      * @path /customers/{customerId}/incidents/{incidentId}
-     * @allow (create) User with ID 'user_abc' can create an incident at /customers/user_abc/incidents/incident_123.
-     * @deny (create) User with ID 'user_def' cannot create an incident at /customers/user_abc/incidents/incident_123.
-     * @allow (get) User with ID 'user_abc' can read their incident at /customers/user_abc/incidents/incident_123.
-     * @deny (get) User with ID 'user_def' cannot read the incident at /customers/user_abc/incidents/incident_123.
-     * @allow (update) User with ID 'user_abc' can update their incident at /customers/user_abc/incidents/incident_123.
-     * @deny (update) User with ID 'user_def' cannot update the incident at /customers/user_abc/incidents/incident_123.
-     * @allow (delete) User with ID 'user_abc' can delete their incident at /customers/user_abc/incidents/incident_123.
-     * @deny (delete) User with ID 'user_def' cannot delete the incident at /customers/user_abc/incidents/incident_123.
-     * @principle Enforces document ownership for all operations.
      */
     match /customers/{customerId}/incidents/{incidentId} {
-      allow get: if isOwner(customerId);
+      allow get: if isOwner(customerId) || isAdmin();
       allow list: if isOwner(customerId);
       allow create: if isOwner(customerId);
-      allow update: if isExistingOwner(customerId);
-      allow delete: if isExistingOwner(customerId);
+      allow update: if isExistingOwner(customerId) || isAdmin();
+      allow delete: if isExistingOwner(customerId) || isAdmin();
     }
 
     /**
      * @description Controls access to chat messages within incidents.
      * @path /customers/{customerId}/incidents/{incidentId}/messages/{messageId}
-     * @allow (create) User with ID 'user_abc' can create a message at /customers/user_abc/incidents/incident_123/messages/message_456.
-     * @deny (create) User with ID 'user_def' cannot create a message at /customers/user_abc/incidents/incident_123/messages/message_456.
-     * @allow (get) User with ID 'user_abc' can read their message at /customers/user_abc/incidents/incident_123/messages/message_456.
-     * @deny (get) User with ID 'user_def' cannot read the message at /customers/user_abc/incidents/incident_123/messages/message_456.
-     * @allow (update) User with ID 'user_abc' can update their message at /customers/user_abc/incidents/incident_123/messages/message_456.
-     * @deny (update) User with ID 'user_def' cannot update the message at /customers/user_abc/incidents/incident_123/messages/message_456.
-     * @allow (delete) User with ID 'user_abc' can delete their message at /customers/user_abc/incidents/incident_123/messages/message_456.
-     * @deny (delete) User with ID 'user_def' cannot delete the message at /customers/user_abc/incidents/incident_123/messages/message_456.
-     * @principle Enforces document ownership for all operations.
      */
     match /customers/{customerId}/incidents/{incidentId}/messages/{messageId} {
-      allow get: if isOwner(customerId);
-      allow list: if isOwner(customerId);
-      allow create: if isOwner(customerId);
-      allow update: if isExistingOwner(customerId);
-      allow delete: if isExistingOwner(customerId);
+      allow get: if isOwner(customerId) || isAdmin();
+      allow list: if isOwner(customerId) || isAdmin();
+      allow create: if isOwner(customerId) || isAdmin();
+      allow update: if isExistingOwner(customerId) || isAdmin();
+      allow delete: if isExistingOwner(customerId) || isAdmin();
+    }
+    
+    /**
+     * @description Admin access for collection group queries. Allows admin to list all incidents.
+     * @path /{path=**}/incidents/{incidentId}
+     */
+    match /{path=**}/incidents/{incidentId} {
+      allow list: if isAdmin();
     }
   }
 

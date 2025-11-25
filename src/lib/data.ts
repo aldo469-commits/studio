@@ -1,11 +1,13 @@
 import type { LucideIcon } from 'lucide-react';
-import { Truck, Ship, Plane, Warehouse, FileCheck2, Construction, Facebook, Twitter, Linkedin } from 'lucide-react';
+import { Truck, Ship, Plane, Warehouse, FileCheck2, Construction, Facebook, Twitter, Linkedin, ShieldCheck } from 'lucide-react';
 
 export type NavLink = {
   href: string;
   label: string;
   auth?: boolean;
   public?: boolean;
+  admin?: boolean;
+  icon?: LucideIcon;
 }
 
 export const navLinks: NavLink[] = [
@@ -18,6 +20,7 @@ export const navLinks: NavLink[] = [
   { href: '/contact', label: 'Contacto' },
   { href: '/incidents', label: 'Mis Incidencias', auth: true },
   { href: '/login', label: 'Área Clientes', public: true },
+  { href: '/admin/incidents', label: 'Admin', admin: true, icon: ShieldCheck },
 ];
 
 export type Service = {

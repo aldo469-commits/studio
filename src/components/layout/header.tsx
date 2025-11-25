@@ -11,6 +11,10 @@ import { Logo } from '@/components/icons';
 import { navLinks as defaultNavLinks } from '@/lib/data';
 import { useUser, useAuth } from '@/firebase';
 
+// IMPORTANT: Replace this with the actual UID of the admin user in a real application.
+const ADMIN_UID = 'REPLACE_WITH_YOUR_ADMIN_USER_ID';
+
+
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
@@ -23,10 +27,12 @@ export function Header() {
     }
     setIsMenuOpen(false);
   }
+  
+  const isAdmin = user?.uid === ADMIN_UID;
 
   const navLinks = defaultNavLinks.filter(link => {
-      // Hide auth-related links from the main nav, they will be handled separately
-      if (link.auth || link.public) {
+      // Hide auth-related, public, and admin links from the main nav
+      if (link.auth || link.public || link.admin) {
           return false;
       }
       return true;
@@ -35,6 +41,8 @@ export function Header() {
   const authNav = user 
     ? { href: '/incidents', label: 'Mis Incidencias' }
     : { href: '/login', label: 'Área Clientes' };
+    
+  const adminNav = defaultNavLinks.find(link => link.admin);
 
 
   return (
@@ -94,6 +102,19 @@ export function Header() {
                         {link.label}
                       </Link>
                     ))}
+                     {isAdmin && adminNav && (
+                       <Link
+                        href={adminNav.href}
+                        onClick={() => setIsMenuOpen(false)}
+                        className={cn(
+                          'text-lg transition-colors hover:text-foreground/80 flex items-center gap-2',
+                          pathname.startsWith(adminNav.href) ? 'text-primary font-semibold' : 'text-foreground/60'
+                        )}
+                      >
+                        {adminNav.icon && <adminNav.icon className="size-5" />}
+                        {adminNav.label}
+                      </Link>
+                     )}
                     {user && (
                         <button
                             onClick={handleLogout}
@@ -118,6 +139,18 @@ export function Header() {
 
         <div className="flex flex-1 items-center justify-end space-x-2 md:space-x-4">
           <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
+             {isAdmin && adminNav && (
+                <Link
+                href={adminNav.href}
+                className={cn(
+                    'transition-colors hover:text-primary flex items-center gap-2',
+                    pathname.startsWith(adminNav.href) ? 'text-primary font-semibold' : 'text-foreground/60'
+                )}
+                >
+                {adminNav.icon && <adminNav.icon className="size-4" />}
+                {adminNav.label}
+                </Link>
+             )}
              <Link
                 href={authNav.href}
                 className={cn(

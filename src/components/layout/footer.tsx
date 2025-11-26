@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Logo } from '@/components/icons';
+import { FooterLogo } from '@/components/icons';
 import { services, navLinks, socialLinks } from '@/lib/data';
 import { Button } from '@/components/ui/button';
 
@@ -13,7 +13,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           
           <div className="space-y-4">
-            <Logo className="w-40" />
+            <FooterLogo />
             <p className="text-sm text-muted-foreground">
               Su socio de confianza en soluciones de transporte y logística a nivel mundial.
             </p>

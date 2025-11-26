@@ -68,8 +68,17 @@ export function Header() {
           </nav>
         </div>
         
-        {/* Mobile Menu Trigger */}
-        <div className="flex-1 flex items-center md:hidden">
+        {/* Mobile Header */}
+        <div className="flex w-full items-center justify-between md:hidden">
+          <Link href="/">
+            <Logo className="w-32" />
+          </Link>
+          <div className="flex items-center gap-2">
+            {!user && !isUserLoading && (
+                <Button asChild size="sm">
+                  <Link href="/login">Acceder</Link>
+                </Button>
+            )}
             <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon">
@@ -77,68 +86,59 @@ export function Header() {
                   <span className="sr-only">Abrir menú</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="left" className="pr-0 pt-0">
-                  <div className="flex h-16 items-center justify-between pl-6 pr-4 border-b">
+              <SheetContent side="left" className="p-0">
+                  <div className="flex h-16 items-center border-b px-6">
                       <Link href="/" onClick={() => setIsMenuOpen(false)}>
                           <Logo className="w-32" />
                       </Link>
-                      <Button variant="ghost" size="icon" onClick={() => setIsMenuOpen(false)}>
-                          <X className="h-5 w-5" />
-                          <span className="sr-only">Cerrar menú</span>
-                      </Button>
                   </div>
-                  <div className="h-[calc(100vh-4rem)] p-6">
-                  <div className="flex flex-col space-y-4">
-                    {[...navLinks, authNav].map((link) => (
-                      <Link
-                        key={link.href}
-                        href={link.href}
-                        onClick={() => setIsMenuOpen(false)}
-                        className={cn(
-                          'text-lg transition-colors hover:text-foreground/80',
-                          pathname === link.href ? 'text-foreground font-semibold' : 'text-foreground/60'
-                        )}
-                      >
-                        {link.label}
-                      </Link>
-                    ))}
-                     {isAdmin && adminNav && (
-                       <Link
-                        href={adminNav.href}
-                        onClick={() => setIsMenuOpen(false)}
-                        className={cn(
-                          'text-lg transition-colors hover:text-foreground/80 flex items-center gap-2',
-                          pathname.startsWith(adminNav.href) ? 'text-primary font-semibold' : 'text-foreground/60'
-                        )}
-                      >
-                        {adminNav.icon && <adminNav.icon className="size-5" />}
-                        {adminNav.label}
-                      </Link>
-                     )}
-                    {user && (
-                        <button
-                            onClick={handleLogout}
-                            className="text-lg text-left text-foreground/60 transition-colors hover:text-foreground/80"
+                  <div className="p-6">
+                    <div className="flex flex-col space-y-4">
+                      {[...navLinks, authNav].map((link) => (
+                        <Link
+                          key={link.href}
+                          href={link.href}
+                          onClick={() => setIsMenuOpen(false)}
+                          className={cn(
+                            'text-lg transition-colors hover:text-foreground/80',
+                            pathname === link.href ? 'text-foreground font-semibold' : 'text-foreground/60'
+                          )}
                         >
-                            Cerrar Sesión
-                        </button>
-                    )}
+                          {link.label}
+                        </Link>
+                      ))}
+                      {isAdmin && adminNav && (
+                        <Link
+                          href={adminNav.href}
+                          onClick={() => setIsMenuOpen(false)}
+                          className={cn(
+                            'text-lg transition-colors hover:text-foreground/80 flex items-center gap-2',
+                            pathname.startsWith(adminNav.href) ? 'text-primary font-semibold' : 'text-foreground/60'
+                          )}
+                        >
+                          {adminNav.icon && <adminNav.icon className="size-5" />}
+                          {adminNav.label}
+                        </Link>
+                      )}
+                      {user && (
+                          <button
+                              onClick={handleLogout}
+                              className="text-lg text-left text-foreground/60 transition-colors hover:text-foreground/80 flex items-center gap-2"
+                          >
+                              <LogOut className="size-5" />
+                              Cerrar Sesión
+                          </button>
+                      )}
+                    </div>
                   </div>
-                </div>
               </SheetContent>
             </Sheet>
+          </div>
         </div>
 
-        {/* Mobile Logo */}
-        <div className="flex-1 flex justify-center md:hidden">
-             <Link href="/">
-                <Logo className="w-32" />
-            </Link>
-        </div>
-
-
-        <div className="flex flex-1 items-center justify-end space-x-2 md:space-x-4">
-          <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
+        {/* Desktop Right Section */}
+        <div className="hidden flex-1 items-center justify-end space-x-2 md:flex md:space-x-4">
+          <nav className="flex items-center space-x-6 text-sm font-medium">
              {isAdmin && adminNav && (
                 <Link
                 href={adminNav.href}
@@ -171,9 +171,6 @@ export function Header() {
           <Button asChild className="hidden md:inline-flex bg-accent hover:bg-accent/90 text-accent-foreground">
             <Link href="/quote">Solicitar Cotización</Link>
           </Button>
-          
-          {/* Placeholder for mobile layout spacing */}
-          <div className="w-8 h-8 md:hidden"></div>
         </div>
       </div>
     </header>

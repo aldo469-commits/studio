@@ -16,7 +16,7 @@ const initialState: TrackingState = {
 function SubmitButton() {
   const { pending } = useFormStatus();
   return (
-    <Button type="submit" disabled={pending} className="bg-accent hover:bg-accent/90 text-accent-foreground">
+    <Button type="submit" disabled={pending} className="bg-accent hover:bg-accent/90 text-accent-foreground w-full sm:w-auto">
       {pending ? 'Buscando...' : <><Search className="mr-2 h-4 w-4" /> Rastrear</>}
     </Button>
   );
@@ -43,7 +43,7 @@ export function TrackingModule() {
             <Input
               name="trackingNumber"
               placeholder="Ej: EJA123456789"
-              className="flex-grow text-lg h-12"
+              className="flex-grow text-base h-12"
               required
             />
             <SubmitButton />

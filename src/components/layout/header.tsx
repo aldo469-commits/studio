@@ -70,9 +70,9 @@ export function Header() {
         
         {/* Mobile Header */}
         <div className="flex w-full items-center justify-between md:hidden">
-          <Link href="/">
-            <Logo className="w-32" />
-          </Link>
+            <Link href="/" className="flex items-center">
+                <Logo />
+            </Link>
           <div className="flex items-center gap-2">
             {!user && !isUserLoading && (
                 <Button asChild size="sm">
@@ -89,7 +89,7 @@ export function Header() {
               <SheetContent side="left" className="p-0">
                   <div className="flex h-16 items-center border-b px-6">
                       <Link href="/" onClick={() => setIsMenuOpen(false)}>
-                          <Logo className="w-32" />
+                          <Logo />
                       </Link>
                   </div>
                   <div className="p-6">

@@ -65,10 +65,15 @@ export function Footer() {
 
         </div>
 
-        <div className="mt-8 pt-8 border-t">
-          <p className="text-center text-sm text-muted-foreground">
+        <div className="mt-8 pt-8 border-t flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-center sm:text-left text-sm text-muted-foreground">
             &copy; {new Date().getFullYear()} EJA GlobalTrans. Todos los derechos reservados.
           </p>
+          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+            <Link href="#" className="hover:text-primary transition-colors">Política de Cookies</Link>
+            <Link href="#" className="hover:text-primary transition-colors">Política de Privacidad</Link>
+            <Link href="#" className="hover:text-primary transition-colors">Aviso Legal</Link>
+          </div>
         </div>
       </div>
     </footer>

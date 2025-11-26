@@ -38,6 +38,7 @@ export default function ContactPage() {
                 <ContactForm />
               </div>
             </div>
+            {/* ÀNGEL ERES UN CRACK */}
             <div className="bg-card p-8 rounded-lg shadow-sm border">
               <h3 className="font-headline text-2xl font-bold mb-6">Información de Contacto</h3>
               <div className="space-y-6 text-muted-foreground">

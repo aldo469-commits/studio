@@ -1,29 +1,95 @@
 'use client';
 
-import { useActionState } from 'react';
-import { useFormStatus } from 'react-dom';
-import { trackShipment, type TrackingState } from './actions';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Search, Package, Calendar, Clock, Lightbulb, TriangleAlert } from 'lucide-react';
 
-const initialState: TrackingState = {
-  status: 'idle',
+type ShipmentEvent = {
+  timestamp: string;
+  status: string;
+  location: string;
 };
 
-function SubmitButton() {
-  const { pending } = useFormStatus();
-  return (
-    <Button type="submit" disabled={pending} className="bg-accent hover:bg-accent/90 text-accent-foreground w-full sm:w-auto">
-      {pending ? 'Buscando...' : <><Search className="mr-2 h-4 w-4" /> Rastrear</>}
-    </Button>
-  );
-}
+type ShipmentData = {
+  trackingNumber: string;
+  currentStatus: string;
+  estimatedDeliveryDate: string;
+  history: ShipmentEvent[];
+};
+
+type TrackingState = {
+  status: 'idle' | 'loading' | 'success' | 'error';
+  message?: string;
+  shipmentData?: ShipmentData;
+  aiSuggestions?: string;
+};
+
+const trackingSchema = z.object({
+  trackingNumber: z.string().min(5, "El número de seguimiento no es válido."),
+});
+
+type TrackingFormData = z.infer<typeof trackingSchema>;
+
+const mockShipmentData: Record<string, ShipmentData> = {
+    'EJA123456789': {
+        trackingNumber: 'EJA123456789',
+        currentStatus: 'En tránsito',
+        estimatedDeliveryDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+        history: [
+            { timestamp: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(), status: 'Envío recogido', location: 'Madrid, España' },
+            { timestamp: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(), status: 'Salida del centro de origen', location: 'Madrid, España' },
+            { timestamp: new Date().toISOString(), status: 'En tránsito hacia el destino', location: 'Zaragoza, España' }
+        ]
+    },
+    'EJA987654321': {
+        trackingNumber: 'EJA987654321',
+        currentStatus: 'Retrasado',
+        estimatedDeliveryDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+        history: [
+            { timestamp: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString(), status: 'Envío recogido', location: 'Shanghái, China' },
+            { timestamp: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(), status: 'Procesado en el puerto de origen', location: 'Shanghái, China' },
+            { timestamp: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(), status: 'Retraso por condiciones meteorológicas', location: 'Océano Índico' }
+        ]
+    }
+};
 
 export function TrackingModule() {
-  const [state, formAction] = useActionState(trackShipment, initialState);
+  const [state, setState] = useState<TrackingState>({ status: 'idle' });
+  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<TrackingFormData>({
+    resolver: zodResolver(trackingSchema),
+  });
+
+  const onFormSubmit = async (data: TrackingFormData) => {
+    setState({ status: 'loading' });
+    const { trackingNumber } = data;
+    const shipmentData = mockShipmentData[trackingNumber.toUpperCase()];
+
+    // Simulate network delay
+    await new Promise(res => setTimeout(res, 1000));
+
+    if (!shipmentData) {
+      setState({
+        status: 'error',
+        message: `No se encontró información para el número de seguimiento ${trackingNumber}.`,
+      });
+      return;
+    }
+    
+    // AI Suggestions are disabled for static export
+    const aiSuggestions = 'Las sugerencias de IA están desactivadas en la versión estática.';
+
+    setState({
+      status: 'success',
+      shipmentData,
+      aiSuggestions,
+    });
+  };
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('es-ES', {
@@ -39,17 +105,23 @@ export function TrackingModule() {
     <div className="space-y-8">
       <Card>
         <CardContent className="p-6">
-          <form action={formAction} className="flex flex-col sm:flex-row gap-4">
-            <Input
-              name="trackingNumber"
-              placeholder="Ej: EJA123456789"
-              className="flex-grow text-base h-12"
-              required
-            />
-            <SubmitButton />
+          <form onSubmit={handleSubmit(onFormSubmit)} className="flex flex-col sm:flex-row gap-4">
+            <div className='w-full'>
+              <Input
+                {...register('trackingNumber')}
+                placeholder="Ej: EJA123456789"
+                className="flex-grow text-base h-12"
+              />
+              {errors.trackingNumber && <p className="mt-1 text-sm text-destructive">{errors.trackingNumber.message}</p>}
+            </div>
+            <Button type="submit" disabled={isSubmitting} className="bg-accent hover:bg-accent/90 text-accent-foreground w-full sm:w-auto">
+                {isSubmitting ? 'Buscando...' : <><Search className="mr-2 h-4 w-4" /> Rastrear</>}
+            </Button>
           </form>
         </CardContent>
       </Card>
+
+      {state.status === 'loading' && <p>Buscando información del envío...</p>}
 
       {state.status === 'error' && (
         <Alert variant="destructive">

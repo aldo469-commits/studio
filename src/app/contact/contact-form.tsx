@@ -1,11 +1,9 @@
 'use client';
 
-import { useActionState, useEffect, useRef } from 'react';
-import { useFormStatus } from 'react-dom';
+import { useEffect, useRef } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { submitContactForm, type ContactFormState } from './actions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -17,8 +15,6 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Terminal } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 
 const contactSchema = z.object({
@@ -30,31 +26,16 @@ const contactSchema = z.object({
 
 type ContactFormData = z.infer<typeof contactSchema>;
 
-function SubmitButton() {
-  const { pending } = useFormStatus();
-  return (
-    <Button type="submit" disabled={pending} className="w-full sm:w-auto bg-accent hover:bg-accent/90 text-accent-foreground">
-      {pending ? 'Enviando...' : 'Enviar Mensaje'}
-    </Button>
-  );
-}
 
 export function ContactForm() {
   const { toast } = useToast();
   const formRef = useRef<HTMLFormElement>(null);
 
-  const [state, formAction] = useActionState<ContactFormState, FormData>(
-    submitContactForm,
-    {
-      message: '',
-    }
-  );
-
   const {
     control,
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     reset,
   } = useForm<ContactFormData>({
     resolver: zodResolver(contactSchema),
@@ -66,56 +47,25 @@ export function ContactForm() {
     },
   });
 
-  useEffect(() => {
-    if (state.message) {
-      if (state.issues) {
-        toast({
-          title: 'Error en el formulario',
-          description: state.message,
-          variant: 'destructive',
-        });
-      } else {
-        toast({
-          title: 'Éxito',
-          description: state.message,
-        });
-        reset(); // Reset form fields on success
-      }
-    }
-  }, [state, toast, reset]);
-  
-  const onFormSubmit = (data: ContactFormData) => {
-    const formData = new FormData();
-    Object.entries(data).forEach(([key, value]) => {
-        if(value) {
-            formData.append(key, value);
-        }
+  const onFormSubmit = async (data: ContactFormData) => {
+    // Simulate sending email
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    console.log("Nuevo mensaje de contacto (simulado):", data);
+
+    toast({
+        title: 'Éxito',
+        description: "¡Gracias por su mensaje! Nos pondremos en contacto con usted pronto.",
     });
-    formAction(formData);
+    reset();
   };
 
 
   return (
     <form
       ref={formRef}
-      action={formAction} // We can still use the action for progressive enhancement
       onSubmit={handleSubmit(onFormSubmit)}
       className="space-y-4"
     >
-        {state.issues && (
-        <Alert variant="destructive">
-          <Terminal className="h-4 w-4" />
-          <AlertTitle>Error al enviar el formulario</AlertTitle>
-          <AlertDescription>
-            <ul className="list-disc pl-5">
-              {state.issues.map((issue, index) => (
-                <li key={index}>{issue}</li>
-              ))}
-            </ul>
-          </AlertDescription>
-        </Alert>
-      )}
-
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="space-y-2">
           <Label htmlFor="name">Su Nombre</Label>
@@ -135,7 +85,7 @@ export function ContactForm() {
             name="subject"
             control={control}
             render={({ field }) => (
-                <Select onValueChange={field.onChange} value={field.value}>
+                <Select onValueChange={field.onChange} value={field.value} disabled={isSubmitting}>
                     <SelectTrigger id="subject" aria-invalid={!!errors.subject}>
                         <SelectValue placeholder="Seleccione un asunto" />
                     </SelectTrigger>
@@ -158,7 +108,9 @@ export function ContactForm() {
       </div>
 
       <div>
-        <SubmitButton />
+        <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto bg-accent hover:bg-accent/90 text-accent-foreground">
+            {isSubmitting ? 'Enviando...' : 'Enviar Mensaje'}
+        </Button>
       </div>
     </form>
   );

@@ -1,11 +1,8 @@
 'use client';
 
-import { useActionState, useEffect, useRef } from 'react';
-import { useFormStatus } from 'react-dom';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { submitQuoteForm, type QuoteFormState } from './actions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -18,8 +15,6 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Terminal } from 'lucide-react';
 
 const quoteSchema = z.object({
   fullName: z.string().min(2, "El nombre completo es requerido."),
@@ -34,24 +29,11 @@ const quoteSchema = z.object({
 
 type QuoteFormData = z.infer<typeof quoteSchema>;
 
-function SubmitButton() {
-  const { pending } = useFormStatus();
-  return (
-    <Button type="submit" disabled={pending} className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
-      {pending ? 'Enviando Solicitud...' : 'Solicitar Cotización'}
-    </Button>
-  );
-}
 
 export function QuoteForm() {
   const { toast } = useToast();
-  const formRef = useRef<HTMLFormElement>(null);
-  const [state, formAction] = useActionState<QuoteFormState, FormData>(
-    submitQuoteForm,
-    { message: '' }
-  );
 
-  const { control, register, handleSubmit, formState: { errors }, reset } = useForm<QuoteFormData>({
+  const { control, register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<QuoteFormData>({
     resolver: zodResolver(quoteSchema),
     defaultValues: {
       fullName: '',
@@ -64,54 +46,26 @@ export function QuoteForm() {
       notes: '',
     },
   });
-
-  useEffect(() => {
-    if (state.message) {
-      if (state.issues) {
-        toast({
-          title: 'Error en la solicitud',
-          description: 'Por favor, revise los campos marcados en rojo.',
-          variant: 'destructive',
-        });
-      } else {
-        toast({
-          title: 'Solicitud Enviada',
-          description: state.message,
-          duration: 8000
-        });
-        reset();
-      }
-    }
-  }, [state, toast, reset]);
   
-  const onFormSubmit = (data: QuoteFormData) => {
-    const formData = new FormData();
-    Object.entries(data).forEach(([key, value]) => {
-        if(value) {
-            formData.append(key, value);
-        }
+  const onFormSubmit = async (data: QuoteFormData) => {
+    // Simulate processing quote and sending email
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    console.log("Nueva solicitud de cotización (simulada):", data);
+
+    toast({
+      title: 'Solicitud Enviada',
+      description: "¡Gracias por su solicitud! Hemos recibido su información y uno de nuestros especialistas se pondrá en contacto con usted en breve para proporcionarle su cotización.",
+      duration: 8000
     });
-    formAction(formData);
+    reset();
   };
   
   const renderError = (field: keyof QuoteFormData) =>
     errors[field] && <p className="mt-1 text-sm text-destructive">{errors[field]?.message}</p>;
 
   return (
-    <form ref={formRef} action={formAction} onSubmit={handleSubmit(onFormSubmit)} className="space-y-6">
-      {state.issues && (
-        <Alert variant="destructive">
-          <Terminal className="h-4 w-4" />
-          <AlertTitle>Errores en el formulario</AlertTitle>
-          <AlertDescription>
-            <ul className="list-disc pl-5">
-              {state.issues.map((issue, index) => <li key={index}>{issue}</li>)}
-            </ul>
-          </AlertDescription>
-        </Alert>
-      )}
-
-      <fieldset className="space-y-4">
+    <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-6">
+      <fieldset className="space-y-4" disabled={isSubmitting}>
         <legend className="font-headline text-lg font-semibold mb-2 border-b pb-2">Información de Contacto</legend>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="space-y-2">
@@ -136,7 +90,7 @@ export function QuoteForm() {
         </div>
       </fieldset>
       
-      <fieldset className="space-y-4">
+      <fieldset className="space-y-4" disabled={isSubmitting}>
         <legend className="font-headline text-lg font-semibold mb-2 border-b pb-2">Detalles del Envío</legend>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="space-y-2">
@@ -179,7 +133,9 @@ export function QuoteForm() {
       </fieldset>
       
       <div>
-        <SubmitButton />
+        <Button type="submit" disabled={isSubmitting} className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
+            {isSubmitting ? 'Enviando Solicitud...' : 'Solicitar Cotización'}
+        </Button>
       </div>
     </form>
   );

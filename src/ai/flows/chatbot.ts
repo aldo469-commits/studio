@@ -1,4 +1,3 @@
-'use server';
 /**
  * @fileOverview A simple chatbot flow using Gemini.
  *
@@ -7,7 +6,6 @@
  * - ChatOutput - The return type for the chat function.
  */
 
-import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
 
 const MessageSchema = z.object({
@@ -32,52 +30,5 @@ const ChatOutputSchema = z.object({
 export type ChatOutput = z.infer<typeof ChatOutputSchema>;
 
 export async function chat(input: ChatInput): Promise<ChatOutput> {
-  return chatFlow(input);
+  return { response: "Lo sentimos, el chat no está disponible en la versión estática." };
 }
-
-const chatFlow = ai.defineFlow(
-  {
-    name: 'chatFlow',
-    inputSchema: ChatInputSchema,
-    outputSchema: ChatOutputSchema,
-  },
-  async ({ history, incidentContext }) => {
-    
-    let incidentDetails = '';
-    if (incidentContext) {
-      incidentDetails = `
-Contexto de la incidencia actual:
-- Título: ${incidentContext.title}
-- Categoría: ${incidentContext.category}
-- Estado: ${incidentContext.status}
-- Descripción: ${incidentContext.description}
-`;
-    }
-    
-    const systemPrompt = `You are a helpful and friendly customer service assistant for EJA GlobalTrans, a global logistics and transportation company.
-Your name is EJA-Bot.
-Your goal is to assist users with their questions about the company's services, shipment tracking, and general inquiries.
-${incidentDetails}
-When responding to an incident, be empathetic and professional. Provide clear, step-by-step solutions if possible.
-Keep your answers concise and helpful.
-The user is interacting with you through a chat widget on the company website.
-The current date is ${new Date().toLocaleDateString('es-ES')}.
-If you don't know the answer, say that you will connect them with a human agent.`;
-
-    const { output } = await ai.generate({
-      model: 'googleai/gemini-2.5-flash',
-      prompt: history.map(m => ({
-          role: m.role,
-          content: m.content,
-        })),
-      system: systemPrompt,
-      config: {
-        temperature: 0.7,
-      },
-    });
-
-    return {
-      response: output?.text ?? "Lo siento, no he podido procesar tu solicitud en este momento.",
-    };
-  }
-);

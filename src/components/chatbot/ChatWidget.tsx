@@ -9,7 +9,8 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { MessageSquare, Send, X, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback } from '../ui/avatar';
-import { chat, type ChatInput } from '@/ai/flows/chatbot';
+// La importación del flujo de chat se elimina para la compilación estática
+// import { chat, type ChatInput } from '@/ai/flows/chatbot';
 
 type Message = {
     role: 'user' | 'model';
@@ -39,25 +40,16 @@ export function ChatWidget() {
         if (!input.trim() || isLoading) return;
 
         const userMessage: Message = { content: input, role: 'user' };
-        const newMessages = [...messages, userMessage];
-        setMessages(newMessages);
+        setMessages(prev => [...prev, userMessage]);
         setInput('');
         setIsLoading(true);
 
-        try {
-            const chatInput: ChatInput = {
-                history: newMessages.map(m => ({ role: m.role, content: m.content })),
-            };
-            const result = await chat(chatInput);
-            const botMessage: Message = { content: result.response, role: 'model' };
+        // Simula una respuesta del bot para la versión estática
+        setTimeout(() => {
+            const botMessage: Message = { content: "Lo sentimos, el chat no está disponible en la versión estática.", role: 'model' };
             setMessages(prev => [...prev, botMessage]);
-        } catch (error) {
-            console.error("Chatbot error:", error);
-            const errorMessage: Message = { content: "Lo siento, ha ocurrido un error. Por favor, inténtelo de nuevo más tarde.", role: 'model' };
-            setMessages(prev => [...prev, errorMessage]);
-        } finally {
             setIsLoading(false);
-        }
+        }, 1000);
     };
 
     return (

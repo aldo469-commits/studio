@@ -1,5 +1,2 @@
-import { config } from 'dotenv';
-config();
-
-import '@/ai/flows/shipment-tracking-suggestions.ts';
-import '@/ai/flows/chatbot.ts';
+// Este archivo se deja vacío intencionadamente para evitar la carga de flujos de Genkit
+// durante la compilación estática.

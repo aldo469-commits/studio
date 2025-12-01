@@ -6,20 +6,18 @@
  * - ShipmentTrackingSuggestionsOutput - The return type for the getShipmentTrackingSuggestions function.
  */
 
-import {z} from 'zod';
+// Imports de Zod y Genkit eliminados para la exportación estática.
 
-const ShipmentTrackingSuggestionsInputSchema = z.object({
-  trackingNumber: z.string().describe('The tracking number of the shipment.'),
-  currentStatus: z.string().describe('The current status of the shipment.'),
-  estimatedDeliveryDate: z.string().describe('The estimated delivery date of the shipment.'),
-  shipmentHistory: z.string().describe('The shipment history information.'),
-});
-export type ShipmentTrackingSuggestionsInput = z.infer<typeof ShipmentTrackingSuggestionsInputSchema>;
+export type ShipmentTrackingSuggestionsInput = {
+  trackingNumber: string;
+  currentStatus: string;
+  estimatedDeliveryDate: string;
+  shipmentHistory: string;
+};
 
-const ShipmentTrackingSuggestionsOutputSchema = z.object({
-  suggestions: z.string().describe('Proactive suggestions about potential delays or alternative routes in Spanish.'),
-});
-export type ShipmentTrackingSuggestionsOutput = z.infer<typeof ShipmentTrackingSuggestionsOutputSchema>;
+export type ShipmentTrackingSuggestionsOutput = {
+  suggestions: string;
+};
 
 export async function getShipmentTrackingSuggestions(input: ShipmentTrackingSuggestionsInput): Promise<ShipmentTrackingSuggestionsOutput> {
   return {

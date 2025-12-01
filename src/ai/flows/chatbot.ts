@@ -68,7 +68,7 @@ If you don't know the answer, say that you will connect them with a human agent.
       model: 'googleai/gemini-2.5-flash',
       prompt: history.map(m => ({
           role: m.role,
-          content: [{ text: m.content }],
+          content: m.content,
         })),
       system: systemPrompt,
       config: {

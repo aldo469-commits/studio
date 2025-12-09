@@ -34,6 +34,20 @@ export default function TrackingPage() {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  // Funció per convertir la data de format DD/MM/YYYY a un objecte Date
+  const parseDate = (dateString: string) => {
+    if (!dateString || typeof dateString !== 'string') return null;
+    const parts = dateString.split('/');
+    if (parts.length === 3) {
+      // Asumim format DD/MM/YYYY
+      const [day, month, year] = parts.map(part => parseInt(part, 10));
+      return new Date(year, month - 1, day);
+    }
+    // Si no té el format esperat, provem de parsejar-la directament
+    const date = new Date(dateString);
+    return isNaN(date.getTime()) ? null : date;
+  };
+
   const handleSearch = async () => {
     if (!trackingCode) {
       setError('Si us plau, introdueix un codi de seguiment.');
@@ -67,6 +81,7 @@ export default function TrackingPage() {
   };
 
   const currentStatusConfig = shipment ? statusConfig[shipment.status] : null;
+  const etaDate = shipment ? parseDate(shipment.eta) : null;
 
   return (
     <div className="container mx-auto max-w-4xl px-4 py-12 md:py-20">
@@ -137,7 +152,9 @@ export default function TrackingPage() {
                     <Calendar className="h-6 w-6 text-primary"/>
                     <div>
                         <p className="text-muted-foreground">Data prevista (ETA)</p>
-                        <p className="font-semibold">{new Date(shipment.eta).toLocaleDateString('ca-ES', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                        <p className="font-semibold">
+                          {etaDate ? etaDate.toLocaleDateString('ca-ES', { day: 'numeric', month: 'long', year: 'numeric' }) : 'Data no disponible'}
+                        </p>
                     </div>
                 </div>
                 <div className="flex items-center gap-3">

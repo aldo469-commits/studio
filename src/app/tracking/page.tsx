@@ -13,11 +13,11 @@ import { Progress } from '@/components/ui/progress';
 type ShipmentData = {
   id: string;
   tracking_code: string;
-  Origen: string;
-  Destí: string;
-  ETA: string;
-  Estat: 'En magatzem' | 'En trànsit' | 'Lliurat';
-  'Ubicació actual': string;
+  origin: string;
+  destination: string;
+  eta: string;
+  status: 'En magatzem' | 'En trànsit' | 'Lliurat';
+  location: string;
 };
 
 // Configuració per a la barra de progrés
@@ -66,7 +66,7 @@ export default function TrackingPage() {
     }
   };
 
-  const currentStatusConfig = shipment ? statusConfig[shipment.Estat] : null;
+  const currentStatusConfig = shipment ? statusConfig[shipment.status] : null;
 
   return (
     <div className="container mx-auto max-w-4xl px-4 py-12 md:py-20">
@@ -123,28 +123,28 @@ export default function TrackingPage() {
                     <Truck className="h-6 w-6 text-primary"/>
                     <div>
                         <p className="text-muted-foreground">Origen</p>
-                        <p className="font-semibold">{shipment.Origen}</p>
+                        <p className="font-semibold">{shipment.origin}</p>
                     </div>
                 </div>
                  <div className="flex items-center gap-3">
                     <MapPin className="h-6 w-6 text-primary"/>
                     <div>
                         <p className="text-muted-foreground">Destí</p>
-                        <p className="font-semibold">{shipment.Destí}</p>
+                        <p className="font-semibold">{shipment.destination}</p>
                     </div>
                 </div>
                  <div className="flex items-center gap-3">
                     <Calendar className="h-6 w-6 text-primary"/>
                     <div>
                         <p className="text-muted-foreground">Data prevista (ETA)</p>
-                        <p className="font-semibold">{new Date(shipment.ETA).toLocaleDateString('ca-ES', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                        <p className="font-semibold">{new Date(shipment.eta).toLocaleDateString('ca-ES', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
                     </div>
                 </div>
                 <div className="flex items-center gap-3">
                     <MapPin className="h-6 w-6 text-primary"/>
                     <div>
                         <p className="text-muted-foreground">Ubicació Actual</p>
-                        <p className="font-semibold">{shipment['Ubicació actual']}</p>
+                        <p className="font-semibold">{shipment.location}</p>
                     </div>
                 </div>
             </div>
@@ -155,7 +155,7 @@ export default function TrackingPage() {
                     {currentStatusConfig && (
                         <div className="flex items-center gap-2 font-semibold text-lg">
                            {currentStatusConfig.icon}
-                           <span>{shipment.Estat}</span>
+                           <span>{shipment.status}</span>
                         </div>
                     )}
                 </div>

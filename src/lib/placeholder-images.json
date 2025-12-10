@@ -111,13 +111,13 @@
     {
       "id": "blog-ai",
       "description": "An abstract visualization of an artificial intelligence network.",
-      "imageUrl": "https://images.unsplash.com/photo-1591696331111-ef9586a5b17a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxhcnRpZmljaWFsJTIwaW50ZWxsaWdlbmNlfGVufDB8fHx8MTc2NDY1MzU5MXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1591696331111-ef9586a5b17a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxhcnRpZmljaWFsJTIwaW50ZWxsaWdlbmNlfGVufDB8fHx8MTc2NDY1MzU5MXww&ixlibrb-4.1.0&q=80&w=1080",
       "imageHint": "artificial intelligence"
     },
     {
       "id": "blog-customs",
       "description": "A close up on a passport being stamped at a customs checkpoint.",
-      "imageUrl": "https://images.unsplash.com/photo-1763225271111-dd9363584249?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjdXN0b21zJTIwZG9jdW1lbnRzfGVufDB8fHx8MTc2NDY5ODI4NHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1763225271111-dd9363584249?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjdXN0b21zJTIwZG9jdW1lbnRzfGVufDB8fHx8MTc2NDY5ODI4NHww&ixlibrb-4.1.0&q=80&w=1080",
       "imageHint": "customs documents"
     }
   ]

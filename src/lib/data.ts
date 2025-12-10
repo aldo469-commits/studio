@@ -223,3 +223,4 @@ export const blogPosts: BlogPost[] = [
     category: 'Comercio Internacional',
   },
 ];
+

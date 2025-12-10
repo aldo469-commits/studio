@@ -74,9 +74,9 @@
     },
     {
       "id": "service-logistics",
-      "description": "A vast, well-organized warehouse with tall shelves and forklifts.",
-      "imageUrl": "https://images.unsplash.com/photo-1644079446600-219068676743?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx3YXJlaG91c2UlMjBsb2dpc3RpY3N8ZW58MHx8fHwxNzY0NjY1MTYxfDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "warehouse logistics"
+      "description": "A truck backed into a loading dock at a warehouse.",
+      "imageUrl": "https://images.unsplash.com/photo-1579586337278-35d19d18aaa4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHx0cnVjayUyMGxvYWRpbmclMjBkb2NrfGVufDB8fHx8MTc2OTg2OTM4Nnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "truck loading dock"
     },
     {
       "id": "service-customs",

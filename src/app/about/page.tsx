@@ -40,7 +40,7 @@ export default function AboutPage() {
             <div className="prose prose-lg max-w-none dark:prose-invert">
               <h2 className="font-headline text-3xl md:text-4xl">Nuestra Historia</h2>
               <p>
-                Fundada en 2005, EJA GlobalTrans nació de la visión de tres expertos en logística con una pasión compartida: simplificar el comercio global. Comenzamos como una pequeña operación enfocada en el transporte terrestre en la península ibérica, pero nuestra dedicación a la excelencia y la satisfacción del cliente nos impulsó a crecer rápidamente.
+                Fundada en 2025, EJA GlobalTrans nació de la visión de tres expertos en logística con una pasión compartida: simplificar el comercio global. Comenzamos como una pequeña operación enfocada en el transporte terrestre en la península ibérica, pero nuestra dedicación a la excelencia y la satisfacción del cliente nos impulsó a crecer rápidamente.
               </p>
               <p>
                 Hoy, somos una empresa de logística integral con presencia en los cinco continentes. A lo largo de los años, hemos expandido nuestros servicios para incluir transporte marítimo, aéreo y soluciones logísticas complejas, manteniendo siempre el espíritu de servicio personalizado que nos definió en nuestros inicios.

@@ -157,7 +157,7 @@ export const blogPosts: BlogPost[] = [
     excerpt: 'Desde hace más de 30 años, ALIFARMA trabaja para hacer que la alimentación sea algo más que comer: una experiencia que conecte con los sentidos.',
     image: 'service-logistics',
     date: '2025-11-25',
-    author: { name: 'Elena García', avatarUrl: 'https://i.pravatar.cc/150?u=elena-garcia' },
+    author: { name: 'Alejandro Doncel', avatarUrl: 'https://i.pravatar.cc/150?u=alejandro-doncel' },
     category: 'Innovación',
     content: `
 <p>Desde hace más de 30 años, <strong>ALIFARMA</strong> trabaja para hacer que la alimentación sea algo más que comer: una experiencia que conecte con los sentidos. Nació en 1988 y, desde entonces, se ha convertido en una empresa referente en el mundo de la innovación alimentaria. Su objetivo es ayudar a otras marcas a crear productos diferentes, más sabrosos, saludables y adaptados a lo que busca el consumidor de hoy.</p>
@@ -192,7 +192,7 @@ export const blogPosts: BlogPost[] = [
     excerpt: 'Descubre estrategias probadas para aumentar la eficiencia, reducir costes y mejorar la resiliencia de tu cadena de suministro en el competitivo mercado actual.',
     image: 'blog-supply-chain',
     date: '2025-11-20',
-    author: { name: 'Elena García', avatarUrl: 'https://i.pravatar.cc/150?u=elena-garcia' },
+    author: { name: 'Alejandro Doncel', avatarUrl: 'https://i.pravatar.cc/150?u=alejandro-doncel' },
     category: 'Logística',
   },
   {
@@ -201,7 +201,7 @@ export const blogPosts: BlogPost[] = [
     excerpt: 'El transporte marítimo se enfrenta a una transformación verde. Analizamos las últimas innovaciones en combustibles alternativos y tecnologías para un futuro más limpio.',
     image: 'blog-sea-freight',
     date: '2025-11-15',
-    author: { name: 'Marcos Reyes', avatarUrl: 'https://i.pravatar.cc/150?u=marcos-reyes' },
+    author: { name: 'Alejandro Doncel', avatarUrl: 'https://i.pravatar.cc/150?u=alejandro-doncel' },
     category: 'Sostenibilidad',
   },
   {
@@ -210,7 +210,7 @@ export const blogPosts: BlogPost[] = [
     excerpt: 'Desde la optimización de rutas en tiempo real hasta la predicción de la demanda, la IA está redefiniendo la eficiencia en el sector logístico. ¿Está tu empresa preparada?',
     image: 'blog-ai',
     date: '2025-11-10',
-    author: { name: 'Sofía Navarro', avatarUrl: 'https://i.pravatar.cc/150?u=sofia-navarro' },
+    author: { name: 'Alejandro Doncel', avatarUrl: 'https://i.pravatar.cc/150?u=alejandro-doncel' },
     category: 'Tecnología',
   },
   {
@@ -219,7 +219,7 @@ export const blogPosts: BlogPost[] = [
     excerpt: 'Los trámites aduaneros son un punto crítico en el comercio internacional. Te damos consejos prácticos para asegurar que tu mercancía cruce las fronteras sin problemas.',
     image: 'blog-customs',
     date: '2025-11-05',
-    author: { name: 'Carlos Jiménez', avatarUrl: 'https://i.pravatar.cc/150?u=carlos-jimenez' },
+    author: { name: 'Alejandro Doncel', avatarUrl: 'https://i.pravatar.cc/150?u=alejandro-doncel' },
     category: 'Comercio Internacional',
   },
 ];

@@ -155,7 +155,7 @@ export const blogPosts: BlogPost[] = [
     slug: 'alifarma-innovacion-alimentaria',
     title: 'ALIFARMA: Innovar en alimentación desde 1988',
     excerpt: 'Desde hace más de 30 años, ALIFARMA trabaja para hacer que la alimentación sea algo más que comer: una experiencia que conecte con los sentidos.',
-    image: 'blog-alifarma',
+    image: 'service-logistics',
     date: '2025-11-25',
     author: { name: 'Elena García', avatarUrl: 'https://i.pravatar.cc/150?u=elena-garcia' },
     category: 'Innovación',

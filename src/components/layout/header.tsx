@@ -1,49 +1,48 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { Menu, X, LogOut } from 'lucide-react';
+import { usePathname, useRouter } from 'next/navigation';
+import { Menu, LogOut, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Logo } from '@/components/icons';
 import { navLinks as defaultNavLinks } from '@/lib/data';
-import { useUser, useAuth } from '@/firebase';
-
-// Admin user is identified by this email address.
-const ADMIN_EMAIL = 'admin@ejaglobaltrans.com';
-
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const pathname = usePathname();
-  const { user, isUserLoading } = useUser();
-  const auth = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    setIsClient(true);
+    const user = localStorage.getItem('user');
+    setIsLoggedIn(!!user);
+  }, [pathname]); // Re-check on route change
 
   const handleLogout = () => {
-    if (auth) {
-      auth.signOut();
-    }
+    localStorage.removeItem('user');
+    setIsLoggedIn(false);
     setIsMenuOpen(false);
-  }
-  
-  const isAdmin = user?.email === ADMIN_EMAIL;
+    router.push('/login');
+  };
 
   const navLinks = defaultNavLinks.filter(link => {
-      // Hide auth-related, public, and admin links from the main nav
-      if (link.auth || link.public || link.admin) {
-          return false;
-      }
-      return true;
+    if (link.auth || link.public || link.admin) {
+      return false;
+    }
+    return true;
   });
 
-  const authNav = user 
-    ? { href: '/incidents', label: 'Mis Incidencias' }
+  const authNav = isLoggedIn
+    ? { href: '/profile', label: 'Mi Perfil' }
     : { href: '/login', label: 'Área Clientes' };
     
-  const adminNav = defaultNavLinks.find(link => link.admin);
-
+  // For this simplified logic, admin panel is not shown
+  const adminNav = null;
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -70,14 +69,14 @@ export function Header() {
         
         {/* Mobile Header */}
         <div className="flex w-full items-center justify-between md:hidden">
-            <Link href="/" className="flex items-center">
-                <Logo />
-            </Link>
+          <Link href="/" className="flex items-center">
+            <Logo />
+          </Link>
           <div className="flex items-center gap-2">
-            {!user && !isUserLoading && (
-                <Button asChild size="sm">
-                  <Link href="/login">Acceder</Link>
-                </Button>
+            {isClient && !isLoggedIn && (
+              <Button asChild size="sm">
+                <Link href="/login">Acceder</Link>
+              </Button>
             )}
             <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
               <SheetTrigger asChild>
@@ -87,50 +86,37 @@ export function Header() {
                 </Button>
               </SheetTrigger>
               <SheetContent side="left" className="p-0">
-                  <div className="flex h-16 items-center border-b px-6">
-                      <Link href="/" onClick={() => setIsMenuOpen(false)}>
-                          <Logo />
+                <div className="flex h-16 items-center border-b px-6">
+                  <Link href="/" onClick={() => setIsMenuOpen(false)}>
+                    <Logo />
+                  </Link>
+                </div>
+                <div className="p-6">
+                  <div className="flex flex-col space-y-4">
+                    {[...navLinks, authNav].map((link) => (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        onClick={() => setIsMenuOpen(false)}
+                        className={cn(
+                          'text-lg transition-colors hover:text-foreground/80',
+                          pathname === link.href ? 'text-foreground font-semibold' : 'text-foreground/60'
+                        )}
+                      >
+                        {link.label}
                       </Link>
+                    ))}
+                    {isClient && isLoggedIn && (
+                      <button
+                        onClick={handleLogout}
+                        className="text-lg text-left text-foreground/60 transition-colors hover:text-foreground/80 flex items-center gap-2"
+                      >
+                        <LogOut className="size-5" />
+                        Cerrar Sesión
+                      </button>
+                    )}
                   </div>
-                  <div className="p-6">
-                    <div className="flex flex-col space-y-4">
-                      {[...navLinks, authNav].map((link) => (
-                        <Link
-                          key={link.href}
-                          href={link.href}
-                          onClick={() => setIsMenuOpen(false)}
-                          className={cn(
-                            'text-lg transition-colors hover:text-foreground/80',
-                            pathname === link.href ? 'text-foreground font-semibold' : 'text-foreground/60'
-                          )}
-                        >
-                          {link.label}
-                        </Link>
-                      ))}
-                      {isAdmin && adminNav && (
-                        <Link
-                          href={adminNav.href}
-                          onClick={() => setIsMenuOpen(false)}
-                          className={cn(
-                            'text-lg transition-colors hover:text-foreground/80 flex items-center gap-2',
-                            pathname.startsWith(adminNav.href) ? 'text-primary font-semibold' : 'text-foreground/60'
-                          )}
-                        >
-                          {adminNav.icon && <adminNav.icon className="size-5" />}
-                          {adminNav.label}
-                        </Link>
-                      )}
-                      {user && (
-                          <button
-                              onClick={handleLogout}
-                              className="text-lg text-left text-foreground/60 transition-colors hover:text-foreground/80 flex items-center gap-2"
-                          >
-                              <LogOut className="size-5" />
-                              Cerrar Sesión
-                          </button>
-                      )}
-                    </div>
-                  </div>
+                </div>
               </SheetContent>
             </Sheet>
           </div>
@@ -139,32 +125,20 @@ export function Header() {
         {/* Desktop Right Section */}
         <div className="hidden flex-1 items-center justify-end space-x-2 md:flex md:space-x-4">
           <nav className="flex items-center space-x-6 text-sm font-medium">
-             {isAdmin && adminNav && (
-                <Link
-                href={adminNav.href}
-                className={cn(
-                    'transition-colors hover:text-primary flex items-center gap-2',
-                    pathname.startsWith(adminNav.href) ? 'text-primary font-semibold' : 'text-foreground/60'
-                )}
-                >
-                {adminNav.icon && <adminNav.icon className="size-4" />}
-                {adminNav.label}
-                </Link>
-             )}
-             <Link
-                href={authNav.href}
-                className={cn(
-                  'transition-colors hover:text-foreground/80',
-                  pathname.startsWith(authNav.href) ? 'text-foreground font-semibold' : 'text-foreground/60'
-                )}
-              >
-                {authNav.label}
-              </Link>
+            <Link
+              href={authNav.href}
+              className={cn(
+                'transition-colors hover:text-foreground/80',
+                pathname.startsWith(authNav.href) ? 'text-foreground font-semibold' : 'text-foreground/60'
+              )}
+            >
+              {authNav.label}
+            </Link>
           </nav>
 
-          {user && !isUserLoading && (
+          {isClient && isLoggedIn && (
             <Button onClick={handleLogout} variant="ghost" size="icon" className="hidden md:inline-flex" title="Cerrar Sesión">
-                <LogOut className="h-5 w-5" />
+              <LogOut className="h-5 w-5" />
             </Button>
           )}
 

@@ -2,13 +2,12 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth, initiateEmailSignIn } from '@/firebase';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { TriangleAlert } from 'lucide-react';
+import { TriangleAlert, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 
 export default function LoginPage() {
@@ -16,7 +15,6 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const auth = useAuth();
   const router = useRouter();
 
   const handleSignIn = async (e: React.FormEvent) => {
@@ -25,17 +23,25 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      await initiateEmailSignIn(auth, email, password);
-      // onAuthStateChanged in provider will handle redirect
-      router.push('/incidents');
-    } catch (err: any) {
-      let errorMessage = "Ocurrió un error desconocido.";
-      if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
-        errorMessage = "El correo electrónico o la contraseña son incorrectos.";
-      } else if (err.message) {
-        errorMessage = err.message;
+      const response = await fetch(`https://sheetdb.io/api/v1/qm90759o5g894/search?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}&sheet=usuaris`);
+      
+      if (!response.ok) {
+        throw new Error('Error en la connexió amb el servidor.');
       }
-      setError(errorMessage);
+
+      const data = await response.json();
+
+      if (data.length > 0) {
+        const user = data[0];
+        // Guardar dades a localStorage
+        localStorage.setItem('user', JSON.stringify({ name: user.name, company: user.company }));
+        router.push('/profile');
+      } else {
+        setError("Dades incorrectes.");
+      }
+
+    } catch (err: any) {
+      setError(err.message || "Hi ha hagut un problema. Intenta-ho de nou més tard.");
     } finally {
       setIsLoading(false);
     }
@@ -45,7 +51,7 @@ export default function LoginPage() {
     <div className="flex items-center justify-center min-h-[70vh] bg-gray-50 dark:bg-gray-900 px-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-headline">Área de Clientes</CardTitle>
+          <CardTitle className="text-2xl font-headline">Àrea de Clientes</CardTitle>
           <CardDescription>Inicie sesión para gestionar sus incidencias.</CardDescription>
         </CardHeader>
         <CardContent>
@@ -79,7 +85,14 @@ export default function LoginPage() {
               />
             </div>
             <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <span>Iniciando sesión...</span>
+                </>
+              ) : (
+                'Iniciar Sesión'
+              )}
             </Button>
           </form>
         </CardContent>

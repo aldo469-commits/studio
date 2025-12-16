@@ -1,6 +1,6 @@
 
 import type { LucideIcon } from 'lucide-react';
-import { Truck, Ship, Plane, Warehouse, FileCheck2, Construction, Facebook, Twitter, Linkedin, ShieldCheck } from 'lucide-react';
+import { Truck, Ship, Plane, Warehouse, FileCheck2, Construction, Facebook, Twitter, Linkedin, ShieldCheck, User as UserIcon } from 'lucide-react';
 
 export type NavLink = {
   href: string;
@@ -19,6 +19,7 @@ export const navLinks: NavLink[] = [
   { href: '/tracking', label: 'Seguimiento' },
   { href: '/blog', label: 'Blog' },
   { href: '/contact', label: 'Contacto' },
+  { href: '/profile', label: 'Mi Perfil', auth: true, icon: UserIcon },
   { href: '/incidents', label: 'Mis Incidencias', auth: true },
   { href: '/login', label: 'Área Clientes', public: true },
   { href: '/admin/incidents', label: 'Admin', admin: true, icon: ShieldCheck },
@@ -156,7 +157,7 @@ export const blogPosts: BlogPost[] = [
     slug: 'alifarma-innovacion-alimentaria',
     title: 'ALIFARMA: Innovar en alimentación desde 1988',
     excerpt: 'Desde hace más de 30 años, ALIFARMA trabaja para hacer que la alimentación sea algo más que comer: una experiencia que conecte con los sentidos.',
-    image: 'blog-alifarma',
+    image: 'blog-alifarma-lab',
     date: '2025-11-25',
     author: { name: 'Alejandro Doncel', avatarUrl: 'https://i.pravatar.cc/150?u=alejandro-doncel' },
     category: 'Innovación',
@@ -224,11 +225,3 @@ export const blogPosts: BlogPost[] = [
     category: 'Comercio Internacional',
   },
 ];
-
-    
-
-    
-
-    
-
-    

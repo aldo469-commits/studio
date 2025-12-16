@@ -41,7 +41,7 @@ export default function LoginPage() {
       if (foundUser) {
         // Guardar dades a localStorage
         localStorage.setItem('user', JSON.stringify({ name: foundUser.nom, company: foundUser.empresa }));
-        router.push('/profile');
+        router.push('/dashboard');
       } else {
         setError("Dades incorrectes.");
       }

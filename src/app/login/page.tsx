@@ -11,7 +11,7 @@ import { TriangleAlert, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 
 export default function LoginPage() {
-  const [user, setUser] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -35,13 +35,12 @@ export default function LoginPage() {
       // 2. Find the user on the client side
       const foundUser = allUsers.find(
         (sheetUser: any) =>
-          sheetUser.usuari === user && sheetUser.contraseña === password
+          sheetUser.usuari === username && sheetUser.contraseña === password
       );
 
       if (foundUser) {
-        const userData = foundUser;
         // Guardar dades a localStorage
-        localStorage.setItem('user', JSON.stringify({ name: userData.usuari, company: userData.empresa }));
+        localStorage.setItem('user', JSON.stringify({ name: foundUser.usuari, company: foundUser.empresa }));
         router.push('/profile');
       } else {
         setError("Dades incorrectes.");
@@ -76,8 +75,8 @@ export default function LoginPage() {
                 id="user"
                 type="text"
                 placeholder="Su usuario"
-                value={user}
-                onChange={(e) => setUser(e.target.value)}
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 required
               />
             </div>

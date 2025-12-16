@@ -23,16 +23,23 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`https://sheetdb.io/api/v1/qm90759o5g894/search?usuari=${encodeURIComponent(user)}&password=${encodeURIComponent(password)}&sheet=usuaris`);
+      // 1. Fetch all users from the sheet
+      const response = await fetch(`https://sheetdb.io/api/v1/qm90759o5g894?sheet=usuaris`);
       
       if (!response.ok) {
         throw new Error('Error en la connexió amb el servidor.');
       }
 
-      const data = await response.json();
+      const allUsers = await response.json();
+      
+      // 2. Find the user on the client side
+      const foundUser = allUsers.find(
+        (sheetUser: any) =>
+          sheetUser.usuari === user && sheetUser.contraseña === password
+      );
 
-      if (data.length > 0) {
-        const userData = data[0];
+      if (foundUser) {
+        const userData = foundUser;
         // Guardar dades a localStorage
         localStorage.setItem('user', JSON.stringify({ name: userData.usuari, company: userData.empresa }));
         router.push('/profile');

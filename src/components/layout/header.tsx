@@ -12,35 +12,44 @@ import { navLinks as defaultNavLinks } from '@/lib/data';
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isClient, setIsClient] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
 
   useEffect(() => {
-    setIsClient(true);
-    const user = localStorage.getItem('user');
-    setIsLoggedIn(!!user);
-  }, [pathname]); // Re-check on route change
+    // This effect now runs only on the client side
+    const checkLoginStatus = () => {
+        const user = localStorage.getItem('user');
+        setIsLoggedIn(!!user);
+    };
+    checkLoginStatus();
+
+    // Optional: Add a storage event listener to sync across tabs
+    window.addEventListener('storage', checkLoginStatus);
+    return () => {
+        window.removeEventListener('storage', checkLoginStatus);
+    };
+  }, [pathname]);
 
   const handleLogout = () => {
     localStorage.removeItem('user');
     setIsLoggedIn(false);
-    setIsMenuOpen(false);
+    if(isMenuOpen) setIsMenuOpen(false);
     router.push('/login');
+    // We can manually refresh the page to ensure all state is cleared if needed
+    // window.location.href = '/login';
   };
 
   const navLinks = defaultNavLinks.filter(link => {
-    if (link.auth || link.public || link.admin) {
-      return false;
+    if (isLoggedIn) {
+        // Show auth links, hide public only links
+        return !link.public;
     }
-    return true;
-  });
+    // Show public links, hide auth-only links
+    return !link.auth;
+  }).filter(link => !link.admin); // Always filter out admin links for this header
 
-  const authNav = isLoggedIn
-    ? { href: '/profile', label: 'Mi Perfil' }
-    : { href: '/login', label: 'Área Clientes' };
-    
+
   // For this simplified logic, admin panel is not shown
   const adminNav = null;
 
@@ -73,7 +82,7 @@ export function Header() {
             <Logo />
           </Link>
           <div className="flex items-center gap-2">
-            {isClient && !isLoggedIn && (
+            {!isLoggedIn && (
               <Button asChild size="sm">
                 <Link href="/login">Acceder</Link>
               </Button>
@@ -93,7 +102,7 @@ export function Header() {
                 </div>
                 <div className="p-6">
                   <div className="flex flex-col space-y-4">
-                    {[...navLinks, authNav].map((link) => (
+                    {navLinks.map((link) => (
                       <Link
                         key={link.href}
                         href={link.href}
@@ -106,7 +115,7 @@ export function Header() {
                         {link.label}
                       </Link>
                     ))}
-                    {isClient && isLoggedIn && (
+                    {isLoggedIn && (
                       <button
                         onClick={handleLogout}
                         className="text-lg text-left text-foreground/60 transition-colors hover:text-foreground/80 flex items-center gap-2"
@@ -125,21 +134,28 @@ export function Header() {
         {/* Desktop Right Section */}
         <div className="hidden flex-1 items-center justify-end space-x-2 md:flex md:space-x-4">
           <nav className="flex items-center space-x-6 text-sm font-medium">
-            <Link
-              href={authNav.href}
-              className={cn(
-                'transition-colors hover:text-foreground/80',
-                pathname.startsWith(authNav.href) ? 'text-foreground font-semibold' : 'text-foreground/60'
-              )}
-            >
-              {authNav.label}
-            </Link>
+             {!isLoggedIn && (
+                <Link
+                    href="/login"
+                    className={cn(
+                        'transition-colors hover:text-foreground/80',
+                        pathname.startsWith('/login') ? 'text-foreground font-semibold' : 'text-foreground/60'
+                    )}
+                >
+                    Área Clientes
+                </Link>
+            )}
           </nav>
 
-          {isClient && isLoggedIn && (
-            <Button onClick={handleLogout} variant="ghost" size="icon" className="hidden md:inline-flex" title="Cerrar Sesión">
-              <LogOut className="h-5 w-5" />
-            </Button>
+          {isLoggedIn && (
+             <>
+                <Button variant="ghost" size="icon" onClick={() => router.push('/profile')} title="Mi Perfil">
+                    <User className="h-5 w-5" />
+                </Button>
+                <Button onClick={handleLogout} variant="ghost" size="icon" title="Cerrar Sesión">
+                    <LogOut className="h-5 w-5" />
+                </Button>
+             </>
           )}
 
           <Button asChild className="hidden md:inline-flex bg-accent hover:bg-accent/90 text-accent-foreground">

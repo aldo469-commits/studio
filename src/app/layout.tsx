@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import { Inter, Space_Grotesk } from 'next/font/google';
+import { Inter, Roboto } from 'next/font/google';
 import { cn } from '@/lib/utils';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
@@ -13,9 +13,10 @@ const fontBody = Inter({
   variable: '--font-body',
 });
 
-const fontHeadline = Space_Grotesk({
+const fontHeadline = Roboto({
   subsets: ['latin'],
   variable: '--font-headline',
+  weight: ['400', '700'],
 });
 
 export const metadata: Metadata = {

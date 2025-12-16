@@ -11,7 +11,7 @@ import { TriangleAlert, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('');
+  const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -23,7 +23,7 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`https://sheetdb.io/api/v1/qm90759o5g894/search?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}&sheet=usuaris`);
+      const response = await fetch(`https://sheetdb.io/api/v1/qm90759o5g894/search?usuari=${encodeURIComponent(user)}&password=${encodeURIComponent(password)}&sheet=usuaris`);
       
       if (!response.ok) {
         throw new Error('Error en la connexió amb el servidor.');
@@ -32,9 +32,9 @@ export default function LoginPage() {
       const data = await response.json();
 
       if (data.length > 0) {
-        const user = data[0];
+        const userData = data[0];
         // Guardar dades a localStorage
-        localStorage.setItem('user', JSON.stringify({ name: user.name, company: user.company }));
+        localStorage.setItem('user', JSON.stringify({ name: userData.usuari, company: userData.empresa }));
         router.push('/profile');
       } else {
         setError("Dades incorrectes.");
@@ -64,13 +64,13 @@ export default function LoginPage() {
               </Alert>
             )}
             <div className="space-y-2">
-              <Label htmlFor="email">Correo Electrónico</Label>
+              <Label htmlFor="user">Usuario</Label>
               <Input
-                id="email"
-                type="email"
-                placeholder="su@email.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                id="user"
+                type="text"
+                placeholder="Su usuario"
+                value={user}
+                onChange={(e) => setUser(e.target.value)}
                 required
               />
             </div>
@@ -91,7 +91,7 @@ export default function LoginPage() {
                   <span>Iniciando sesión...</span>
                 </>
               ) : (
-                'Iniciar Sesión'
+                'Entrar'
               )}
             </Button>
           </form>

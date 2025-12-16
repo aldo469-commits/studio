@@ -35,12 +35,12 @@ export default function LoginPage() {
       // 2. Find the user on the client side
       const foundUser = allUsers.find(
         (sheetUser: any) =>
-          sheetUser.usuari === username && sheetUser.contraseña === password
+          sheetUser.usuaris === username && sheetUser.password === password
       );
 
       if (foundUser) {
         // Guardar dades a localStorage
-        localStorage.setItem('user', JSON.stringify({ name: foundUser.usuari, company: foundUser.empresa }));
+        localStorage.setItem('user', JSON.stringify({ name: foundUser.nom, company: foundUser.empresa }));
         router.push('/profile');
       } else {
         setError("Dades incorrectes.");

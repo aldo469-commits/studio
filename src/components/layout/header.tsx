@@ -133,20 +133,6 @@ export function Header() {
 
         {/* Desktop Right Section */}
         <div className="hidden flex-1 items-center justify-end space-x-2 md:flex md:space-x-4">
-          <nav className="flex items-center space-x-6 text-sm font-medium">
-             {!isLoggedIn && (
-                <Link
-                    href="/login"
-                    className={cn(
-                        'transition-colors hover:text-foreground/80',
-                        pathname.startsWith('/login') ? 'text-foreground font-semibold' : 'text-foreground/60'
-                    )}
-                >
-                    Área Clientes
-                </Link>
-            )}
-          </nav>
-
           {isLoggedIn && (
              <>
                 <Button variant="ghost" size="icon" onClick={() => router.push('/profile')} title="Mi Perfil">

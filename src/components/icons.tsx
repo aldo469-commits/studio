@@ -7,8 +7,8 @@ export function Logo({ className }: { className?: string }) {
        <Image
         src="/Gemini_Generated_Image_vhgd4svhgd4svhgd-removebg-preview.png"
         alt="EJA GlobalTrans Logo"
-        width={140}
-        height={40}
+        width={120}
+        height={34}
         priority
       />
     </div>

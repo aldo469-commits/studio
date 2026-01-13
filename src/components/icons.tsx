@@ -3,28 +3,26 @@ import Image from 'next/image';
 
 export function Logo({ className }: { className?: string }) {
   return (
-    <div style={{ width: '140px', height: '40px', position: 'relative' }}>
-        <Image 
-            src="/LOGO.png" 
-            alt="EJA GlobalTrans Logo" 
-            fill
-            className={cn("object-contain", className)}
-            unoptimized
-        />
-    </div>
+    <Image 
+        src="/LOGO.png" 
+        alt="EJA GlobalTrans Logo" 
+        width={140}
+        height={40}
+        className={cn("object-contain", className)}
+        unoptimized
+    />
   );
 }
 
 export function FooterLogo({ className }: { className?: string }) {
     return (
-        <div style={{ width: '140px', height: '40px', position: 'relative' }}>
-            <Image 
-                src="/LOGO.png" 
-                alt="EJA GlobalTrans Logo" 
-                fill
-                className={cn("object-contain", className)}
-                unoptimized
-            />
-        </div>
+        <Image 
+            src="/LOGO.png" 
+            alt="EJA GlobalTrans Logo" 
+            width={140}
+            height={40}
+            className={cn("object-contain", className)}
+            unoptimized
+        />
       );
 }

@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 export function Logo({ className }: { className?: string }) {
   return (
-    <div className={cn("flex items-center", className)}>
+    <div className={cn(className)}>
         <Image 
             src="/LOGO.png" 
             alt="EJA GlobalTrans Logo" 
@@ -17,7 +17,7 @@ export function Logo({ className }: { className?: string }) {
 
 export function FooterLogo({ className }: { className?: string }) {
     return (
-        <div className={cn("flex items-center", className)}>
+        <div className={cn(className)}>
              <Image 
                 src="/LOGO.png" 
                 alt="EJA GlobalTrans Logo" 

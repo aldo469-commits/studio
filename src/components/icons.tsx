@@ -4,7 +4,7 @@ import Image from 'next/image';
 export function Logo({ className }: { className?: string }) {
   return (
     <Image 
-        src="/LOGO.png" 
+        src="/Captura%20de%20pantalla%202026-01-13%20153624.png" 
         alt="EJA GlobalTrans Logo" 
         width={140}
         height={40}
@@ -17,7 +17,7 @@ export function Logo({ className }: { className?: string }) {
 export function FooterLogo({ className }: { className?: string }) {
     return (
         <Image 
-            src="/LOGO.png" 
+            src="/Captura%20de%20pantalla%202026-01-13%20153624.png" 
             alt="EJA GlobalTrans Logo" 
             width={140}
             height={40}

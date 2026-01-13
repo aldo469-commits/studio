@@ -5,7 +5,7 @@ export function Logo({ className }: { className?: string }) {
   return (
     <div className={cn("flex items-center", className)}>
        <Image
-        src="/Gemini_Generated_Image_vhgd4svhgd4svhgd.png"
+        src="/Gemini_Generated_Image_vhgd4svhgd4svhgd-removebg-preview.png"
         alt="EJA GlobalTrans Logo"
         width={140}
         height={40}
@@ -19,7 +19,7 @@ export function FooterLogo({ className }: { className?: string }) {
     return (
       <div className={cn("flex items-center", className)}>
         <Image
-          src="/Gemini_Generated_Image_vhgd4svhgd4svhgd.png"
+          src="/Gemini_Generated_Image_vhgd4svhgd4svhgd-removebg-preview.png"
           alt="EJA GlobalTrans Logo"
           width={140}
           height={40}

@@ -19,12 +19,6 @@
       "imageHint": "office building"
     },
     {
-      "id": "locations-hero",
-      "description": "A stylized illuminated globe showing connecting lines across continents.",
-      "imageUrl": "https://images.unsplash.com/photo-1542382257-80dedb725088?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxnbG9iYWwlMjBuZXR3b3JrfGVufDB8fHx8MTc2NDYzMDQ1MHww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "global network"
-    },
-    {
       "id": "contact-hero",
       "description": "A close-up of a person's hands typing on a laptop.",
       "imageUrl": "https://images.unsplash.com/photo-1570215171424-f74325192b55?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8cGVyc29uJTIwdHlwaW5nfGVufDB8fHx8MTc2NDY5NzE1NXww&ixlib=rb-4.1.0&q=80&w=1080",
@@ -41,12 +35,6 @@
       "description": "A map on a digital screen with a highlighted route and tracking points.",
       "imageUrl": "https://images.unsplash.com/photo-1446776899648-aa78eefe8ed0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxkaWdpdGFsJTIwbWFwfGVufDB8fHx8MTc2NDY5ODI4NXww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "digital map"
-    },
-    {
-      "id": "world-map",
-      "description": "A flat, clean world map in shades of blue and gray.",
-      "imageUrl": "https://images.unsplash.com/photo-1723306743407-cb6ac8f19941?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx3b3JsZCUyMG1hcHxlbnwwfHx8fDE3NjQ2NTg1MTJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "world map"
     },
     {
       "id": "about-us-team",

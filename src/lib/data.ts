@@ -14,7 +14,6 @@ export type NavLink = {
 export const navLinks: NavLink[] = [
   { href: '/', label: 'Inicio' },
   { href: '/services', label: 'Servicios' },
-  { href: '/locations', label: 'Ubicaciones' },
   { href: '/about', label: 'Nosotros' },
   { href: '/tracking', label: 'Seguimiento' },
   { href: '/blog', label: 'Blog' },
@@ -83,51 +82,6 @@ export const services: Service[] = [
     longDescription: 'Gestionamos proyectos logísticos complejos de principio a fin. Desde el transporte de maquinaria pesada y componentes industriales hasta la coordinación de envíos para grandes proyectos de construcción, tenemos la experiencia para manejar las cargas más desafiantes.',
     icon: Construction,
     image: 'service-projects',
-  },
-];
-
-export const officeLocations = [
-  {
-    city: "Madrid, España",
-    address: "Calle de la Logística 123, 28001 Madrid",
-    phone: "+34 91 234 56 78",
-    type: "Sede Central",
-    coords: { top: '39%', left: '48%' }
-  },
-  {
-    city: "Ciudad de México, México",
-    address: "Av. del Transporte 456, 06500 CDMX",
-    phone: "+52 55 1234 5678",
-    type: "Oficina Regional",
-    coords: { top: '48%', left: '17%' }
-  },
-  {
-    city: "Nueva York, EE. UU.",
-    address: "100 Global Transit Ave, New York, NY 10001",
-    phone: "+1 212 555 0199",
-    type: "Oficina Comercial",
-    coords: { top: '39%', left: '23%' }
-  },
-  {
-    city: "Shanghái, China",
-    address: "世纪大道88号, Pudong, Shanghái",
-    phone: "+86 21 8765 4321",
-    type: "Centro de Operaciones (Asia)",
-    coords: { top: '43%', left: '85%' }
-  },
-  {
-    city: "São Paulo, Brasil",
-    address: "Av. Paulista 789, São Paulo - SP, 01311-913",
-    phone: "+55 11 9876 5432",
-    type: "Oficina Regional (LATAM)",
-    coords: { top: '65%', left: '33%' }
-  },
-    {
-    city: "Sídney, Australia",
-    address: "Level 5, 45 Clarence St, Sydney NSW 2000",
-    phone: "+61 2 1234 5678",
-    type: "Oficina Comercial (Oceanía)",
-    coords: { top: '69%', left: '92%' }
   },
 ];
 

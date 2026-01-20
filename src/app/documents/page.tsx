@@ -1,0 +1,347 @@
+'use client';
+
+import { useState, useEffect, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
+import { useUser } from '@/firebase';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
+import { Loader2, Printer, ArrowLeft, FileText, TriangleAlert } from 'lucide-react';
+import { Logo } from '@/components/icons';
+
+// Types based on SheetDB structure
+type DocumentLine = {
+  num_factura: string;
+  data: string;
+  usuari: string;
+  fpagament: string;
+  concepte: string;
+  preu_unitari: string;
+  unitats: string;
+  iva: string;
+  dte: string;
+  albara: string;
+};
+
+type UserData = {
+  usuari: string;
+  rol: 'admin' | 'administrador' | 'treballador' | 'client';
+  empresa: string;
+  fiscalid: string;
+  adreca: string;
+  telefon: string;
+};
+
+type ProcessedInvoice = {
+  invoiceNumber: string;
+  date: string;
+  userEmail: string;
+  paymentMethod: string;
+  lines: DocumentLine[];
+  clientData?: UserData;
+  subtotal: number;
+  ivaBreakdown: { rate: number; base: number; quota: number }[];
+  totalIva: number;
+  grandTotal: number;
+};
+
+const API_URL = 'https://sheetdb.io/api/v1/qm90759o5g894';
+
+// Main component
+export default function DocumentsPage() {
+  const { user, isUserLoading } = useUser();
+  const router = useRouter();
+
+  const [documents, setDocuments] = useState<DocumentLine[]>([]);
+  const [users, setUsers] = useState<UserData[]>([]);
+  const [role, setRole] = useState<UserData['rol'] | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedInvoice, setSelectedInvoice] = useState<ProcessedInvoice | null>(null);
+
+  useEffect(() => {
+    if (isUserLoading) {
+      return;
+    }
+    if (!user) {
+      router.push('/login');
+      return;
+    }
+
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        // 1. Fetch all users to find role and for later reference
+        const usersRes = await fetch(`${API_URL}?sheet=usuaris`);
+        if (!usersRes.ok) throw new Error('No se pudieron cargar los datos de los usuarios.');
+        const allUsers: UserData[] = await usersRes.json();
+        setUsers(allUsers);
+
+        // 2. Find current user's role
+        const currentUserData = allUsers.find(u => u.usuari === user.email);
+        const currentUserRole = currentUserData?.rol || null;
+        setRole(currentUserRole);
+
+        if (!currentUserRole) {
+          throw new Error('No se ha podido determinar tu rol. Contacta con el administrador.');
+        }
+
+        // 3. Fetch documents based on role
+        let docsUrl = `${API_URL}?sheet=documents`;
+        const isAdmin = ['admin', 'administrador', 'treballador'].includes(currentUserRole);
+        if (!isAdmin) {
+          docsUrl = `${API_URL}/search?sheet=documents&usuari=${user.email}`;
+        }
+        
+        const docsRes = await fetch(docsUrl);
+        if (!docsRes.ok) throw new Error('No se pudieron cargar las facturas.');
+        const invoiceDocs: DocumentLine[] = await docsRes.json();
+        setDocuments(invoiceDocs);
+
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [user, isUserLoading, router]);
+
+  const processedInvoices = useMemo((): ProcessedInvoice[] => {
+    if (!documents.length || !users.length) return [];
+
+    const groupedByInvoiceNumber = documents.reduce<Record<string, DocumentLine[]>>((acc, doc) => {
+      acc[doc.num_factura] = acc[doc.num_factura] || [];
+      acc[doc.num_factura].push(doc);
+      return acc;
+    }, {});
+
+    return Object.values(groupedByInvoiceNumber).map(lines => {
+      const firstLine = lines[0];
+      const clientData = users.find(u => u.usuari === firstLine.usuari);
+
+      let subtotal = 0;
+      const ivaBreakdown: Record<string, { base: number; quota: number, rate: number }> = {};
+
+      lines.forEach(line => {
+        const price = parseFloat(line.preu_unitari) || 0;
+        const units = parseFloat(line.unitats) || 0;
+        const discount = parseFloat(line.dte) || 0;
+        const ivaRate = parseFloat(line.iva) || 0;
+
+        const lineSubtotal = (price * units) * (1 - discount / 100);
+        subtotal += lineSubtotal;
+
+        if (!ivaBreakdown[ivaRate]) {
+          ivaBreakdown[ivaRate] = { base: 0, quota: 0, rate: ivaRate };
+        }
+        ivaBreakdown[ivaRate].base += lineSubtotal;
+      });
+
+      let totalIva = 0;
+      Object.values(ivaBreakdown).forEach(item => {
+        item.quota = item.base * (item.rate / 100);
+        totalIva += item.quota;
+      });
+
+      return {
+        invoiceNumber: firstLine.num_factura,
+        date: firstLine.data,
+        userEmail: firstLine.usuari,
+        paymentMethod: firstLine.fpagament,
+        lines: lines,
+        clientData: clientData,
+        subtotal: subtotal,
+        ivaBreakdown: Object.values(ivaBreakdown),
+        totalIva: totalIva,
+        grandTotal: subtotal + totalIva,
+      };
+    }).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  }, [documents, users]);
+  
+  const handlePrint = () => {
+    window.print();
+  };
+
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-8 flex justify-center items-center h-[50vh]">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <p className="ml-4 text-muted-foreground">Cargando documentos...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <Alert variant="destructive">
+          <TriangleAlert className="h-4 w-4" />
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      </div>
+    );
+  }
+
+  if (selectedInvoice) {
+    return (
+      <div className="container mx-auto px-4 py-8 bg-background">
+        <div className="flex gap-4 mb-6 print:hidden">
+            <Button variant="outline" onClick={() => setSelectedInvoice(null)}>
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Volver al listado
+            </Button>
+            <Button onClick={handlePrint}>
+                <Printer className="mr-2 h-4 w-4" />
+                Imprimir PDF
+            </Button>
+        </div>
+        
+        <div id="zona-factura" className="p-8 bg-white border rounded-lg shadow-sm text-black">
+            <header className="flex justify-between items-start pb-4 border-b">
+                <div>
+                    <Logo className="h-10"/>
+                    <div className="text-xs text-gray-600 mt-2">
+                        <p>EJA GlobalTrans</p>
+                        <p>Calle de la Logística 123, 28001 Madrid, España</p>
+                        <p>NIF: B12345678</p>
+                        <p>info@ejaglobaltrans.com</p>
+                    </div>
+                </div>
+                <div className="text-right">
+                    <h2 className="text-2xl font-bold font-headline text-primary">FACTURA</h2>
+                    <p className="font-semibold">Nº: {selectedInvoice.invoiceNumber}</p>
+                    <p>Data: {new Date(selectedInvoice.date).toLocaleDateString('es-ES')}</p>
+                </div>
+            </header>
+
+            <section className="my-6">
+                <h3 className="font-semibold mb-2">Datos del Cliente:</h3>
+                {selectedInvoice.clientData ? (
+                    <div className="text-sm">
+                        <p className="font-bold">{selectedInvoice.clientData.empresa}</p>
+                        <p>NIF: {selectedInvoice.clientData.fiscalid}</p>
+                        <p>{selectedInvoice.clientData.adreca}</p>
+                        <p>Teléfono: {selectedInvoice.clientData.telefon}</p>
+                        <p>Email: {selectedInvoice.clientData.usuari}</p>
+                    </div>
+                ) : (
+                    <p className="text-sm text-red-500">Datos del cliente no encontrados.</p>
+                )}
+            </section>
+
+            <section className="my-6">
+                <Table>
+                    <TableHeader>
+                        <TableRow className="bg-gray-100">
+                            <TableHead className="w-1/2">Concepto</TableHead>
+                            <TableHead className="text-right">Precio</TableHead>
+                            <TableHead className="text-right">Uds.</TableHead>
+                            <TableHead className="text-right">Dte.</TableHead>
+                            <TableHead className="text-right">Total</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {selectedInvoice.lines.map((line, index) => {
+                            const price = parseFloat(line.preu_unitari) || 0;
+                            const units = parseFloat(line.unitats) || 0;
+                            const discount = parseFloat(line.dte) || 0;
+                            const total = (price * units) * (1 - discount/100);
+                            return (
+                                <TableRow key={index}>
+                                    <TableCell>{line.concepte}</TableCell>
+                                    <TableCell className="text-right">{price.toFixed(2)}€</TableCell>
+                                    <TableCell className="text-right">{units}</TableCell>
+                                    <TableCell className="text-right">{discount}%</TableCell>
+                                    <TableCell className="text-right font-medium">{total.toFixed(2)}€</TableCell>
+                                </TableRow>
+                            )
+                        })}
+                    </TableBody>
+                </Table>
+            </section>
+            
+            <section className="flex justify-end mt-6">
+                <div className="w-full max-w-sm space-y-2">
+                    <div className="flex justify-between text-sm">
+                        <span>Subtotal</span>
+                        <span>{selectedInvoice.subtotal.toFixed(2)}€</span>
+                    </div>
+                    {selectedInvoice.ivaBreakdown.map(iva => (
+                         <div key={iva.rate} className="flex justify-between text-sm">
+                            <span>IVA ({iva.rate}%) sobre {iva.base.toFixed(2)}€</span>
+                            <span>{iva.quota.toFixed(2)}€</span>
+                        </div>
+                    ))}
+                    <div className="flex justify-between font-bold text-lg pt-2 border-t mt-2">
+                        <span>TOTAL</span>
+                        <span>{selectedInvoice.grandTotal.toFixed(2)}€</span>
+                    </div>
+                </div>
+            </section>
+            
+             <section className="my-6">
+                <h3 className="font-semibold text-sm">Forma de pago:</h3>
+                <p className="text-sm">{selectedInvoice.paymentMethod}</p>
+             </section>
+
+            <footer className="text-xs text-gray-500 pt-4 border-t mt-8">
+                <p>EJA GlobalTrans - Inscrita en el Registro Mercantil de Madrid, Tomo 1234, Folio 56, Hoja M-78901.</p>
+                <p>De conformidad con la Ley Orgánica 3/2018, de 5 de diciembre, de Protección de Datos Personales y garantía de los derechos digitales, le informamos que sus datos serán incorporados a un fichero titularidad de EJA GlobalTrans con la finalidad de gestionar la relación comercial.</p>
+            </footer>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold font-headline">Mis Documentos</h1>
+        {role && ['admin', 'administrador', 'treballador'].includes(role) && (
+            <Badge>Vista de Administrador</Badge>
+        )}
+      </div>
+      
+      {processedInvoices.length === 0 ? (
+        <Card className="text-center py-12">
+            <CardHeader>
+                <FileText className="mx-auto h-12 w-12 text-muted-foreground" />
+                <CardTitle>No se encontraron documentos</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <CardDescription>Actualmente no tiene facturas disponibles.</CardDescription>
+            </CardContent>
+        </Card>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {processedInvoices.map(invoice => (
+            <Card key={invoice.invoiceNumber} className="flex flex-col">
+              <CardHeader>
+                <CardTitle>Factura Nº {invoice.invoiceNumber}</CardTitle>
+                <CardDescription>
+                  Fecha: {new Date(invoice.date).toLocaleDateString('es-ES')}
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="flex-grow">
+                <p className="font-bold text-2xl mb-2">{invoice.grandTotal.toFixed(2)}€</p>
+                {role && ['admin', 'administrador', 'treballador'].includes(role) && (
+                    <p className="text-sm text-muted-foreground">{invoice.clientData?.empresa || invoice.userEmail}</p>
+                )}
+              </CardContent>
+              <CardFooter>
+                  <Button className="w-full" onClick={() => setSelectedInvoice(invoice)}>
+                    Ver Detalles e Imprimir
+                  </Button>
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}

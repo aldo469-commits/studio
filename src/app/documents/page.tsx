@@ -132,8 +132,10 @@ export default function DocumentsPage() {
         // 3. Fetch documents based on role
         let docsUrl = `${API_URL}?sheet=documents`;
         const isAdmin = ['admin', 'administrador', 'treballador'].includes(currentUserRole);
+        
         if (!isAdmin) {
-          const encodedEmail = encodeURIComponent(user.email);
+          const cleanEmail = user.email.trim();
+          const encodedEmail = encodeURIComponent(cleanEmail);
           docsUrl = `${API_URL}/search?sheet=documents&usuari=${encodedEmail}&case_sensitive=false`;
         }
         
@@ -165,7 +167,7 @@ export default function DocumentsPage() {
 
     return Object.values(groupedByInvoiceNumber).map(lines => {
       const firstLine = lines[0];
-      const clientData = users.find(u => u.usuari && firstLine.usuari && u.usuari.toLowerCase() === firstLine.usuari.toLowerCase());
+      const clientData = users.find(u => u.usuari && firstLine.usuari && u.usuari.trim().toLowerCase() === firstLine.usuari.trim().toLowerCase());
 
       let subtotal = 0;
       const ivaBreakdown: Record<string, { base: number; quota: number, rate: number }> = {};
@@ -219,7 +221,7 @@ export default function DocumentsPage() {
 
     return Object.values(groupedByDeliveryNote).map(lines => {
       const firstLine = lines[0];
-      const clientData = users.find(u => u.usuari && firstLine.usuari && u.usuari.toLowerCase() === firstLine.usuari.toLowerCase());
+      const clientData = users.find(u => u.usuari && firstLine.usuari && u.usuari.trim().toLowerCase() === firstLine.usuari.trim().toLowerCase());
       return {
         deliveryNoteNumber: firstLine.albara,
         date: firstLine.data,

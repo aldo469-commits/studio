@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { useUser } from '@/firebase';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -35,6 +34,13 @@ type UserData = {
   telefon: string;
 };
 
+// User profile from localStorage
+type UserProfile = {
+  name: string;
+  company: string;
+  email: string;
+};
+
 type ProcessedInvoice = {
   invoiceNumber: string;
   date: string;
@@ -60,8 +66,10 @@ const API_URL = 'https://sheetdb.io/api/v1/qm90759o5g894';
 
 // Main component
 export default function DocumentsPage() {
-  const { user, isUserLoading } = useUser();
   const router = useRouter();
+
+  const [user, setUser] = useState<UserProfile | null>(null);
+  const [authLoading, setAuthLoading] = useState(true);
 
   const [documents, setDocuments] = useState<DocumentLine[]>([]);
   const [users, setUsers] = useState<UserData[]>([]);
@@ -72,12 +80,30 @@ export default function DocumentsPage() {
   const [selectedDeliveryNote, setSelectedDeliveryNote] = useState<ProcessedDeliveryNote | null>(null);
 
 
+  // Auth check effect from localStorage
   useEffect(() => {
-    if (isUserLoading) {
-      return;
-    }
-    if (!user) {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        if (parsedUser.email) {
+            setUser(parsedUser);
+        } else {
+            router.push('/login');
+        }
+      } catch (e) {
+        console.error("Failed to parse user data from localStorage", e);
+        router.push('/login');
+      }
+    } else {
       router.push('/login');
+    }
+    setAuthLoading(false);
+  }, [router]);
+
+  // Data fetching effect
+  useEffect(() => {
+    if (authLoading || !user) {
       return;
     }
 
@@ -120,7 +146,7 @@ export default function DocumentsPage() {
     };
 
     fetchData();
-  }, [user, isUserLoading, router]);
+  }, [user, authLoading]);
 
   const processedInvoices = useMemo((): ProcessedInvoice[] => {
     if (!documents.length || !users.length) return [];
@@ -146,7 +172,7 @@ export default function DocumentsPage() {
         const discount = parseFloat(line.dte) || 0;
         const ivaRate = parseFloat(line.iva) || 0;
 
-        const lineSubtotal = (price * units) * (1 - discount / 100);
+        const lineSubtotal = (price * units) * (1 - (discount / 100));
         subtotal += lineSubtotal;
 
         if (!ivaBreakdown[ivaRate]) {
@@ -203,6 +229,15 @@ export default function DocumentsPage() {
   const handlePrint = () => {
     window.print();
   };
+
+  if (authLoading) {
+    return (
+      <div className="container mx-auto px-4 py-8 flex justify-center items-center h-[50vh]">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <p className="ml-4 text-muted-foreground">Verificando sesión...</p>
+      </div>
+    );
+  }
 
   if (loading) {
     return (
@@ -288,7 +323,7 @@ export default function DocumentsPage() {
                             const price = parseFloat(line.preu_unitari) || 0;
                             const units = parseFloat(line.unitats) || 0;
                             const discount = parseFloat(line.dte) || 0;
-                            const total = (price * units) * (1 - discount/100);
+                            const total = (price * units) * (1 - (discount / 100));
                             return (
                                 <TableRow key={index}>
                                     <TableCell>{line.concepte}</TableCell>

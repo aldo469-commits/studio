@@ -39,8 +39,12 @@ export default function LoginPage() {
       );
 
       if (foundUser) {
-        // Guardar dades a localStorage
-        localStorage.setItem('user', JSON.stringify({ name: foundUser.nom, company: foundUser.empresa }));
+        // Guardar dades a localStorage, incloent l'email
+        localStorage.setItem('user', JSON.stringify({ 
+            name: foundUser.nom, 
+            company: foundUser.empresa,
+            email: foundUser.usuaris 
+        }));
         router.push('/dashboard');
       } else {
         setError("Dades incorrectes.");
@@ -70,7 +74,7 @@ export default function LoginPage() {
               </Alert>
             )}
             <div className="space-y-2">
-              <Label htmlFor="user">Usuario</Label>
+              <Label htmlFor="user">Usuario (Email)</Label>
               <Input
                 id="user"
                 type="text"

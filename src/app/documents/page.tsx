@@ -133,7 +133,8 @@ export default function DocumentsPage() {
         let docsUrl = `${API_URL}?sheet=documents`;
         const isAdmin = ['admin', 'administrador', 'treballador'].includes(currentUserRole);
         if (!isAdmin) {
-          docsUrl = `${API_URL}/search?sheet=documents&usuari=${user.email}&case_sensitive=false`;
+          const encodedEmail = encodeURIComponent(user.email);
+          docsUrl = `${API_URL}/search?sheet=documents&usuari=${encodedEmail}&case_sensitive=false`;
         }
         
         const docsRes = await fetch(docsUrl);

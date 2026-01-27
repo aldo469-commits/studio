@@ -117,10 +117,13 @@ export default function DocumentsPage() {
         const allUsers: UserData[] = await usersRes.json();
         setUsers(allUsers);
 
-        // 2. Find current user's role
-        const currentUserData = allUsers.find(u => u.usuari === user.email);
-        const currentUserRole = currentUserData?.rol || null;
-        setRole(currentUserRole);
+        // 2. Find current user's role (case-insensitive and trimmed)
+        const currentUserData = allUsers.find(
+          (u) => u.usuari && user?.email && u.usuari.trim().toLowerCase() === user.email.trim().toLowerCase()
+        );
+        const currentUserRole = currentUserData?.rol?.trim().toLowerCase() || null;
+        setRole(currentUserRole as UserData['rol'] | null);
+
 
         if (!currentUserRole) {
           throw new Error('No se ha podido determinar tu rol. Contacta con el administrador.');

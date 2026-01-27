@@ -14,9 +14,9 @@ export type NavLink = {
 export const navLinks: NavLink[] = [
   { href: '/', label: 'Inicio' },
   { href: '/services', label: 'Servicios' },
-  { href: '/about', label: 'Nosotros' },
+  { href: '/about', label: 'Nosotros', public: true },
   { href: '/tracking', label: 'Seguimiento' },
-  { href: '/blog', label: 'Blog' },
+  { href: '/blog', label: 'Blog', public: true },
   { href: '/contact', label: 'Contacto' },
   { href: '/dashboard', label: 'Dashboard', auth: true, icon: LayoutDashboard },
   { href: '/documents', label: 'Mis Documentos', auth: true, icon: FileText },

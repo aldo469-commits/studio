@@ -9,6 +9,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { Loader2, Printer, ArrowLeft, FileText, TriangleAlert } from 'lucide-react';
 import { Logo } from '@/components/icons';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Badge } from '@/components/ui/badge';
 
 // Types based on SheetDB structure
 type DocumentLine = {
@@ -46,6 +48,14 @@ type ProcessedInvoice = {
   grandTotal: number;
 };
 
+type ProcessedDeliveryNote = {
+    deliveryNoteNumber: string;
+    date: string;
+    userEmail: string;
+    clientData?: UserData;
+    lines: DocumentLine[];
+};
+
 const API_URL = 'https://sheetdb.io/api/v1/qm90759o5g894';
 
 // Main component
@@ -59,6 +69,8 @@ export default function DocumentsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedInvoice, setSelectedInvoice] = useState<ProcessedInvoice | null>(null);
+  const [selectedDeliveryNote, setSelectedDeliveryNote] = useState<ProcessedDeliveryNote | null>(null);
+
 
   useEffect(() => {
     if (isUserLoading) {
@@ -113,7 +125,9 @@ export default function DocumentsPage() {
   const processedInvoices = useMemo((): ProcessedInvoice[] => {
     if (!documents.length || !users.length) return [];
 
-    const groupedByInvoiceNumber = documents.reduce<Record<string, DocumentLine[]>>((acc, doc) => {
+    const invoiceDocs = documents.filter(doc => doc.num_factura && doc.num_factura.trim() !== '');
+
+    const groupedByInvoiceNumber = invoiceDocs.reduce<Record<string, DocumentLine[]>>((acc, doc) => {
       acc[doc.num_factura] = acc[doc.num_factura] || [];
       acc[doc.num_factura].push(doc);
       return acc;
@@ -162,6 +176,30 @@ export default function DocumentsPage() {
     }).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }, [documents, users]);
   
+  const processedDeliveryNotes = useMemo((): ProcessedDeliveryNote[] => {
+    if (!documents.length || !users.length) return [];
+    
+    const deliveryNoteDocs = documents.filter(doc => doc.albara && doc.albara.trim() !== '');
+
+    const groupedByDeliveryNote = deliveryNoteDocs.reduce<Record<string, DocumentLine[]>>((acc, doc) => {
+      acc[doc.albara] = acc[doc.albara] || [];
+      acc[doc.albara].push(doc);
+      return acc;
+    }, {});
+
+    return Object.values(groupedByDeliveryNote).map(lines => {
+      const firstLine = lines[0];
+      const clientData = users.find(u => u.usuari === firstLine.usuari);
+      return {
+        deliveryNoteNumber: firstLine.albara,
+        date: firstLine.data,
+        userEmail: firstLine.usuari,
+        clientData,
+        lines,
+      };
+    }).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  }, [documents, users]);
+
   const handlePrint = () => {
     window.print();
   };
@@ -298,6 +336,44 @@ export default function DocumentsPage() {
     );
   }
 
+  if (selectedDeliveryNote) {
+    return (
+        <div className="container mx-auto px-4 py-8">
+            <Button variant="outline" onClick={() => setSelectedDeliveryNote(null)}>
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Volver al listado de albaranes
+            </Button>
+            <Card className="mt-6">
+                <CardHeader>
+                    <CardTitle>Albarán Nº {selectedDeliveryNote.deliveryNoteNumber}</CardTitle>
+                    <CardDescription>
+                        Fecha: {new Date(selectedDeliveryNote.date).toLocaleDateString('es-ES')}
+                        {selectedDeliveryNote.clientData && ` | Cliente: ${selectedDeliveryNote.clientData.empresa}`}
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Concepto</TableHead>
+                                <TableHead className="text-right">Unidades</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {selectedDeliveryNote.lines.map((line, index) => (
+                                <TableRow key={index}>
+                                    <TableCell>{line.concepte}</TableCell>
+                                    <TableCell className="text-right">{line.unitats}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </CardContent>
+            </Card>
+        </div>
+    )
+  }
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-6">
@@ -307,41 +383,88 @@ export default function DocumentsPage() {
         )}
       </div>
       
-      {processedInvoices.length === 0 ? (
-        <Card className="text-center py-12">
-            <CardHeader>
-                <FileText className="mx-auto h-12 w-12 text-muted-foreground" />
-                <CardTitle>No se encontraron documentos</CardTitle>
-            </CardHeader>
-            <CardContent>
-                <CardDescription>Actualmente no tiene facturas disponibles.</CardDescription>
-            </CardContent>
-        </Card>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {processedInvoices.map(invoice => (
-            <Card key={invoice.invoiceNumber} className="flex flex-col">
-              <CardHeader>
-                <CardTitle>Factura Nº {invoice.invoiceNumber}</CardTitle>
-                <CardDescription>
-                  Fecha: {new Date(invoice.date).toLocaleDateString('es-ES')}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="flex-grow">
-                <p className="font-bold text-2xl mb-2">{invoice.grandTotal.toFixed(2)}€</p>
-                {role && ['admin', 'administrador', 'treballador'].includes(role) && (
-                    <p className="text-sm text-muted-foreground">{invoice.clientData?.empresa || invoice.userEmail}</p>
-                )}
-              </CardContent>
-              <CardFooter>
-                  <Button className="w-full" onClick={() => setSelectedInvoice(invoice)}>
-                    Ver Detalles e Imprimir
-                  </Button>
-              </CardFooter>
-            </Card>
-          ))}
-        </div>
-      )}
+      <Tabs defaultValue="invoices" className="w-full">
+        <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="invoices">Facturas</TabsTrigger>
+            <TabsTrigger value="delivery-notes">Albaranes</TabsTrigger>
+        </TabsList>
+        <TabsContent value="invoices" className="mt-6">
+            {processedInvoices.length === 0 ? (
+                <Card className="text-center py-12">
+                    <CardHeader>
+                        <FileText className="mx-auto h-12 w-12 text-muted-foreground" />
+                        <CardTitle>No se encontraron facturas</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <CardDescription>Actualmente no tiene facturas disponibles.</CardDescription>
+                    </CardContent>
+                </Card>
+            ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {processedInvoices.map(invoice => (
+                    <Card key={invoice.invoiceNumber} className="flex flex-col">
+                    <CardHeader>
+                        <CardTitle>Factura Nº {invoice.invoiceNumber}</CardTitle>
+                        <CardDescription>
+                        Fecha: {new Date(invoice.date).toLocaleDateString('es-ES')}
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex-grow">
+                        <p className="font-bold text-2xl mb-2">{invoice.grandTotal.toFixed(2)}€</p>
+                        {role && ['admin', 'administrador', 'treballador'].includes(role) && (
+                            <p className="text-sm text-muted-foreground">{invoice.clientData?.empresa || invoice.userEmail}</p>
+                        )}
+                    </CardContent>
+                    <CardFooter>
+                        <Button className="w-full" onClick={() => setSelectedInvoice(invoice)}>
+                            Ver Detalles e Imprimir
+                        </Button>
+                    </CardFooter>
+                    </Card>
+                ))}
+                </div>
+            )}
+        </TabsContent>
+        <TabsContent value="delivery-notes" className="mt-6">
+           {processedDeliveryNotes.length === 0 ? (
+                <Card className="text-center py-12">
+                    <CardHeader>
+                        <FileText className="mx-auto h-12 w-12 text-muted-foreground" />
+                        <CardTitle>No se encontraron albaranes</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <CardDescription>Actualmente no tiene albaranes disponibles.</CardDescription>
+                    </CardContent>
+                </Card>
+            ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {processedDeliveryNotes.map(note => (
+                    <Card key={note.deliveryNoteNumber} className="flex flex-col">
+                    <CardHeader>
+                        <CardTitle>Albarán Nº {note.deliveryNoteNumber}</CardTitle>
+                        <CardDescription>
+                        Fecha: {new Date(note.date).toLocaleDateString('es-ES')}
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex-grow">
+                        <p className='text-sm text-muted-foreground'>
+                            {note.lines.length} {note.lines.length === 1 ? 'línea' : 'líneas'}
+                        </p>
+                        {role && ['admin', 'administrador', 'treballador'].includes(role) && (
+                            <p className="text-sm text-muted-foreground mt-2">{note.clientData?.empresa || note.userEmail}</p>
+                        )}
+                    </CardContent>
+                    <CardFooter>
+                        <Button className="w-full" onClick={() => setSelectedDeliveryNote(note)}>
+                            Ver Detalles
+                        </Button>
+                    </CardFooter>
+                    </Card>
+                ))}
+                </div>
+            )}
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

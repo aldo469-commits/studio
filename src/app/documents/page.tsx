@@ -73,7 +73,6 @@ export default function DocumentsPage() {
 
   const [documents, setDocuments] = useState<DocumentLine[]>([]);
   const [users, setUsers] = useState<UserData[]>([]);
-  const [role, setRole] = useState<UserData['rol'] | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedInvoice, setSelectedInvoice] = useState<ProcessedInvoice | null>(null);
@@ -101,7 +100,7 @@ export default function DocumentsPage() {
     setAuthLoading(false);
   }, [router]);
 
-  // Data fetching effect
+  // Data fetching effect - Simplified to fetch all data and filter on client
   useEffect(() => {
     if (authLoading || !user) {
       return;
@@ -111,38 +110,20 @@ export default function DocumentsPage() {
       setLoading(true);
       setError(null);
       try {
-        // 1. Fetch all users to find role and for later reference
-        const usersRes = await fetch(`${API_URL}?sheet=usuaris`);
+        // Fetch all users and all documents, then filter on the client.
+        const [usersRes, docsRes] = await Promise.all([
+            fetch(`${API_URL}?sheet=usuaris`),
+            fetch(`${API_URL}?sheet=documents`)
+        ]);
+        
         if (!usersRes.ok) throw new Error('No se pudieron cargar los datos de los usuarios.');
+        if (!docsRes.ok) throw new Error('No se pudieron cargar los documentos.');
+        
         const allUsers: UserData[] = await usersRes.json();
+        const allDocs: DocumentLine[] = await docsRes.json();
+
         setUsers(allUsers);
-
-        // 2. Find current user's role (case-insensitive and trimmed)
-        const currentUserData = allUsers.find(
-          (u) => u.usuari && user?.email && u.usuari.trim().toLowerCase() === user.email.trim().toLowerCase()
-        );
-        const currentUserRole = currentUserData?.rol?.trim().toLowerCase() || null;
-        setRole(currentUserRole as UserData['rol'] | null);
-
-
-        if (!currentUserRole) {
-          throw new Error('No se ha podido determinar tu rol. Contacta con el administrador.');
-        }
-
-        // 3. Fetch documents based on role
-        let docsUrl = `${API_URL}?sheet=documents`;
-        const isAdmin = ['admin', 'administrador', 'treballador'].includes(currentUserRole);
-        
-        if (!isAdmin) {
-          const cleanEmail = user.email.trim();
-          const encodedEmail = encodeURIComponent(cleanEmail);
-          docsUrl = `${API_URL}/search?sheet=documents&usuari=${encodedEmail}&case_sensitive=false`;
-        }
-        
-        const docsRes = await fetch(docsUrl);
-        if (!docsRes.ok) throw new Error('No se pudieron cargar las facturas.');
-        const invoiceDocs: DocumentLine[] = await docsRes.json();
-        setDocuments(invoiceDocs);
+        setDocuments(allDocs);
 
       } catch (err: any) {
         setError(err.message);
@@ -154,10 +135,32 @@ export default function DocumentsPage() {
     fetchData();
   }, [user, authLoading]);
 
-  const processedInvoices = useMemo((): ProcessedInvoice[] => {
-    if (!documents.length || !users.length) return [];
+  const role = useMemo(() => {
+     if (!users.length || !user) return null;
+     const currentUserData = users.find(
+      (u) => u.usuari && user?.email && u.usuari.trim().toLowerCase() === user.email.trim().toLowerCase()
+    );
+    return currentUserData?.rol?.trim().toLowerCase() as UserData['rol'] | null;
+  }, [users, user]);
 
-    const invoiceDocs = documents.filter(doc => doc.num_factura && doc.num_factura.trim() !== '');
+  const visibleDocuments = useMemo(() => {
+    if (!user || !documents.length) return [];
+    
+    const isAdmin = role && ['admin', 'administrador', 'treballador'].includes(role);
+
+    if (isAdmin) {
+        return documents;
+    }
+
+    return documents.filter(doc => 
+        doc.usuari && user.email && doc.usuari.trim().toLowerCase() === user.email.trim().toLowerCase()
+    );
+  }, [documents, user, role]);
+
+  const processedInvoices = useMemo((): ProcessedInvoice[] => {
+    if (!visibleDocuments.length || !users.length) return [];
+
+    const invoiceDocs = visibleDocuments.filter(doc => doc.num_factura && doc.num_factura.trim() !== '');
 
     const groupedByInvoiceNumber = invoiceDocs.reduce<Record<string, DocumentLine[]>>((acc, doc) => {
       acc[doc.num_factura] = acc[doc.num_factura] || [];
@@ -206,12 +209,12 @@ export default function DocumentsPage() {
         grandTotal: subtotal + totalIva,
       };
     }).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-  }, [documents, users]);
+  }, [visibleDocuments, users]);
   
   const processedDeliveryNotes = useMemo((): ProcessedDeliveryNote[] => {
-    if (!documents.length || !users.length) return [];
+    if (!visibleDocuments.length || !users.length) return [];
     
-    const deliveryNoteDocs = documents.filter(doc => doc.albara && doc.albara.trim() !== '');
+    const deliveryNoteDocs = visibleDocuments.filter(doc => doc.albara && doc.albara.trim() !== '');
 
     const groupedByDeliveryNote = deliveryNoteDocs.reduce<Record<string, DocumentLine[]>>((acc, doc) => {
       acc[doc.albara] = acc[doc.albara] || [];
@@ -230,7 +233,7 @@ export default function DocumentsPage() {
         lines,
       };
     }).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-  }, [documents, users]);
+  }, [visibleDocuments, users]);
 
   const handlePrint = () => {
     window.print();
@@ -380,7 +383,7 @@ export default function DocumentsPage() {
   if (selectedDeliveryNote) {
     return (
         <div className="container mx-auto px-4 py-8">
-            <Button variant="outline" onClick={() => setSelectedDeliveryNote(null)}>
+            <Button variant="outline" onClick={() => setSelectedDeliveryNote(null)} className="print:hidden">
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Volver al listado de albaranes
             </Button>

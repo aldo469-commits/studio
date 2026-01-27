@@ -15,7 +15,7 @@ import { Badge } from '@/components/ui/badge';
 type DocumentLine = {
   num_factura: string;
   data: string;
-  usuaris: string;
+  usuari: string;
   fpagament: string;
   concepte: string;
   preu_unitari: string;
@@ -26,7 +26,7 @@ type DocumentLine = {
 };
 
 type UserData = {
-  usuaris: string;
+  usuari: string;
   rol: 'admin' | 'administrador' | 'treballador' | 'client';
   empresa: string;
   fiscalid: string;
@@ -119,7 +119,7 @@ export default function DocumentsPage() {
 
         // 2. Find current user's role (case-insensitive and trimmed)
         const currentUserData = allUsers.find(
-          (u) => u.usuaris && user?.email && u.usuaris.trim().toLowerCase() === user.email.trim().toLowerCase()
+          (u) => u.usuari && user?.email && u.usuari.trim().toLowerCase() === user.email.trim().toLowerCase()
         );
         const currentUserRole = currentUserData?.rol?.trim().toLowerCase() || null;
         setRole(currentUserRole as UserData['rol'] | null);
@@ -133,7 +133,7 @@ export default function DocumentsPage() {
         let docsUrl = `${API_URL}?sheet=documents`;
         const isAdmin = ['admin', 'administrador', 'treballador'].includes(currentUserRole);
         if (!isAdmin) {
-          docsUrl = `${API_URL}/search?sheet=documents&usuaris=${user.email}`;
+          docsUrl = `${API_URL}/search?sheet=documents&usuari=${user.email}`;
         }
         
         const docsRes = await fetch(docsUrl);
@@ -164,7 +164,7 @@ export default function DocumentsPage() {
 
     return Object.values(groupedByInvoiceNumber).map(lines => {
       const firstLine = lines[0];
-      const clientData = users.find(u => u.usuaris === firstLine.usuaris);
+      const clientData = users.find(u => u.usuari === firstLine.usuari);
 
       let subtotal = 0;
       const ivaBreakdown: Record<string, { base: number; quota: number, rate: number }> = {};
@@ -193,7 +193,7 @@ export default function DocumentsPage() {
       return {
         invoiceNumber: firstLine.num_factura,
         date: firstLine.data,
-        userEmail: firstLine.usuaris,
+        userEmail: firstLine.usuari,
         paymentMethod: firstLine.fpagament,
         lines: lines,
         clientData: clientData,
@@ -218,11 +218,11 @@ export default function DocumentsPage() {
 
     return Object.values(groupedByDeliveryNote).map(lines => {
       const firstLine = lines[0];
-      const clientData = users.find(u => u.usuaris === firstLine.usuaris);
+      const clientData = users.find(u => u.usuari === firstLine.usuari);
       return {
         deliveryNoteNumber: firstLine.albara,
         date: firstLine.data,
-        userEmail: firstLine.usuaris,
+        userEmail: firstLine.usuari,
         clientData,
         lines,
       };
@@ -303,7 +303,7 @@ export default function DocumentsPage() {
                         <p>NIF: {selectedInvoice.clientData.fiscalid}</p>
                         <p>{selectedInvoice.clientData.adreca}</p>
                         <p>Teléfono: {selectedInvoice.clientData.telefon}</p>
-                        <p>Email: {selectedInvoice.clientData.usuaris}</p>
+                        <p>Email: {selectedInvoice.clientData.usuari}</p>
                     </div>
                 ) : (
                     <p className="text-sm text-red-500">Datos del cliente no encontrados.</p>

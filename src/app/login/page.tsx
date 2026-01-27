@@ -35,7 +35,7 @@ export default function LoginPage() {
       // 2. Find the user on the client side
       const foundUser = allUsers.find(
         (sheetUser: any) =>
-          sheetUser.usuaris === username && sheetUser.password === password
+          sheetUser.usuari === username && sheetUser.password === password
       );
 
       if (foundUser) {
@@ -43,7 +43,7 @@ export default function LoginPage() {
         localStorage.setItem('user', JSON.stringify({ 
             name: foundUser.nom, 
             company: foundUser.empresa,
-            email: foundUser.usuaris 
+            email: foundUser.usuari 
         }));
         router.push('/dashboard');
       } else {

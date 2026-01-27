@@ -32,10 +32,10 @@ export default function LoginPage() {
 
       const allUsers = await response.json();
       
-      // 2. Find the user on the client side
+      // 2. Find the user on the client side (case-insensitive for username)
       const foundUser = allUsers.find(
         (sheetUser: any) =>
-          sheetUser.usuari === username && sheetUser.password === password
+          sheetUser.usuari && sheetUser.usuari.toLowerCase() === username.toLowerCase() && sheetUser.password === password
       );
 
       if (foundUser) {

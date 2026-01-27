@@ -133,7 +133,7 @@ export default function DocumentsPage() {
         let docsUrl = `${API_URL}?sheet=documents`;
         const isAdmin = ['admin', 'administrador', 'treballador'].includes(currentUserRole);
         if (!isAdmin) {
-          docsUrl = `${API_URL}/search?sheet=documents&usuari=${user.email}`;
+          docsUrl = `${API_URL}/search?sheet=documents&usuari=${user.email}&case_sensitive=false`;
         }
         
         const docsRes = await fetch(docsUrl);
@@ -164,7 +164,7 @@ export default function DocumentsPage() {
 
     return Object.values(groupedByInvoiceNumber).map(lines => {
       const firstLine = lines[0];
-      const clientData = users.find(u => u.usuari === firstLine.usuari);
+      const clientData = users.find(u => u.usuari && firstLine.usuari && u.usuari.toLowerCase() === firstLine.usuari.toLowerCase());
 
       let subtotal = 0;
       const ivaBreakdown: Record<string, { base: number; quota: number, rate: number }> = {};
@@ -218,7 +218,7 @@ export default function DocumentsPage() {
 
     return Object.values(groupedByDeliveryNote).map(lines => {
       const firstLine = lines[0];
-      const clientData = users.find(u => u.usuari === firstLine.usuari);
+      const clientData = users.find(u => u.usuari && firstLine.usuari && u.usuari.toLowerCase() === firstLine.usuari.toLowerCase());
       return {
         deliveryNoteNumber: firstLine.albara,
         date: firstLine.data,
@@ -335,7 +335,7 @@ export default function DocumentsPage() {
                                     <TableCell className="text-right">{discount}%</TableCell>
                                     <TableCell className="text-right font-medium">{total.toFixed(2)}€</TableCell>
                                 </TableRow>
-                            )
+                            );
                         })}
                     </TableBody>
                 </Table>

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { User, Building, LogOut } from 'lucide-react';
+import { User, Building, LogOut, FileText, MessageSquare } from 'lucide-react';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 
 type UserProfile = {
@@ -59,8 +59,13 @@ export default function ProfilePage() {
           </div>
         </CardContent>
         <CardFooter className='flex-col gap-4'>
+            <Button onClick={() => router.push('/documents')} className="w-full">
+                <FileText className="mr-2 h-4 w-4" />
+                Mis Documentos
+            </Button>
             <Button onClick={() => router.push('/incidents')} className="w-full">
-                Ver mis incidencias
+                <MessageSquare className="mr-2 h-4 w-4" />
+                Mis Incidencias
             </Button>
           <Button onClick={handleLogout} variant="destructive" className="w-full">
             <LogOut className="mr-2 h-4 w-4" />

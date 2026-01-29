@@ -19,8 +19,6 @@ export const navLinks: NavLink[] = [
   { href: '/blog', label: 'Blog', public: true },
   { href: '/contact', label: 'Contacto' },
   { href: '/dashboard', label: 'Dashboard', auth: true, icon: LayoutDashboard },
-  { href: '/documents', label: 'Mis Documentos', auth: true, icon: FileText },
-  { href: '/incidents', label: 'Mis Incidencias', auth: true },
   { href: '/login', label: 'Área Clientes', public: true },
   { href: '/admin/incidents', label: 'Admin', admin: true, icon: ShieldCheck },
 ];

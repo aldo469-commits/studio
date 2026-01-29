@@ -135,11 +135,8 @@ export function Header() {
         <div className="hidden flex-1 items-center justify-end space-x-2 md:flex md:space-x-4">
           {isLoggedIn && (
              <>
-                <Button variant="ghost" size="icon" onClick={() => router.push('/profile')} title="Mi Perfil">
+                <Button variant="ghost" size="icon" onClick={() => router.push('/dashboard')} title="Área Cliente">
                     <User className="h-5 w-5" />
-                </Button>
-                <Button onClick={handleLogout} variant="ghost" size="icon" title="Cerrar Sesión">
-                    <LogOut className="h-5 w-5" />
                 </Button>
              </>
           )}

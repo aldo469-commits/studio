@@ -1,6 +1,6 @@
 
 import type { LucideIcon } from 'lucide-react';
-import { Truck, Ship, Plane, Warehouse, FileCheck2, Construction, Facebook, Twitter, Linkedin, ShieldCheck, User as UserIcon, LayoutDashboard, FileText } from 'lucide-react';
+import { Truck, Ship, Plane, Warehouse, FileCheck2, Construction, Facebook, Twitter, Linkedin, ShieldCheck, User as UserIcon } from 'lucide-react';
 
 export type NavLink = {
   href: string;
@@ -18,8 +18,8 @@ export const navLinks: NavLink[] = [
   { href: '/tracking', label: 'Seguimiento' },
   { href: '/blog', label: 'Blog', public: true },
   { href: '/contact', label: 'Contacto' },
-  { href: '/dashboard', label: 'Dashboard', auth: true, icon: LayoutDashboard },
-  { href: '/login', label: 'Área Clientes', public: true },
+  { href: '/dashboard', label: 'Área Cliente', auth: true, icon: UserIcon },
+  { href: '/login', label: 'Acceder', public: true },
   { href: '/admin/incidents', label: 'Admin', admin: true, icon: ShieldCheck },
 ];
 

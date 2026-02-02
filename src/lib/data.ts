@@ -16,7 +16,7 @@ export const navLinks: NavLink[] = [
   { href: '/services', label: 'Servicios' },
   { href: '/about', label: 'Nosotros', public: true },
   { href: '/tracking', label: 'Seguimiento' },
-  { href: '/blog', label: 'Blog', public: true },
+  { href: '/blog', label: 'Blog' },
   { href: '/contact', label: 'Contacto' },
   { href: '/dashboard', label: 'Área Cliente', auth: true, icon: UserIcon },
   { href: '/login', label: 'Acceder', public: true },

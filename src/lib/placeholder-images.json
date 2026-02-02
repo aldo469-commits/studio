@@ -27,7 +27,7 @@
     {
       "id": "quote-hero",
       "description": "A person signing a document on a clipboard in a warehouse setting.",
-      "imageUrl": "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzaWduaW5nJTIwZG9jdW1lbnR8ZW58MHx8fHwxNzY0NjIyNTAxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzaWduaW5nJTIwZG9jdW1lbnR8ZW58MHx8fHwxNzY0NjIyNTAxfDA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "signing document"
     },
     {
@@ -39,43 +39,43 @@
     {
       "id": "about-us-team",
       "description": "A diverse group of professionals in a modern office, smiling and looking at the camera.",
-      "imageUrl": "https://images.unsplash.com/photo-1600880292089-90a7e086ee0c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxvZmZpY2UlMjB0ZWFtfGVufDB8fHx8MTc2NDY0NjkzNHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1600880292089-90a7e086ee0c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxvZmZpY2UlMjB0ZWFtfGVufDB8fHx8MTc2NDY0NjkzNHww&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "office team"
     },
     {
       "id": "service-land",
       "description": "A fleet of modern white trucks parked in a row.",
-      "imageUrl": "https://images.unsplash.com/photo-1590504805643-bb1f94cde7fd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHx0cnVjayUyMGZsZWV0fGVufDB8fHx8MTc2NDYzMTg2OXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1590504805643-bb1f94cde7fd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHx0cnVjayUyMGZsZWV0fGVufDB8fHx8MTc2NDYzMTg2OXww&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "truck fleet"
     },
     {
       "id": "service-sea",
       "description": "A large container ship sailing on the open ocean.",
-      "imageUrl": "https://images.unsplash.com/photo-1655164709639-95035bff7ea8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjb250YWluZXIlMjBzaGlwfGVufDB8fHx8MTc2NDY5ODI4NHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1655164709639-95035bff7ea8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjb250YWluZXIlMjBzaGlwfGVufDB8fHx8MTc2NDY5ODI4NHww&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "container ship"
     },
     {
       "id": "service-air",
       "description": "A cargo plane being loaded with containers at an airport.",
-      "imageUrl": "https://images.unsplash.com/photo-1675296904760-f7a57b368eda?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8Y2FyZ28lMjBwbGFuZXxlbnwwfHx8fDE3NjQ2MjMyMDR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1675296904760-f7a57b368eda?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8Y2FyZ28lMjBwbGFuZXxlbnwwfHx8fDE3NjQ2MjMyMDR8MA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "cargo plane"
     },
     {
       "id": "service-logistics",
-      "description": "A truck backed into a loading dock at a warehouse.",
-      "imageUrl": "https://images.unsplash.com/photo-1579586337278-35d19d18aaa4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHx0cnVjayUyMGxvYWRpbmclMjBkb2NrfGVufDB8fHx8MTc2OTg2OTM4Nnww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "truck loading dock"
+      "description": "Interior of a large, modern warehouse with tall shelves stacked with boxes.",
+      "imageUrl": "https://images.unsplash.com/photo-1569982175971-d92b01cf8694?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx3YXJlaG91c2V8ZW58MHx8fHwxNzE4NzQzMjM5fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "warehouse interior"
     },
     {
       "id": "service-customs",
       "description": "A customs officer inspecting documents at a border control point.",
-      "imageUrl": "https://images.unsplash.com/photo-1609558931141-606ae4284153?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxjdXN0b21zJTIwaW5zcGVjdGlvbnxlbnwwfHx8fDE3NjQ2OTgyODR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1609558931141-606ae4284153?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxjdXN0b21zJTIwaW5zcGVjdGlvbnxlbnwwfHx8fDE3NjQ2OTgyODR8MA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "customs inspection"
     },
     {
       "id": "service-projects",
       "description": "Oversized industrial equipment being transported on a specialized truck.",
-      "imageUrl": "https://images.unsplash.com/photo-1725429976920-492648a26ac7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxvdmVyc2l6ZWQlMjBjYXJnb3xlbnwwfHx8fDE3NjQ2OTgyODR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1725429976920-492648a26ac7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxvdmVyc2l6ZWQlMjBjYXJnb3xlbnwwfHx8fDE3NjQ2OTgyODR8MA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "oversized cargo"
     },
     {
@@ -87,13 +87,13 @@
     {
       "id": "blog-supply-chain",
       "description": "A bird's eye view of a warehouse with workers and forklifts moving around.",
-      "imageUrl": "https://images.unsplash.com/photo-1644079446600-219068676743?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx3YXJlaG91c2UlMjBsb2dpc3RpY3N8ZW58MHx8fHwxNzY0NjY1MTYxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1644079446600-219068676743?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx3YXJlaG91c2UlMjBsb2dpc3RpY3N8ZW58MHx8fHwxNzY0NjY1MTYxfDA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "warehouse logistics"
     },
     {
       "id": "blog-sea-freight",
       "description": "A large container ship with a green hull, suggesting sustainability.",
-      "imageUrl": "https://images.unsplash.com/photo-1604506522146-316c8bedd874?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxjb250YWluZXIlMjBzaGlwfGVufDB8fHx8MTc2NDY5ODI4NHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1604506522146-316c8bedd874?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxjb250YWluZXIlMjBzaGlwfGVufDB8fHx8MTc2NDY5ODI4NHww&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "container ship"
     },
     {

@@ -23,6 +23,9 @@ type DocumentLine = {
   iva: string;
   dte: string;
   albara: string;
+  referencia?: string; // Potential new fields from spreadsheet
+  pes?: string;
+  volum?: string;
 };
 
 type UserData = {
@@ -75,7 +78,6 @@ function parseDateFromSheet(dateStr: string): Date | null {
     const date = new Date(year, month - 1, day);
     return isNaN(date.getTime()) ? null : date;
   }
-  // Fallback for standard ISO formats
   const date = new Date(dateStr);
   return isNaN(date.getTime()) ? null : date;
 }
@@ -93,7 +95,6 @@ export default function DocumentsPage() {
   const [selectedInvoice, setSelectedInvoice] = useState<ProcessedInvoice | null>(null);
   const [selectedDeliveryNote, setSelectedDeliveryNote] = useState<ProcessedDeliveryNote | null>(null);
 
-  // Auth check effect from localStorage
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
@@ -114,7 +115,6 @@ export default function DocumentsPage() {
     setAuthLoading(false);
   }, [router]);
 
-  // Data fetching effect
   useEffect(() => {
     if (authLoading || !user) return;
 
@@ -308,7 +308,7 @@ export default function DocumentsPage() {
             <header className="flex justify-between items-start pb-4 border-b">
                 <div>
                     <Logo className="h-8 mb-4"/>
-                    <div className="text-xs text-gray-600 mt-6">
+                    <div className="text-xs text-gray-600 mt-2">
                         <p className="font-bold text-sm text-black mb-1">EJA GlobalTrans</p>
                         <p>Calle de la Logística 123, 28001 Madrid, España</p>
                         <p>NIF: B12345678</p>
@@ -341,11 +341,11 @@ export default function DocumentsPage() {
                 <Table>
                     <TableHeader>
                         <TableRow className="bg-gray-100">
-                            <TableHead className="w-1/2">Concepto</TableHead>
-                            <TableHead className="text-right">Precio</TableHead>
-                            <TableHead className="text-right">Uds.</TableHead>
-                            <TableHead className="text-right">Dte.</TableHead>
-                            <TableHead className="text-right">Total</TableHead>
+                            <TableHead className="w-1/2 text-black">Concepto</TableHead>
+                            <TableHead className="text-right text-black">Precio</TableHead>
+                            <TableHead className="text-right text-black">Uds.</TableHead>
+                            <TableHead className="text-right text-black">Dte.</TableHead>
+                            <TableHead className="text-right text-black">Total</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -355,12 +355,12 @@ export default function DocumentsPage() {
                             const discount = parseFloat(line.dte) || 0;
                             const lineTotal = (price * units) * (1 - (discount / 100));
                             return (
-                                <TableRow key={index}>
-                                    <TableCell>{line.concepte}</TableCell>
-                                    <TableCell className="text-right">{price.toFixed(2)}€</TableCell>
-                                    <TableCell className="text-right">{units}</TableCell>
-                                    <TableCell className="text-right">{discount}%</TableCell>
-                                    <TableCell className="text-right font-medium">{lineTotal.toFixed(2)}€</TableCell>
+                                <TableRow key={index} className="border-b">
+                                    <TableCell className="text-black">{line.concepte}</TableCell>
+                                    <TableCell className="text-right text-black">{price.toFixed(2)}€</TableCell>
+                                    <TableCell className="text-right text-black">{units}</TableCell>
+                                    <TableCell className="text-right text-black">{discount}%</TableCell>
+                                    <TableCell className="text-right font-medium text-black">{lineTotal.toFixed(2)}€</TableCell>
                                 </TableRow>
                             );
                         })}
@@ -392,7 +392,7 @@ export default function DocumentsPage() {
                 <p className="text-sm">{selectedInvoice.paymentMethod}</p>
              </section>
 
-            <footer className="text-xs text-gray-500 pt-4 border-t mt-8">
+            <footer className="text-[10px] text-gray-500 pt-4 border-t mt-8">
                 <p>EJA GlobalTrans - Inscrita en el Registro Mercantil de Madrid, Tomo 1234, Folio 56, Hoja M-78901.</p>
                 <p>De conformidad con la Ley Orgánica 3/2018, de 5 de diciembre, de Protección de Datos Personales y garantía de los derechos digitales, le informamos que sus datos serán incorporados a un fichero titularidad de EJA GlobalTrans con la finalidad de gestionar la relación comercial.</p>
             </footer>
@@ -403,41 +403,93 @@ export default function DocumentsPage() {
 
   if (selectedDeliveryNote) {
     const formattedDate = parseDateFromSheet(selectedDeliveryNote.date)?.toLocaleDateString('es-ES') || selectedDeliveryNote.date;
+    
     return (
-        <div className="container mx-auto px-4 py-8">
-            <Button variant="outline" onClick={() => setSelectedDeliveryNote(null)} className="print:hidden">
+      <div className="container mx-auto px-4 py-8 bg-background print:bg-white print:p-0">
+        <div className="flex gap-4 mb-6 print:hidden">
+            <Button variant="outline" onClick={() => setSelectedDeliveryNote(null)}>
                 <ArrowLeft className="mr-2 h-4 w-4" />
-                Volver al listado de albaranes
+                Volver al listado
             </Button>
-            <Card className="mt-6">
-                <CardHeader>
-                    <CardTitle>Albarán Nº {selectedDeliveryNote.deliveryNoteNumber}</CardTitle>
-                    <CardDescription>
-                        Fecha: {formattedDate}
-                        {selectedDeliveryNote.clientData && ` | Cliente: ${selectedDeliveryNote.clientData.empresa}`}
-                    </CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>Concepto</TableHead>
-                                <TableHead className="text-right">Unidades</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {selectedDeliveryNote.lines.map((line, index) => (
-                                <TableRow key={index}>
-                                    <TableCell>{line.concepte}</TableCell>
-                                    <TableCell className="text-right">{line.unitats}</TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </CardContent>
-            </Card>
+            <Button onClick={handlePrint}>
+                <Printer className="mr-2 h-4 w-4" />
+                Imprimir PDF
+            </Button>
         </div>
-    )
+        
+        <div id="zona-factura" className="p-8 bg-white border rounded-lg shadow-sm text-black">
+            <header className="flex justify-between items-start pb-4 border-b">
+                <div>
+                    <Logo className="h-8 mb-4"/>
+                    <div className="text-xs text-gray-600 mt-2">
+                        <p className="font-bold text-sm text-black mb-1">EJA GlobalTrans</p>
+                        <p>Calle de la Logística 123, 28001 Madrid, España</p>
+                        <p>NIF: B12345678</p>
+                        <p>info@ejaglobaltrans.com</p>
+                    </div>
+                </div>
+                <div className="text-right">
+                    <h2 className="text-2xl font-bold font-headline text-primary">ALBARÁN</h2>
+                    <p className="font-semibold">Nº: {selectedDeliveryNote.deliveryNoteNumber}</p>
+                    <p>Fecha: {formattedDate}</p>
+                </div>
+            </header>
+
+            <section className="my-6">
+                <h3 className="font-semibold mb-2">Datos del Cliente:</h3>
+                {selectedDeliveryNote.clientData ? (
+                    <div className="text-sm">
+                        <p className="font-bold">{selectedDeliveryNote.clientData.empresa}</p>
+                        <p>NIF: {selectedDeliveryNote.clientData.fiscalid}</p>
+                        <p>{selectedDeliveryNote.clientData.adreca}</p>
+                        <p>Teléfono: {selectedDeliveryNote.clientData.telefon}</p>
+                        <p>Email: {selectedDeliveryNote.clientData.usuari}</p>
+                    </div>
+                ) : (
+                    <p className="text-sm text-red-500">Datos del cliente no encontrados.</p>
+                )}
+            </section>
+
+            <section className="my-6">
+                <Table>
+                    <TableHeader>
+                        <TableRow className="bg-gray-100">
+                            <TableHead className="w-2/3 text-black">Concepto</TableHead>
+                            <TableHead className="text-right text-black">Unidades</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {selectedDeliveryNote.lines.map((line, index) => (
+                            <TableRow key={index} className="border-b">
+                                <TableCell className="text-black">
+                                    <div className="font-medium">{line.concepte}</div>
+                                    {line.referencia && <div className="text-xs text-gray-500">Ref: {line.referencia}</div>}
+                                </TableCell>
+                                <TableCell className="text-right text-black">{line.unitats}</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </section>
+
+            <section className="mt-12 grid grid-cols-2 gap-8">
+                <div className="border rounded p-4 h-32 flex flex-col justify-between">
+                    <p className="text-xs font-semibold">RECIBIDO POR:</p>
+                    <div className="border-t pt-2 text-[10px] text-gray-500">Firma y Sello</div>
+                </div>
+                <div className="border rounded p-4 h-32 flex flex-col justify-between">
+                    <p className="text-xs font-semibold">ENTREGADO POR:</p>
+                    <div className="border-t pt-2 text-[10px] text-gray-500">Firma y Fecha</div>
+                </div>
+            </section>
+
+            <footer className="text-[10px] text-gray-500 pt-4 border-t mt-12">
+                <p>EJA GlobalTrans - Calle de la Logística 123, 28001 Madrid, España.</p>
+                <p>De conformidad con la Ley Orgánica 3/2018, de 5 de diciembre, de Protección de Datos Personales y garantía de los derechos digitales, le informamos que sus datos serán incorporados a un fichero titularidad de EJA GlobalTrans con la finalidad de gestionar la relación comercial.</p>
+            </footer>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -527,7 +579,7 @@ export default function DocumentsPage() {
                         </CardContent>
                         <CardFooter>
                             <Button className="w-full" onClick={() => setSelectedDeliveryNote(note)}>
-                                Ver Detalles
+                                Ver Detalles e Imprimir
                             </Button>
                         </CardFooter>
                         </Card>

@@ -23,7 +23,7 @@ type DocumentLine = {
   iva: string;
   dte: string;
   albara: string;
-  referencia?: string; // Potential new fields from spreadsheet
+  referencia?: string;
   pes?: string;
   volum?: string;
 };
@@ -308,7 +308,7 @@ export default function DocumentsPage() {
             <header className="flex justify-between items-start pb-4 border-b">
                 <div>
                     <Logo className="h-8 mb-4"/>
-                    <div className="text-xs text-gray-600 mt-2">
+                    <div className="text-xs text-gray-600 mt-6">
                         <p className="font-bold text-sm text-black mb-1">EJA GlobalTrans</p>
                         <p>Calle de la Logística 123, 28001 Madrid, España</p>
                         <p>NIF: B12345678</p>
@@ -421,7 +421,7 @@ export default function DocumentsPage() {
             <header className="flex justify-between items-start pb-4 border-b">
                 <div>
                     <Logo className="h-8 mb-4"/>
-                    <div className="text-xs text-gray-600 mt-2">
+                    <div className="text-xs text-gray-600 mt-6">
                         <p className="font-bold text-sm text-black mb-1">EJA GlobalTrans</p>
                         <p>Calle de la Logística 123, 28001 Madrid, España</p>
                         <p>NIF: B12345678</p>
@@ -454,7 +454,7 @@ export default function DocumentsPage() {
                 <Table>
                     <TableHeader>
                         <TableRow className="bg-gray-100">
-                            <TableHead className="w-2/3 text-black">Concepto</TableHead>
+                            <TableHead className="w-2/3 text-black">Concepto / Detalles</TableHead>
                             <TableHead className="text-right text-black">Unidades</TableHead>
                         </TableRow>
                     </TableHeader>
@@ -463,7 +463,15 @@ export default function DocumentsPage() {
                             <TableRow key={index} className="border-b">
                                 <TableCell className="text-black">
                                     <div className="font-medium">{line.concepte}</div>
-                                    {line.referencia && <div className="text-xs text-gray-500">Ref: {line.referencia}</div>}
+                                    <div className="text-xs text-gray-500 space-y-0.5 mt-1">
+                                        {line.referencia && <p>Ref: {line.referencia}</p>}
+                                        {(line.pes || line.volum) && (
+                                            <p>
+                                                {line.pes && <span>Peso: {line.pes}kg </span>}
+                                                {line.volum && <span>| Volumen: {line.volum}m³</span>}
+                                            </p>
+                                        )}
+                                    </div>
                                 </TableCell>
                                 <TableCell className="text-right text-black">{line.unitats}</TableCell>
                             </TableRow>

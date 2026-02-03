@@ -79,12 +79,6 @@
       "imageHint": "oversized cargo"
     },
     {
-      "id": "blog-alifarma",
-      "description": "A scientist looking at a beaker in a food science laboratory.",
-      "imageUrl": "https://images.unsplash.com/photo-1694022887658-3f71dcedfe41?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxmb29kJTIwbGFib3JhdG9yeXxlbnwwfHx8fDE3NjQ2MDQ5MDV8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "food laboratory"
-    },
-    {
       "id": "blog-supply-chain",
       "description": "A bird's eye view of a warehouse with workers and forklifts moving around.",
       "imageUrl": "https://images.unsplash.com/photo-1644079446600-219068676743?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx3YXJlaG91c2UlMjBsb2dpc3RpY3N8ZW58MHx8fHwxNzY0NjY1MTYxfDA&ixlib-rb-4.1.0&q=80&w=1080",

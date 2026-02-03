@@ -307,9 +307,9 @@ export default function DocumentsPage() {
         <div id="zona-factura" className="p-8 bg-white border rounded-lg shadow-sm text-black">
             <header className="flex justify-between items-start pb-4 border-b">
                 <div>
-                    <Logo className="h-10"/>
-                    <div className="text-xs text-gray-600 mt-2">
-                        <p>EJA GlobalTrans</p>
+                    <Logo className="h-8 mb-4"/>
+                    <div className="text-xs text-gray-600 mt-6">
+                        <p className="font-bold text-sm text-black mb-1">EJA GlobalTrans</p>
                         <p>Calle de la Logística 123, 28001 Madrid, España</p>
                         <p>NIF: B12345678</p>
                         <p>info@ejaglobaltrans.com</p>

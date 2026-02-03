@@ -107,38 +107,35 @@ export type BlogPost = {
 
 export const blogPosts: BlogPost[] = [
   {
-    slug: 'alifarma-innovacion-alimentaria',
-    title: 'ALIFARMA: Innovar en alimentación desde 1988',
-    excerpt: 'Desde hace más de 30 años, ALIFARMA trabaja para hacer que la alimentación sea algo más que comer: una experiencia que conecte con los sentidos.',
-    image: 'blog-alifarma-lab',
+    slug: 'futuro-logistica-4pl-hub-tarragona',
+    title: 'EJA Globaltrans: Por qué el futuro de la logística 4PL pasa por el Hub de Tarragona',
+    excerpt: 'En un mercado globalizado donde los márgenes del transporte son cada vez más estrechos, el éxito real se encuentra en la inteligencia logística y el modelo 4PL.',
+    image: 'blog-supply-chain',
     date: '2025-11-25',
     author: { name: 'Alejandro Doncel', avatarUrl: 'https://i.pravatar.cc/150?u=alejandro-doncel' },
-    category: 'Innovación',
+    category: 'Estrategia',
     content: `
-<p>Desde hace más de 30 años, <strong>ALIFARMA</strong> trabaja para hacer que la alimentación sea algo más que comer: una experiencia que conecte con los sentidos. Nació en 1988 y, desde entonces, se ha convertido en una empresa referente en el mundo de la innovación alimentaria. Su objetivo es ayudar a otras marcas a crear productos diferentes, más sabrosos, saludables y adaptados a lo que busca el consumidor de hoy.</p>
+<p>En un mercado globalizado donde los márgenes del transporte son cada vez más estrechos, la verdadera ventaja competitiva ya no reside solo en mover mercancía de un punto A a un punto B. El éxito real se encuentra en la inteligencia logística: la capacidad de transformar el flujo de datos y la manipulación de producto en un ahorro directo de costes operativos.</p>
 
-<h3 class="font-headline text-2xl mt-8 mb-4">Logística de Precisión</h3>
-<p>En su centro logístico de Reus, de unos 4.000 m², gestionan hasta 3.200 toneladas de productos. Desde allí se encargan de importar y exportar materias primas a diferentes países, asegurando que todo llegue a tiempo y en las mejores condiciones. Además, cuentan con un almacén robotizado, zonas para productos ecológicos, y transporte a temperatura controlada, lo que garantiza que la calidad se mantenga en todo momento.</p>
+<p>En <strong>EJA Globaltrans</strong>, hemos nacido con una misión clara: ser el motor logístico que optimiza el corredor europeo desde nuestro enclave estratégico en el Polígono de Constantí (Tarragona).</p>
 
-<h3 class="font-headline text-2xl mt-8 mb-4">Idealis: El Laboratorio de Ideas</h3>
-<p>Pero lo que realmente hace especial a ALIFARMA es su laboratorio <strong>Idealis</strong>. En este espacio se desarrollan nuevas ideas para mejorar los alimentos: se trabaja en su conservación, en hacerlos más nutritivos o estables, y en probar nuevas formulaciones que ayuden a las empresas a innovar más rápido. Es un lugar donde la ciencia y la creatividad se unen para transformar ideas en productos reales.</p>
-<p>Hace unos meses, personalmente visité el laboratorio y pude ver una operativa de la creación de un pan tipo briox, con diferentes bandejas del producto. A los días nos dejaron probar el producto final, y realmente fue una experiencia grata. Así mismo como hice yo, nuestros clientes tienen la posibilidad de realizar visitas y probar sus productos.</p>
+<h3 class="font-headline text-2xl mt-8 mb-4">De Transportistas a Socios Estratégicos (Modelo 4PL)</h3>
+<p>¿Qué diferencia a EJA de una agencia de transporte convencional? La respuesta es la gestión integral. Mientras otros se limitan a buscar un camión, nosotros actuamos como el "cerebro" de su cadena de suministro. Nuestro modelo se basa en cuatro pilares de rentabilidad:</p>
 
-<h3 class="font-headline text-2xl mt-8 mb-4">Siempre a la Vanguardia</h3>
-<p>ALIFARMA también participa en ferias y eventos del sector, tanto en España como fuera, lo que les permite estar siempre al día de las últimas tendencias y tecnologías. Gracias a esto, puede ofrecer a sus clientes soluciones modernas y adaptadas a las necesidades del mercado actual.</p>
-
-<h3 class="font-headline text-2xl mt-8 mb-4">¿Qué vas a obtener como cliente en ALIFARMA?</h3>
 <ul class="list-disc pl-6 space-y-2 mt-4">
-  <li><strong>Calidad y Seguridad:</strong> Garantizar que los ingredientes suministrados cumplan con estándares estrictos de calidad, seguridad alimentaria y normativas vigentes es una preocupación clave para evitar riesgos regulatorios y mantener la confianza del consumidor.</li>
-  <li><strong>Innovación y Personalización:</strong> Buscan soluciones innovadoras y a medida que mejoren el perfil nutricional, estabilidad y conservación de sus productos. Necesitan un partner técnico que adapte los desarrollos a sus procesos reales para obtener resultados efectivos.</li>
-  <li><strong>Soporte Técnico y Desarrollo:</strong> Quieren apoyo práctico en formulación, pruebas y desarrollo para acelerar sus proyectos y reducir tiempos y recursos, con acompañamiento desde la idea hasta el producto final.</li>
-  <li><strong>Eficiencia Logística:</strong> Requieren una cadena de suministro confiable con capacidad para gestionar importación/exportación, almacenamiento avanzado (como almacén robotizado) y transporte con temperatura controlada, para asegurar la entrega en condiciones óptimas.</li>
-  <li><strong>Formación y Conocimiento:</strong> Les interesa acceder a formación especializada en técnicas como el uso de espesantes, saborizantes, conservantes y colorantes para mejorar la calidad y rendimiento de sus productos.</li>
-  <li><strong>Cumplimiento Normativo y Etiquetado:</strong> Necesitan asegurarse de que sus productos cumplan con las regulaciones en etiquetado y seguridad alimentaria, y que los ingredientes estén respaldados por evidencia científica y certificaciones adecuadas.</li>
+  <li><strong>Agregación de Demanda:</strong> Optimizamos las cargas desde origen (Bélgica, Francia, Norte de Europa) consolidando grupajes en vehículos de gran volumen. Menos camiones, más eficiencia.</li>
+  <li><strong>El Hub de Constantí como Centro de Valor:</strong> Nuestra ubicación, a un paso del Puerto de Tarragona y con conexión directa a la AP-7 y A-27, nos permite actuar como un pulmón operativo. Aquí, la mercancía no solo se guarda; se transforma. Realizamos controles de calidad, etiquetado y kitting, convirtiendo el "producto de fábrica" en "producto listo para el supermercado".</li>
+  <li><strong>Milla de Oro y Distribución Capilar:</strong> Gestionamos la entrega Just-In-Time en las principales plataformas logísticas. Si el supermercado retrasa una ventana de descarga, nosotros absorbemos el impacto en nuestro almacén, eliminando los sobrecostes por esperas o camiones parados.</li>
+  <li><strong>Logística Inversa Inteligente:</strong> Recuperamos los rechazos de plataforma de forma inmediata en nuestro Hub, evitando retornos costosos a origen y reintroduciendo el producto en la cadena de valor rápidamente.</li>
 </ul>
 
-<p class="mt-6">Colaborar con ALIFARMA significa contar con un socio técnico y humano, capaz de aportar soluciones reales y adaptadas al ritmo de cada empresa.</p>
-<p class="font-semibold mt-4">Esperamos tu mensaje.</p>
+<h3 class="font-headline text-2xl mt-8 mb-4">Tecnología y Ubicación: El Binomio Perfecto</h3>
+<p>Estar situados en Constantí no es casualidad. Es una decisión estratégica para ofrecer una comunicación inmejorable con el Puerto de Tarragona y los principales polígonos industriales de la zona. Esta proximidad nos permite reducir drásticamente los "kilómetros en vacío", una obsesión en EJA Globaltrans para garantizar la sostenibilidad económica y ambiental de nuestros clientes.</p>
+
+<h3 class="font-headline text-2xl mt-8 mb-4">Mucho más que transporte</h3>
+<p>En EJA Globaltrans no vendemos fletes; vendemos tranquilidad operativa. Nuestro equipo, liderado por especialistas en ventas, multicanalidad y operaciones de almacén, trabaja con un único objetivo: que usted se olvide de la logística para centrarse en hacer crecer su negocio.</p>
+
+<p class="mt-6 font-bold">¿Está su empresa lista para dar el salto al modelo 4PL? Bienvenidos a la logística del futuro. Bienvenidos a EJA Globaltrans.</p>
 `
   },
   {

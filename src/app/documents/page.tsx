@@ -64,6 +64,22 @@ type ProcessedDeliveryNote = {
 
 const API_URL = 'https://sheetdb.io/api/v1/qm90759o5g894';
 
+/**
+ * Helper to parse dates in DD/MM/YYYY format from Google Sheets
+ */
+function parseDateFromSheet(dateStr: string): Date | null {
+  if (!dateStr || typeof dateStr !== 'string') return null;
+  const parts = dateStr.trim().split('/');
+  if (parts.length === 3) {
+    const [day, month, year] = parts.map(p => parseInt(p, 10));
+    const date = new Date(year, month - 1, day);
+    return isNaN(date.getTime()) ? null : date;
+  }
+  // Fallback for standard ISO formats
+  const date = new Date(dateStr);
+  return isNaN(date.getTime()) ? null : date;
+}
+
 export default function DocumentsPage() {
   const router = useRouter();
 
@@ -203,7 +219,11 @@ export default function DocumentsPage() {
         totalIva: totalIva,
         grandTotal: subtotal + totalIva,
       };
-    }).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    }).sort((a, b) => {
+      const dateA = parseDateFromSheet(a.date)?.getTime() || 0;
+      const dateB = parseDateFromSheet(b.date)?.getTime() || 0;
+      return dateB - dateA;
+    });
   }, [visibleDocuments, users]);
   
   const processedDeliveryNotes = useMemo((): ProcessedDeliveryNote[] => {
@@ -227,7 +247,11 @@ export default function DocumentsPage() {
         clientData,
         lines,
       };
-    }).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    }).sort((a, b) => {
+      const dateA = parseDateFromSheet(a.date)?.getTime() || 0;
+      const dateB = parseDateFromSheet(b.date)?.getTime() || 0;
+      return dateB - dateA;
+    });
   }, [visibleDocuments, users]);
 
   const handlePrint = () => {
@@ -265,6 +289,8 @@ export default function DocumentsPage() {
   }
 
   if (selectedInvoice) {
+    const formattedDate = parseDateFromSheet(selectedInvoice.date)?.toLocaleDateString('es-ES') || selectedInvoice.date;
+    
     return (
       <div className="container mx-auto px-4 py-8 bg-background print:bg-white print:p-0">
         <div className="flex gap-4 mb-6 print:hidden">
@@ -292,7 +318,7 @@ export default function DocumentsPage() {
                 <div className="text-right">
                     <h2 className="text-2xl font-bold font-headline text-primary">FACTURA</h2>
                     <p className="font-semibold">Nº: {selectedInvoice.invoiceNumber}</p>
-                    <p>Data: {new Date(selectedInvoice.date).toLocaleDateString('es-ES')}</p>
+                    <p>Fecha: {formattedDate}</p>
                 </div>
             </header>
 
@@ -327,14 +353,14 @@ export default function DocumentsPage() {
                             const price = parseFloat(line.preu_unitari) || 0;
                             const units = parseFloat(line.unitats) || 0;
                             const discount = parseFloat(line.dte) || 0;
-                            const total = (price * units) * (1 - (discount / 100));
+                            const lineTotal = (price * units) * (1 - (discount / 100));
                             return (
                                 <TableRow key={index}>
                                     <TableCell>{line.concepte}</TableCell>
                                     <TableCell className="text-right">{price.toFixed(2)}€</TableCell>
                                     <TableCell className="text-right">{units}</TableCell>
                                     <TableCell className="text-right">{discount}%</TableCell>
-                                    <TableCell className="text-right font-medium">{total.toFixed(2)}€</TableCell>
+                                    <TableCell className="text-right font-medium">{lineTotal.toFixed(2)}€</TableCell>
                                 </TableRow>
                             );
                         })}
@@ -376,6 +402,7 @@ export default function DocumentsPage() {
   }
 
   if (selectedDeliveryNote) {
+    const formattedDate = parseDateFromSheet(selectedDeliveryNote.date)?.toLocaleDateString('es-ES') || selectedDeliveryNote.date;
     return (
         <div className="container mx-auto px-4 py-8">
             <Button variant="outline" onClick={() => setSelectedDeliveryNote(null)} className="print:hidden">
@@ -386,7 +413,7 @@ export default function DocumentsPage() {
                 <CardHeader>
                     <CardTitle>Albarán Nº {selectedDeliveryNote.deliveryNoteNumber}</CardTitle>
                     <CardDescription>
-                        Fecha: {new Date(selectedDeliveryNote.date).toLocaleDateString('es-ES')}
+                        Fecha: {formattedDate}
                         {selectedDeliveryNote.clientData && ` | Cliente: ${selectedDeliveryNote.clientData.empresa}`}
                     </CardDescription>
                 </CardHeader>
@@ -440,27 +467,30 @@ export default function DocumentsPage() {
                 </Card>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {processedInvoices.map(invoice => (
-                    <Card key={invoice.invoiceNumber} className="flex flex-col">
-                    <CardHeader>
-                        <CardTitle>Factura Nº {invoice.invoiceNumber}</CardTitle>
-                        <CardDescription>
-                        Fecha: {new Date(invoice.date).toLocaleDateString('es-ES')}
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent className="flex-grow">
-                        <p className="font-bold text-2xl mb-2">{invoice.grandTotal.toFixed(2)}€</p>
-                        {role && ['admin', 'administrador', 'treballador'].includes(role) && (
-                            <p className="text-sm text-muted-foreground">{invoice.clientData?.empresa || invoice.userEmail}</p>
-                        )}
-                    </CardContent>
-                    <CardFooter>
-                        <Button className="w-full" onClick={() => setSelectedInvoice(invoice)}>
-                            Ver Detalles e Imprimir
-                        </Button>
-                    </CardFooter>
-                    </Card>
-                ))}
+                {processedInvoices.map(invoice => {
+                    const d = parseDateFromSheet(invoice.date);
+                    return (
+                        <Card key={invoice.invoiceNumber} className="flex flex-col">
+                        <CardHeader>
+                            <CardTitle>Factura Nº {invoice.invoiceNumber}</CardTitle>
+                            <CardDescription>
+                            Fecha: {d ? d.toLocaleDateString('es-ES') : invoice.date}
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent className="flex-grow">
+                            <p className="font-bold text-2xl mb-2">{invoice.grandTotal.toFixed(2)}€</p>
+                            {role && ['admin', 'administrador', 'treballador'].includes(role) && (
+                                <p className="text-sm text-muted-foreground">{invoice.clientData?.empresa || invoice.userEmail}</p>
+                            )}
+                        </CardContent>
+                        <CardFooter>
+                            <Button className="w-full" onClick={() => setSelectedInvoice(invoice)}>
+                                Ver Detalles e Imprimir
+                            </Button>
+                        </CardFooter>
+                        </Card>
+                    );
+                })}
                 </div>
             )}
         </TabsContent>
@@ -477,29 +507,32 @@ export default function DocumentsPage() {
                 </Card>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {processedDeliveryNotes.map(note => (
-                    <Card key={note.deliveryNoteNumber} className="flex flex-col">
-                    <CardHeader>
-                        <CardTitle>Albarán Nº {note.deliveryNoteNumber}</CardTitle>
-                        <CardDescription>
-                        Fecha: {new Date(note.date).toLocaleDateString('es-ES')}
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent className="flex-grow">
-                        <p className='text-sm text-muted-foreground'>
-                            {note.lines.length} {note.lines.length === 1 ? 'línea' : 'líneas'}
-                        </p>
-                        {role && ['admin', 'administrador', 'treballador'].includes(role) && (
-                            <p className="text-sm text-muted-foreground mt-2">{note.clientData?.empresa || note.userEmail}</p>
-                        )}
-                    </CardContent>
-                    <CardFooter>
-                        <Button className="w-full" onClick={() => setSelectedDeliveryNote(note)}>
-                            Ver Detalles
-                        </Button>
-                    </CardFooter>
-                    </Card>
-                ))}
+                {processedDeliveryNotes.map(note => {
+                    const d = parseDateFromSheet(note.date);
+                    return (
+                        <Card key={note.deliveryNoteNumber} className="flex flex-col">
+                        <CardHeader>
+                            <CardTitle>Albarán Nº {note.deliveryNoteNumber}</CardTitle>
+                            <CardDescription>
+                            Fecha: {d ? d.toLocaleDateString('es-ES') : note.date}
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent className="flex-grow">
+                            <p className='text-sm text-muted-foreground'>
+                                {note.lines.length} {note.lines.length === 1 ? 'línea' : 'líneas'}
+                            </p>
+                            {role && ['admin', 'administrador', 'treballador'].includes(role) && (
+                                <p className="text-sm text-muted-foreground mt-2">{note.clientData?.empresa || note.userEmail}</p>
+                            )}
+                        </CardContent>
+                        <CardFooter>
+                            <Button className="w-full" onClick={() => setSelectedDeliveryNote(note)}>
+                                Ver Detalles
+                            </Button>
+                        </CardFooter>
+                        </Card>
+                    );
+                })}
                 </div>
             )}
         </TabsContent>

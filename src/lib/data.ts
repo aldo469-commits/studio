@@ -112,7 +112,7 @@ export const blogPosts: BlogPost[] = [
     excerpt: 'En un mercado globalizado donde los márgenes del transporte son cada vez más estrechos, el éxito real se encuentra en la inteligencia logística y el modelo 4PL.',
     image: 'blog-supply-chain',
     date: '2025-11-25',
-    author: { name: 'Alejandro Doncel', avatarUrl: 'https://i.pravatar.cc/150?u=alejandro-doncel' },
+    author: { name: 'Alejandro Doncel', avatarUrl: '/alejandro-doncel.png' },
     category: 'Estrategia',
     content: `
 <p>En un mercado globalizado donde los márgenes del transporte son cada vez más estrechos, la verdadera ventaja competitiva ya no reside solo en mover mercancía de un punto A a un punto B. El éxito real se encuentra en la inteligencia logística: la capacidad de transformar el flujo de datos y la manipulación de producto en un ahorro directo de costes operativos.</p>
@@ -124,7 +124,7 @@ export const blogPosts: BlogPost[] = [
 
 <ul class="list-disc pl-6 space-y-2 mt-4">
   <li><strong>Agregación de Demanda:</strong> Optimizamos las cargas desde origen (Bélgica, Francia, Norte de Europa) consolidando grupajes en vehículos de gran volumen. Menos camiones, más eficiencia.</li>
-  <li><strong>El Hub de Constantí como Centro de Valor:</strong> Nuestra ubicación, a un paso del Puerto de Tarragona y con conexión directa a la AP-7 y A-27, nos permite actuar como un pulmón operativo. Aquí, la mercancía no solo se guarda; se transforma. Realizamos controles de calidad, etiquetado y kitting, convirtiendo el "producto de fábrica" en "producto listo para el supermercado".</li>
+  <li><strong>El Hub de Constantí como Centro de Valor:</strong> Nuestra ubicación, a un paso del Puerto de Tarragona y con conexión directo a la AP-7 y A-27, nos permite actuar como un pulmón operativo. Aquí, la mercancía no solo se guarda; se transforma. Realizamos controles de calidad, etiquetado y kitting, convirtiendo el "producto de fábrica" en "producto listo para el supermercado".</li>
   <li><strong>Milla de Oro y Distribución Capilar:</strong> Gestionamos la entrega Just-In-Time en las principales plataformas logísticas. Si el supermercado retrasa una ventana de descarga, nosotros absorbemos el impacto en nuestro almacén, eliminando los sobrecostes por esperas o camiones parados.</li>
   <li><strong>Logística Inversa Inteligente:</strong> Recuperamos los rechazos de plataforma de forma inmediata en nuestro Hub, evitando retornos costosos a origen y reintroduciendo el producto en la cadena de valor rápidamente.</li>
 </ul>
@@ -144,7 +144,7 @@ export const blogPosts: BlogPost[] = [
     excerpt: 'Descubre estrategias probadas para aumentar la eficiencia, reducir costes y mejorar la resiliencia de tu cadena de suministro en el competitivo mercado actual.',
     image: 'blog-supply-chain',
     date: '2025-11-20',
-    author: { name: 'Alejandro Doncel', avatarUrl: 'https://i.pravatar.cc/150?u=alejandro-doncel' },
+    author: { name: 'Alejandro Doncel', avatarUrl: '/alejandro-doncel.png' },
     category: 'Logística',
   },
   {
@@ -153,7 +153,7 @@ export const blogPosts: BlogPost[] = [
     excerpt: 'El transporte marítimo se enfrenta a una transformación verde. Analizamos las últimas innovaciones en combustibles alternativos y tecnologías para un futuro más limpio.',
     image: 'blog-sea-freight',
     date: '2025-11-15',
-    author: { name: 'Alejandro Doncel', avatarUrl: 'https://i.pravatar.cc/150?u=alejandro-doncel' },
+    author: { name: 'Alejandro Doncel', avatarUrl: '/alejandro-doncel.png' },
     category: 'Sostenibilidad',
   },
   {
@@ -162,7 +162,7 @@ export const blogPosts: BlogPost[] = [
     excerpt: 'Desde la optimización de rutas en tiempo real hasta la predicción de la demanda, la IA está redefiniendo la eficiencia en el sector logístico. ¿Está tu empresa preparada?',
     image: 'blog-ai',
     date: '2025-11-10',
-    author: { name: 'Alejandro Doncel', avatarUrl: 'https://i.pravatar.cc/150?u=alejandro-doncel' },
+    author: { name: 'Alejandro Doncel', avatarUrl: '/alejandro-doncel.png' },
     category: 'Tecnología',
   },
   {
@@ -171,7 +171,7 @@ export const blogPosts: BlogPost[] = [
     excerpt: 'Los trámites aduaneros son un punto crítico en el comercio internacional. Te damos consejos prácticos para asegurar que tu mercancía cruce las fronteras sin problemas.',
     image: 'blog-customs',
     date: '2025-11-05',
-    author: { name: 'Alejandro Doncel', avatarUrl: 'https://i.pravatar.cc/150?u=alejandro-doncel' },
+    author: { name: 'Alejandro Doncel', avatarUrl: '/alejandro-doncel.png' },
     category: 'Comercio Internacional',
   },
 ];

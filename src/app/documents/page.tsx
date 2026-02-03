@@ -64,7 +64,6 @@ type ProcessedDeliveryNote = {
 
 const API_URL = 'https://sheetdb.io/api/v1/qm90759o5g894';
 
-// Main component
 export default function DocumentsPage() {
   const router = useRouter();
 
@@ -77,7 +76,6 @@ export default function DocumentsPage() {
   const [error, setError] = useState<string | null>(null);
   const [selectedInvoice, setSelectedInvoice] = useState<ProcessedInvoice | null>(null);
   const [selectedDeliveryNote, setSelectedDeliveryNote] = useState<ProcessedDeliveryNote | null>(null);
-
 
   // Auth check effect from localStorage
   useEffect(() => {
@@ -100,17 +98,14 @@ export default function DocumentsPage() {
     setAuthLoading(false);
   }, [router]);
 
-  // Data fetching effect - Simplified to fetch all data and filter on client
+  // Data fetching effect
   useEffect(() => {
-    if (authLoading || !user) {
-      return;
-    }
+    if (authLoading || !user) return;
 
     const fetchData = async () => {
       setLoading(true);
       setError(null);
       try {
-        // Fetch all users and all documents, then filter on the client.
         const [usersRes, docsRes] = await Promise.all([
             fetch(`${API_URL}?sheet=usuaris`),
             fetch(`${API_URL}?sheet=documents`)
@@ -271,7 +266,7 @@ export default function DocumentsPage() {
 
   if (selectedInvoice) {
     return (
-      <div className="container mx-auto px-4 py-8 bg-background">
+      <div className="container mx-auto px-4 py-8 bg-background print:bg-white print:p-0">
         <div className="flex gap-4 mb-6 print:hidden">
             <Button variant="outline" onClick={() => setSelectedInvoice(null)}>
                 <ArrowLeft className="mr-2 h-4 w-4" />

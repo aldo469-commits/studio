@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -27,7 +28,7 @@ export default function LoginPage() {
       const response = await fetch(`https://sheetdb.io/api/v1/qm90759o5g894?sheet=usuaris`);
       
       if (!response.ok) {
-        throw new Error('Error en la connexió amb el servidor.');
+        throw new Error('Error en la conexión con el servidor.');
       }
 
       const allUsers = await response.json();
@@ -39,7 +40,7 @@ export default function LoginPage() {
       );
 
       if (foundUser) {
-        // Guardar dades a localStorage, incloent l'email
+        // Guardar datos en localStorage, incluyendo el email
         localStorage.setItem('user', JSON.stringify({ 
             name: foundUser.nom, 
             company: foundUser.empresa,
@@ -47,11 +48,11 @@ export default function LoginPage() {
         }));
         router.push('/dashboard');
       } else {
-        setError("Dades incorrectes.");
+        setError("Datos incorrectos.");
       }
 
     } catch (err: any) {
-      setError(err.message || "Hi ha hagut un problema. Intenta-ho de nou més tard.");
+      setError(err.message || "Ha habido un problema. Inténtalo de nuevo más tarde.");
     } finally {
       setIsLoading(false);
     }
@@ -61,7 +62,7 @@ export default function LoginPage() {
     <div className="flex items-center justify-center min-h-[70vh] bg-gray-50 dark:bg-gray-900 px-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-headline">Àrea de Clientes</CardTitle>
+          <CardTitle className="text-2xl font-headline">Área de Clientes</CardTitle>
           <CardDescription>Inicie sesión para gestionar sus incidencias.</CardDescription>
         </CardHeader>
         <CardContent>

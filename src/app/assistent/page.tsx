@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -43,7 +44,7 @@ export default function AssistentPage() {
       const data = await res.json();
       setResponse(data.content);
     } catch (err: any) {
-      setError(err.message || 'Hi ha hagut un problema en contactar l\'assistent.');
+      setError(err.message || 'Ha habido un problema al contactar con el asistente.');
     } finally {
       setIsLoading(false);
     }
@@ -52,9 +53,9 @@ export default function AssistentPage() {
   return (
     <div className="container mx-auto max-w-2xl px-4 py-12 md:py-20">
       <div className="text-center mb-10">
-        <h1 className="text-4xl md:text-5xl font-bold font-headline">Assistent IA</h1>
+        <h1 className="text-4xl md:text-5xl font-bold font-headline">Asistente IA</h1>
         <p className="mt-3 text-lg text-muted-foreground">
-          Fes una pregunta o demana el que necessitis.
+          Haz una pregunta o pide lo que necesites.
         </p>
       </div>
 
@@ -65,7 +66,7 @@ export default function AssistentPage() {
               type="text"
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
-              placeholder="Ex: Quines són les tendències en logística sostenible?"
+              placeholder="Ej: ¿Cuáles son las tendencias en logística sostenible?"
               className="flex-grow text-base h-12"
               disabled={isLoading}
             />
@@ -96,7 +97,7 @@ export default function AssistentPage() {
         <Card className="animate-in fade-in-50 duration-500">
           <CardHeader>
             <CardTitle className="flex items-center gap-3 text-2xl font-headline">
-              Resposta de l'Assistent
+              Respuesta del Asistente
             </CardTitle>
           </CardHeader>
           <CardContent>

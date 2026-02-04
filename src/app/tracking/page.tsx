@@ -9,22 +9,25 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Search, Package, TriangleAlert, Loader2, MapPin, Calendar, Truck, Warehouse, CheckCircle } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 
-// Definim el tipus de dades que esperem de l'API
+// Definimos el tipo de datos que esperamos de l'API
 type ShipmentData = {
   id: string;
   tracking_code: string;
   origin: string;
   destination: string;
   eta: string;
-  status: 'En magatzem' | 'En trànsit' | 'Lliurat';
+  status: 'En almacén' | 'En tránsito' | 'Entregado' | 'En magatzem' | 'En trànsit' | 'Lliurat';
   location: string;
 };
 
-// Configuració per a la barra de progrés
-const statusConfig = {
-  'En magatzem': { value: 10, color: 'bg-yellow-500', icon: <Warehouse className="h-5 w-5" /> },
-  'En trànsit': { value: 50, color: 'bg-blue-500', icon: <Truck className="h-5 w-5" /> },
-  'Lliurat': { value: 100, color: 'bg-green-500', icon: <CheckCircle className="h-5 w-5" /> },
+// Configuración para la barra de progreso
+const statusConfig: Record<string, { value: number; color: string; icon: React.ReactNode; label: string }> = {
+  'En almacén': { value: 10, color: 'bg-yellow-500', icon: <Warehouse className="h-5 w-5" />, label: 'En almacén' },
+  'En magatzem': { value: 10, color: 'bg-yellow-500', icon: <Warehouse className="h-5 w-5" />, label: 'En almacén' },
+  'En tránsito': { value: 50, color: 'bg-blue-500', icon: <Truck className="h-5 w-5" />, label: 'En tránsito' },
+  'En trànsit': { value: 50, color: 'bg-blue-500', icon: <Truck className="h-5 w-5" />, label: 'En tránsito' },
+  'Entregado': { value: 100, color: 'bg-green-500', icon: <CheckCircle className="h-5 w-5" />, label: 'Entregado' },
+  'Lliurat': { value: 100, color: 'bg-green-500', icon: <CheckCircle className="h-5 w-5" />, label: 'Entregado' },
 };
 
 
@@ -34,23 +37,23 @@ export default function TrackingPage() {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Funció per convertir la data de format DD/MM/YYYY a un objecte Date
+  // Función para convertir la fecha de formato DD/MM/YYYY a un objeto Date
   const parseDate = (dateString: string) => {
     if (!dateString || typeof dateString !== 'string') return null;
     const parts = dateString.split('/');
     if (parts.length === 3) {
-      // Asumim format DD/MM/YYYY
+      // Asumimos formato DD/MM/YYYY
       const [day, month, year] = parts.map(part => parseInt(part, 10));
       return new Date(year, month - 1, day);
     }
-    // Si no té el format esperat, provem de parsejar-la directament
+    // Si no tiene el formato esperado, probamos a parsearla directamente
     const date = new Date(dateString);
     return isNaN(date.getTime()) ? null : date;
   };
 
   const handleSearch = async () => {
     if (!trackingCode) {
-      setError('Si us plau, introdueix un codi de seguiment.');
+      setError('Por favor, introduce un código de seguimiento.');
       return;
     }
     setIsLoading(true);
@@ -60,20 +63,20 @@ export default function TrackingPage() {
     try {
       const response = await fetch(`https://sheetdb.io/api/v1/qm90759o5g894/search?tracking_code=${trackingCode}`);
       if (!response.ok) {
-        throw new Error('No s\'ha pogut connectar amb el servidor de seguiment.');
+        throw new Error('No se ha podido conectar con el servidor de seguimiento.');
       }
       const data: ShipmentData[] = await response.json();
       
-      // Simulem un petit retard per a una millor experiència d'usuari
+      // Simulamos un pequeño retraso para una mejor experiencia de usuario
       await new Promise(res => setTimeout(res, 500));
 
       if (data.length > 0) {
         setShipment(data[0]);
       } else {
-        setError(`Codi no trobat: No s'ha trobat cap enviament amb el codi '${trackingCode}'.`);
+        setError(`Código no encontrado: No se ha encontrado ningún envío con el código '${trackingCode}'.`);
       }
     } catch (err) {
-      setError('Hi ha hagut un problema amb la connexió. Intenta-ho de nou més tard.');
+      setError('Ha habido un problema con la conexión. Inténtalo de nuevo más tarde.');
       console.error(err);
     } finally {
       setIsLoading(false);
@@ -86,9 +89,9 @@ export default function TrackingPage() {
   return (
     <div className="container mx-auto max-w-4xl px-4 py-12 md:py-20">
       <div className="text-center mb-10">
-        <h1 className="text-4xl md:text-5xl font-bold font-headline">Localitza el teu enviament</h1>
+        <h1 className="text-4xl md:text-5xl font-bold font-headline">Localiza tu envío</h1>
         <p className="mt-3 text-lg text-muted-foreground">
-          Introdueix el codi de seguiment per veure l'estat del teu paquet en temps real.
+          Introduce el código de seguimiento para ver el estado de tu paquete en tiempo real.
         </p>
       </div>
 
@@ -99,7 +102,7 @@ export default function TrackingPage() {
               type="text"
               value={trackingCode}
               onChange={(e) => setTrackingCode(e.target.value)}
-              placeholder="Ex: EJA123456789"
+              placeholder="Ej: EJA123456789"
               className="flex-grow text-base h-12"
               onKeyUp={(e) => e.key === 'Enter' && handleSearch()}
             />
@@ -109,7 +112,7 @@ export default function TrackingPage() {
               ) : (
                 <Search className="mr-2 h-5 w-5" />
               )}
-              Cercar
+              Buscar
             </Button>
           </div>
         </CardContent>
@@ -128,9 +131,9 @@ export default function TrackingPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-3 text-2xl font-headline">
                 <Package />
-                Resultats de l'enviament
+                Resultados del envío
             </CardTitle>
-            <CardDescription>Codi de seguiment: <span className="font-mono font-semibold">{shipment.tracking_code}</span></CardDescription>
+            <CardDescription>Código de seguimiento: <span className="font-mono font-semibold">{shipment.tracking_code}</span></CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-sm">
@@ -144,35 +147,35 @@ export default function TrackingPage() {
                  <div className="flex items-center gap-3">
                     <MapPin className="h-6 w-6 text-primary"/>
                     <div>
-                        <p className="text-muted-foreground">Destí</p>
+                        <p className="text-muted-foreground">Destino</p>
                         <p className="font-semibold">{shipment.destination}</p>
                     </div>
                 </div>
                  <div className="flex items-center gap-3">
                     <Calendar className="h-6 w-6 text-primary"/>
                     <div>
-                        <p className="text-muted-foreground">Data prevista (ETA)</p>
+                        <p className="text-muted-foreground">Fecha prevista (ETA)</p>
                         <p className="font-semibold">
-                          {etaDate ? etaDate.toLocaleDateString('ca-ES', { day: 'numeric', month: 'long', year: 'numeric' }) : 'Data no disponible'}
+                          {etaDate ? etaDate.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }) : 'Fecha no disponible'}
                         </p>
                     </div>
                 </div>
                 <div className="flex items-center gap-3">
                     <MapPin className="h-6 w-6 text-primary"/>
                     <div>
-                        <p className="text-muted-foreground">Ubicació Actual</p>
+                        <p className="text-muted-foreground">Ubicación Actual</p>
                         <p className="font-semibold">{shipment.location}</p>
                     </div>
                 </div>
             </div>
 
             <div>
-                <h3 className="text-lg font-semibold mb-3 font-headline">Estat de l'enviament</h3>
+                <h3 className="text-lg font-semibold mb-3 font-headline">Estado del envío</h3>
                 <div className="flex items-center gap-4 mb-3">
                     {currentStatusConfig && (
                         <div className="flex items-center gap-2 font-semibold text-lg">
                            {currentStatusConfig.icon}
-                           <span>{shipment.status}</span>
+                           <span>{currentStatusConfig.label}</span>
                         </div>
                     )}
                 </div>
@@ -182,9 +185,9 @@ export default function TrackingPage() {
                 )}
 
                 <div className="grid grid-cols-3 mt-2 text-xs text-muted-foreground">
-                    <div className="text-left">En magatzem</div>
-                    <div className="text-center">En trànsit</div>
-                    <div className="text-right">Lliurat</div>
+                    <div className="text-left">En almacén</div>
+                    <div className="text-center">En tránsito</div>
+                    <div className="text-right">Entregado</div>
                 </div>
             </div>
             

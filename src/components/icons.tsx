@@ -7,8 +7,8 @@ export function Logo({ className }: { className?: string }) {
        <Image
         src="/LOGO.WEBP"
         alt="EJA GlobalTrans Logo"
-        width={140}
-        height={40}
+        width={160}
+        height={45}
         className="h-10 w-auto object-contain"
         priority
       />
@@ -22,7 +22,7 @@ export function FooterLogo({ className }: { className?: string }) {
         <Image
           src="/LOGO.WEBP"
           alt="EJA GlobalTrans Logo"
-          width={180}
+          width={200}
           height={60}
           className="h-12 w-auto object-contain"
           priority

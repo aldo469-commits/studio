@@ -8,8 +8,9 @@ export function Logo({ className }: { className?: string }) {
        <Image
         src="/logo.png"
         alt="EJA GlobalTrans Logo"
-        width={100}
-        height={28}
+        width={120}
+        height={40}
+        className="h-10 w-auto object-contain"
         priority
       />
     </div>
@@ -22,8 +23,9 @@ export function FooterLogo({ className }: { className?: string }) {
         <Image
           src="/logo.png"
           alt="EJA GlobalTrans Logo"
-          width={140}
-          height={40}
+          width={180}
+          height={60}
+          className="h-12 w-auto object-contain"
           priority
         />
       </div>

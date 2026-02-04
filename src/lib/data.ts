@@ -105,7 +105,7 @@ export type BlogPost = {
   content?: string;
 };
 
-const AUTHOR_IMAGE = '/Gemini_Generated_Image_vhgd4svhgd4svhgd-removebg-preview.png';
+const AUTHOR_IMAGE = '/logo.png';
 
 export const blogPosts: BlogPost[] = [
   {

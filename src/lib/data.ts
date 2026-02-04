@@ -105,6 +105,8 @@ export type BlogPost = {
   content?: string;
 };
 
+const AUTHOR_IMAGE = '/Gemini_Generated_Image_vhgd4svhgd4svhgd-removebg-preview.png';
+
 export const blogPosts: BlogPost[] = [
   {
     slug: 'futuro-logistica-4pl-hub-tarragona',
@@ -112,7 +114,7 @@ export const blogPosts: BlogPost[] = [
     excerpt: 'En un mercado globalizado donde los márgenes del transporte son cada vez más estrechos, el éxito real se encuentra en la inteligencia logística y el modelo 4PL.',
     image: 'blog-supply-chain',
     date: '2025-11-25',
-    author: { name: 'Alejandro Doncel', avatarUrl: '/alejandro-doncel.png' },
+    author: { name: 'Alejandro Doncel', avatarUrl: AUTHOR_IMAGE },
     category: 'Estrategia',
     content: `
 <p>En un mercado globalizado donde los márgenes del transporte son cada vez más estrechos, la verdadera ventaja competitiva ya no reside solo en mover mercancía de un punto A a un punto B. El éxito real se encuentra en la inteligencia logística: la capacidad de transformar el flujo de datos y la manipulación de producto en un ahorro directo de costes operativos.</p>
@@ -144,7 +146,7 @@ export const blogPosts: BlogPost[] = [
     excerpt: 'Descubre estrategias probadas para aumentar la eficiencia, reducir costes y mejorar la resiliencia de tu cadena de suministro en el competitivo mercado actual.',
     image: 'blog-supply-chain',
     date: '2025-11-20',
-    author: { name: 'Alejandro Doncel', avatarUrl: '/alejandro-doncel.png' },
+    author: { name: 'Alejandro Doncel', avatarUrl: AUTHOR_IMAGE },
     category: 'Logística',
   },
   {
@@ -153,7 +155,7 @@ export const blogPosts: BlogPost[] = [
     excerpt: 'El transporte marítimo se enfrenta a una transformación verde. Analizamos las últimas innovaciones en combustibles alternativos y tecnologías para un futuro más limpio.',
     image: 'blog-sea-freight',
     date: '2025-11-15',
-    author: { name: 'Alejandro Doncel', avatarUrl: '/alejandro-doncel.png' },
+    author: { name: 'Alejandro Doncel', avatarUrl: AUTHOR_IMAGE },
     category: 'Sostenibilidad',
   },
   {
@@ -162,7 +164,7 @@ export const blogPosts: BlogPost[] = [
     excerpt: 'Desde la optimización de rutas en tiempo real hasta la predicción de la demanda, la IA está redefiniendo la eficiencia en el sector logístico. ¿Está tu empresa preparada?',
     image: 'blog-ai',
     date: '2025-11-10',
-    author: { name: 'Alejandro Doncel', avatarUrl: '/alejandro-doncel.png' },
+    author: { name: 'Alejandro Doncel', avatarUrl: AUTHOR_IMAGE },
     category: 'Tecnología',
   },
   {
@@ -171,7 +173,7 @@ export const blogPosts: BlogPost[] = [
     excerpt: 'Los trámites aduaneros son un punto crítico en el comercio internacional. Te damos consejos prácticos para asegurar que tu mercancía cruce las fronteras sin problemas.',
     image: 'blog-customs',
     date: '2025-11-05',
-    author: { name: 'Alejandro Doncel', avatarUrl: '/alejandro-doncel.png' },
+    author: { name: 'Alejandro Doncel', avatarUrl: AUTHOR_IMAGE },
     category: 'Comercio Internacional',
   },
 ];

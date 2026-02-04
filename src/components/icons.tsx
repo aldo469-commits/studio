@@ -1,4 +1,3 @@
-
 import { cn } from "@/lib/utils";
 import Image from 'next/image';
 
@@ -6,9 +5,9 @@ export function Logo({ className }: { className?: string }) {
   return (
     <div className={cn("flex items-center", className)}>
        <Image
-        src="/logo.png"
+        src="/LOGO.WEBP"
         alt="EJA GlobalTrans Logo"
-        width={120}
+        width={140}
         height={40}
         className="h-10 w-auto object-contain"
         priority
@@ -21,7 +20,7 @@ export function FooterLogo({ className }: { className?: string }) {
     return (
       <div className={cn("flex items-center", className)}>
         <Image
-          src="/logo.png"
+          src="/LOGO.WEBP"
           alt="EJA GlobalTrans Logo"
           width={180}
           height={60}

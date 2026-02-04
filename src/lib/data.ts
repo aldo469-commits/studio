@@ -1,4 +1,3 @@
-
 import type { LucideIcon } from 'lucide-react';
 import { Truck, Ship, Plane, Warehouse, FileCheck2, Construction, Facebook, Twitter, Linkedin, ShieldCheck, User as UserIcon } from 'lucide-react';
 
@@ -105,8 +104,7 @@ export type BlogPost = {
   content?: string;
 };
 
-// La única imagen presente en la carpeta public
-const AUTHOR_IMAGE = '/logo.png';
+const AUTHOR_IMAGE = '/AUTOR.JPEG';
 
 export const blogPosts: BlogPost[] = [
   {

@@ -105,6 +105,7 @@ export type BlogPost = {
   content?: string;
 };
 
+// La única imagen presente en la carpeta public
 const AUTHOR_IMAGE = '/logo.png';
 
 export const blogPosts: BlogPost[] = [
@@ -126,7 +127,7 @@ export const blogPosts: BlogPost[] = [
 
 <ul class="list-disc pl-6 space-y-2 mt-4">
   <li><strong>Agregación de Demanda:</strong> Optimizamos las cargas desde origen (Bélgica, Francia, Norte de Europa) consolidando grupajes en vehículos de gran volumen. Menos camiones, más eficiencia.</li>
-  <li><strong>El Hub de Constantí como Centro de Valor:</strong> Nuestra ubicación, a un paso del Puerto de Tarragona y con conexión directo a la AP-7 y A-27, nos permite actuar como un pulmón operativo. Aquí, la mercancía no solo se guarda; se transforma. Realizamos controles de calidad, etiquetado y kitting, convirtiendo el "producto de fábrica" en "producto listo para el supermercado".</li>
+  <li><strong>El Hub de Constantí como Centro de Valor:</strong> Nuestra ubicación, a un paso del Puerto de Tarragona y con conexión directa a la AP-7 y A-27, nos permite actuar como un pulmón operativo. Aquí, la mercancía no solo se guarda; se transforma. Realizamos controles de calidad, etiquetado y kitting, convirtiendo el "producto de fábrica" en "producto listo para el supermercado".</li>
   <li><strong>Milla de Oro y Distribución Capilar:</strong> Gestionamos la entrega Just-In-Time en las principales plataformas logísticas. Si el supermercado retrasa una ventana de descarga, nosotros absorbemos el impacto en nuestro almacén, eliminando los sobrecostes por esperas o camiones parados.</li>
   <li><strong>Logística Inversa Inteligente:</strong> Recuperamos los rechazos de plataforma de forma inmediata en nuestro Hub, evitando retornos costosos a origen y reintroduciendo el producto en la cadena de valor rápidamente.</li>
 </ul>

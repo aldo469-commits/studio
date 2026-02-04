@@ -1,10 +1,11 @@
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { blogPosts } from '@/lib/data';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { ArrowRight, Calendar, User } from 'lucide-react';
+import { ArrowRight, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
@@ -107,7 +108,10 @@ export default function BlogPage() {
                 </CardContent>
                 <CardFooter className="p-6 pt-0 text-xs text-muted-foreground flex justify-between">
                     <div className="flex items-center gap-2">
-                        <User className="size-3" />
+                        <Avatar className="h-6 w-6">
+                            {post.author.avatarUrl && <AvatarImage src={post.author.avatarUrl} alt={post.author.name} />}
+                            <AvatarFallback>{post.author.name.charAt(0)}</AvatarFallback>
+                        </Avatar>
                         <span>{post.author.name}</span>
                     </div>
                     <div className="flex items-center gap-2">

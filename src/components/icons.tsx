@@ -5,7 +5,7 @@ export function Logo({ className }: { className?: string }) {
   return (
     <div className={cn("flex items-center", className)}>
        <Image
-        src="/LOGO.WEBP"
+        src="/LOGO.webp"
         alt="EJA GlobalTrans Logo"
         width={220}
         height={70}
@@ -20,7 +20,7 @@ export function FooterLogo({ className }: { className?: string }) {
     return (
       <div className={cn("flex items-center", className)}>
         <Image
-          src="/LOGO.WEBP"
+          src="/LOGO.webp"
           alt="EJA GlobalTrans Logo"
           width={240}
           height={80}

@@ -7,6 +7,7 @@ import { Footer } from '@/components/layout/footer';
 import { Toaster } from '@/components/ui/toaster';
 import { FirebaseClientProvider } from '@/firebase';
 import { ChatWidget } from '@/components/chatbot/ChatWidget';
+import { LanguageProvider } from '@/context/language-context';
 
 const fontBody = Inter({
   subsets: ['latin'],
@@ -39,11 +40,13 @@ export default function RootLayout({
         )}
       >
         <FirebaseClientProvider>
-          <Header />
-          <main className="flex-1">{children}</main>
-          <Footer />
-          <ChatWidget />
-          <Toaster />
+          <LanguageProvider>
+            <Header />
+            <main className="flex-1">{children}</main>
+            <Footer />
+            <ChatWidget />
+            <Toaster />
+          </LanguageProvider>
         </FirebaseClientProvider>
       </body>
     </html>

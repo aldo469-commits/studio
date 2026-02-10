@@ -1,11 +1,22 @@
+"use client";
+
 import Link from 'next/link';
 import { FooterLogo } from '@/components/icons';
-import { services, navLinks, socialLinks } from '@/lib/data';
+import { services, socialLinks } from '@/lib/data';
 import { Button } from '@/components/ui/button';
+import { useLanguage } from '@/context/language-context';
 
 export function Footer() {
-  const footerNavLinks = navLinks.filter(l => l.href !== '/');
+  const { t } = useLanguage();
   const footerServices = services.slice(0, 4);
+
+  const navLinks = [
+    { href: '/services', label: t('nav.services') },
+    { href: '/about', label: t('nav.about') },
+    { href: '/tracking', label: t('nav.tracking') },
+    { href: '/blog', label: t('nav.blog') },
+    { href: '/contact', label: t('nav.contact') },
+  ];
 
   return (
     <footer className="bg-primary text-primary-foreground border-t border-primary-foreground/10">
@@ -15,7 +26,7 @@ export function Footer() {
           <div className="space-y-4">
             <FooterLogo />
             <p className="text-sm text-primary-foreground/80">
-              Su socio de confianza en soluciones de transporte y logística a nivel mundial.
+              {t('footer.description')}
             </p>
             <div className="flex space-x-2">
               {socialLinks.map((social) => (
@@ -29,9 +40,9 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="font-headline font-semibold text-lg mb-4">Navegación</h3>
+            <h3 className="font-headline font-semibold text-lg mb-4">{t('footer.navigation')}</h3>
             <ul className="space-y-2">
-              {footerNavLinks.map(link => (
+              {navLinks.map(link => (
                 <li key={link.href}>
                   <Link href={link.href} className="text-sm text-primary-foreground/80 hover:text-primary-foreground transition-colors">
                     {link.label}
@@ -42,7 +53,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="font-headline font-semibold text-lg mb-4">Servicios Destacados</h3>
+            <h3 className="font-headline font-semibold text-lg mb-4">{t('footer.featuredServices')}</h3>
             <ul className="space-y-2">
               {footerServices.map(service => (
                 <li key={service.slug}>
@@ -55,7 +66,7 @@ export function Footer() {
           </div>
           
           <div>
-            <h3 className="font-headline font-semibold text-lg mb-4">Contacto</h3>
+            <h3 className="font-headline font-semibold text-lg mb-4">{t('footer.contact')}</h3>
             <div className="text-sm text-primary-foreground/80 space-y-2">
                 <p><strong>Email:</strong> info@ejaglobaltrans.com</p>
                 <p><strong>Teléfono:</strong> +34 91 234 56 78</p>
@@ -67,12 +78,12 @@ export function Footer() {
 
         <div className="mt-8 pt-8 border-t border-primary-foreground/20 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-center sm:text-left text-sm text-primary-foreground/80">
-            &copy; {new Date().getFullYear()} EJA GlobalTrans. Todos los derechos reservados.
+            &copy; {new Date().getFullYear()} EJA GlobalTrans. {t('footer.rights')}
           </p>
           <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-sm text-primary-foreground/80">
-            <Link href="/cookie-policy" className="hover:text-primary-foreground transition-colors">Política de Cookies</Link>
-            <Link href="/privacy-policy" className="hover:text-primary-foreground transition-colors">Política de Privacidad</Link>
-            <Link href="/legal-notice" className="hover:text-primary-foreground transition-colors">Aviso Legal</Link>
+            <Link href="/cookie-policy" className="hover:text-primary-foreground transition-colors">{t('footer.cookies')}</Link>
+            <Link href="/privacy-policy" className="hover:text-primary-foreground transition-colors">{t('footer.privacy')}</Link>
+            <Link href="/legal-notice" className="hover:text-primary-foreground transition-colors">{t('footer.legal')}</Link>
           </div>
         </div>
       </div>

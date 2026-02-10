@@ -3,28 +3,33 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Menu, LogOut, User } from 'lucide-react';
+import { Menu, LogOut, User, Globe } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Logo } from '@/components/icons';
-import { navLinks as defaultNavLinks } from '@/lib/data';
+import { useLanguage } from '@/context/language-context';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
+  const { t, language, setLanguage } = useLanguage();
 
   useEffect(() => {
-    // This effect now runs only on the client side
     const checkLoginStatus = () => {
         const user = localStorage.getItem('user');
         setIsLoggedIn(!!user);
     };
     checkLoginStatus();
 
-    // Optional: Add a storage event listener to sync across tabs
     window.addEventListener('storage', checkLoginStatus);
     return () => {
         window.removeEventListener('storage', checkLoginStatus);
@@ -36,22 +41,22 @@ export function Header() {
     setIsLoggedIn(false);
     if(isMenuOpen) setIsMenuOpen(false);
     router.push('/login');
-    // We can manually refresh the page to ensure all state is cleared if needed
-    // window.location.href = '/login';
   };
 
-  const navLinks = defaultNavLinks.filter(link => {
-    if (isLoggedIn) {
-        // Show auth links, hide public only links
-        return !link.public;
-    }
-    // Show public links, hide auth-only links
-    return !link.auth;
-  }).filter(link => !link.admin); // Always filter out admin links for this header
+  const navItems = [
+    { href: '/', label: t('nav.home'), public: true },
+    { href: '/services', label: t('nav.services'), public: true },
+    { href: '/about', label: t('nav.about'), public: true },
+    { href: '/tracking', label: t('nav.tracking'), public: true },
+    { href: '/blog', label: t('nav.blog'), public: true },
+    { href: '/contact', label: t('nav.contact'), public: true },
+    { href: '/dashboard', label: t('nav.clientArea'), auth: true },
+  ];
 
-
-  // For this simplified logic, admin panel is not shown
-  const adminNav = null;
+  const visibleNavLinks = navItems.filter(link => {
+    if (isLoggedIn) return !link.public || link.href === '/';
+    return link.public;
+  });
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -61,7 +66,7 @@ export function Header() {
             <Logo />
           </Link>
           <nav className="flex items-center space-x-6 text-sm font-medium">
-            {navLinks.map((link) => (
+            {visibleNavLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
@@ -84,7 +89,7 @@ export function Header() {
           <div className="flex items-center gap-2">
             {!isLoggedIn && (
               <Button asChild size="sm">
-                <Link href="/login">Acceder</Link>
+                <Link href="/login">{t('nav.access')}</Link>
               </Button>
             )}
             <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
@@ -102,7 +107,7 @@ export function Header() {
                 </div>
                 <div className="p-6">
                   <div className="flex flex-col space-y-4">
-                    {navLinks.map((link) => (
+                    {visibleNavLinks.map((link) => (
                       <Link
                         key={link.href}
                         href={link.href}
@@ -115,13 +120,20 @@ export function Header() {
                         {link.label}
                       </Link>
                     ))}
+                    <div className="pt-4 border-t">
+                      <p className="text-sm font-semibold mb-2">Idioma / Language</p>
+                      <div className="flex gap-2">
+                        <Button variant={language === 'es' ? 'default' : 'outline'} size="sm" onClick={() => setLanguage('es')}>ES</Button>
+                        <Button variant={language === 'en' ? 'default' : 'outline'} size="sm" onClick={() => setLanguage('en')}>EN</Button>
+                      </div>
+                    </div>
                     {isLoggedIn && (
                       <button
                         onClick={handleLogout}
-                        className="text-lg text-left text-foreground/60 transition-colors hover:text-foreground/80 flex items-center gap-2"
+                        className="text-lg text-left text-foreground/60 transition-colors hover:text-foreground/80 flex items-center gap-2 pt-4"
                       >
                         <LogOut className="size-5" />
-                        Cerrar Sesión
+                        {t('nav.logout')}
                       </button>
                     )}
                   </div>
@@ -133,16 +145,30 @@ export function Header() {
 
         {/* Desktop Right Section */}
         <div className="hidden flex-1 items-center justify-end space-x-2 md:flex md:space-x-4">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <Globe className="h-5 w-5" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => setLanguage('es')} className={cn(language === 'es' && "font-bold")}>
+                Español
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setLanguage('en')} className={cn(language === 'en' && "font-bold")}>
+                English
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
           {isLoggedIn && (
-             <>
-                <Button variant="ghost" size="icon" onClick={() => router.push('/dashboard')} title="Área Cliente">
-                    <User className="h-5 w-5" />
-                </Button>
-             </>
+             <Button variant="ghost" size="icon" onClick={() => router.push('/dashboard')} title={t('nav.clientArea')}>
+                <User className="h-5 w-5" />
+             </Button>
           )}
 
           <Button asChild className="hidden md:inline-flex bg-accent hover:bg-accent/90 text-accent-foreground">
-            <Link href="/quote">Solicitar Cotización</Link>
+            <Link href="/quote">{t('nav.quote')}</Link>
           </Button>
         </div>
       </div>

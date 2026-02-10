@@ -22,9 +22,9 @@ export function FooterLogo({ className }: { className?: string }) {
         <Image
           src="/LOGO.webp"
           alt="EJA GlobalTrans Logo"
-          width={240}
-          height={80}
-          className="h-16 w-auto object-contain"
+          width={300}
+          height={100}
+          className="h-28 w-auto object-contain"
           priority
         />
       </div>

@@ -1,16 +1,20 @@
-import { notFound } from 'next/navigation';
+'use client';
+
+import { notFound, useParams } from 'next/navigation';
 import Image from 'next/image';
 import { blogPosts } from '@/lib/data';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { Calendar } from 'lucide-react';
+import { Calendar, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { useLanguage } from '@/context/language-context';
 
-export default function BlogPostPage({ params }: { params: { slug: string } }) {
-  const post = blogPosts.find((p) => p.slug === params.slug);
+export default function BlogPostPage() {
+  const { slug } = useParams();
+  const { t, language } = useLanguage();
+  const post = blogPosts.find((p) => p.slug === slug);
 
   if (!post) {
     notFound();
@@ -18,9 +22,8 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
 
   const postImage = PlaceHolderImages.find(p => p.id === post.image);
 
-
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('es-ES', {
+    return new Date(dateString).toLocaleDateString(language === 'es' ? 'es-ES' : 'en-US', {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
@@ -33,7 +36,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         <Button asChild variant="outline" size="sm">
             <Link href="/blog">
                 <ArrowLeft className="mr-2"/>
-                Volver al Blog
+                {t('blog.backToBlog')}
             </Link>
         </Button>
       </div>
@@ -82,11 +85,4 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
 
     </article>
   );
-}
-
-// Generate static paths for all blog posts
-export async function generateStaticParams() {
-  return blogPosts.map((post) => ({
-    slug: post.slug,
-  }));
 }

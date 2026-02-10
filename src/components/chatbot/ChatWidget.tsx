@@ -9,8 +9,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { MessageSquare, Send, X, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback } from '../ui/avatar';
-// La importación del flujo de chat se elimina para la compilación estática
-// import { chat, type ChatInput } from '@/ai/flows/chatbot';
+import { useLanguage } from '@/context/language-context';
 
 type Message = {
     role: 'user' | 'model';
@@ -18,13 +17,16 @@ type Message = {
 };
 
 export function ChatWidget() {
+    const { t } = useLanguage();
     const [isOpen, setIsOpen] = useState(false);
-    const [messages, setMessages] = useState<Message[]>([
-        { content: "¡Hola! Soy el asistente virtual de EJA GlobalTrans. ¿Cómo puedo ayudarte hoy?", role: 'model' }
-    ]);
+    const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const scrollAreaRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        setMessages([{ content: t('chatbot.welcome'), role: 'model' }]);
+    }, [t]);
 
     useEffect(() => {
         if (scrollAreaRef.current) {
@@ -44,9 +46,8 @@ export function ChatWidget() {
         setInput('');
         setIsLoading(true);
 
-        // Simula una respuesta del bot para la versión estática
         setTimeout(() => {
-            const botMessage: Message = { content: "Lo sentimos, el chat no está disponible en la versión estática.", role: 'model' };
+            const botMessage: Message = { content: t('chatbot.error'), role: 'model' };
             setMessages(prev => [...prev, botMessage]);
             setIsLoading(false);
         }, 1000);
@@ -71,7 +72,7 @@ export function ChatWidget() {
                 <Card className="h-full flex flex-col">
                     <CardHeader className="flex flex-row items-center justify-between">
                         <div>
-                            <CardTitle className="font-headline text-lg">Asistente Virtual</CardTitle>
+                            <CardTitle className="font-headline text-lg">{t('chatbot.title')}</CardTitle>
                             <CardDescription>EJA GlobalTrans</CardDescription>
                         </div>
                         <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)}>
@@ -122,7 +123,7 @@ export function ChatWidget() {
                             <Input
                                 value={input}
                                 onChange={(e) => setInput(e.target.value)}
-                                placeholder="Escribe un mensaje..."
+                                placeholder={t('chatbot.placeholder')}
                                 autoComplete="off"
                                 disabled={isLoading}
                             />

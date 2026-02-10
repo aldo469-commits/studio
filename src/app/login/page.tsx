@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState } from 'react';
@@ -10,8 +9,10 @@ import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { TriangleAlert, Loader2 } from 'lucide-react';
 import Link from 'next/link';
+import { useLanguage } from '@/context/language-context';
 
 export default function LoginPage() {
+  const { t } = useLanguage();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -24,23 +25,14 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      // 1. Fetch all users from the sheet
       const response = await fetch(`https://sheetdb.io/api/v1/qm90759o5g894?sheet=usuaris`);
-      
-      if (!response.ok) {
-        throw new Error('Error en la conexión con el servidor.');
-      }
-
+      if (!response.ok) throw new Error('Error en la conexión.');
       const allUsers = await response.json();
-      
-      // 2. Find the user on the client side (case-insensitive for username)
       const foundUser = allUsers.find(
         (sheetUser: any) =>
           sheetUser.usuari && sheetUser.usuari.toLowerCase() === username.toLowerCase() && sheetUser.password === password
       );
-
       if (foundUser) {
-        // Guardar datos en localStorage, incluyendo el email
         localStorage.setItem('user', JSON.stringify({ 
             name: foundUser.nom, 
             company: foundUser.empresa,
@@ -50,9 +42,8 @@ export default function LoginPage() {
       } else {
         setError("Datos incorrectos.");
       }
-
     } catch (err: any) {
-      setError(err.message || "Ha habido un problema. Inténtalo de nuevo más tarde.");
+      setError(err.message || "Ha habido un problema.");
     } finally {
       setIsLoading(false);
     }
@@ -62,31 +53,31 @@ export default function LoginPage() {
     <div className="flex items-center justify-center min-h-[70vh] bg-gray-50 dark:bg-gray-900 px-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-headline">Área de Clientes</CardTitle>
-          <CardDescription>Inicie sesión para gestionar sus incidencias.</CardDescription>
+          <CardTitle className="text-2xl font-headline">{t('auth.loginTitle')}</CardTitle>
+          <CardDescription>{t('auth.loginSubtitle')}</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSignIn} className="space-y-4">
             {error && (
               <Alert variant="destructive">
                 <TriangleAlert className="h-4 w-4" />
-                <AlertTitle>Error de inicio de sesión</AlertTitle>
+                <AlertTitle>Error</AlertTitle>
                 <AlertDescription>{error}</AlertDescription>
               </Alert>
             )}
             <div className="space-y-2">
-              <Label htmlFor="user">Usuario (Email)</Label>
+              <Label htmlFor="user">{t('auth.email')}</Label>
               <Input
                 id="user"
                 type="text"
-                placeholder="Su usuario"
+                placeholder="su@email.com"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 required
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Contraseña</Label>
+              <Label htmlFor="password">{t('auth.password')}</Label>
               <Input
                 id="password"
                 type="password"
@@ -99,19 +90,19 @@ export default function LoginPage() {
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  <span>Iniciando sesión...</span>
+                  <span>{t('auth.loggingIn')}</span>
                 </>
               ) : (
-                'Entrar'
+                t('auth.enter')
               )}
             </Button>
           </form>
         </CardContent>
         <CardFooter className="flex justify-center text-sm">
             <p className="text-muted-foreground">
-                ¿No tiene una cuenta?{' '}
+                {t('auth.noAccount')}{' '}
                 <Link href="/register" className="font-medium text-primary hover:underline">
-                    Regístrese aquí
+                    {t('auth.registerHere')}
                 </Link>
             </p>
         </CardFooter>

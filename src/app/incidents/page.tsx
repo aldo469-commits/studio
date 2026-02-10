@@ -14,8 +14,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useLanguage } from '@/context/language-context';
 
 export default function IncidentsPage() {
+  const { t, language } = useLanguage();
   const { user, isUserLoading } = useUser();
   const router = useRouter();
   const firestore = useFirestore();
@@ -68,23 +70,23 @@ export default function IncidentsPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold font-headline">Mis Incidencias</h1>
+        <h1 className="text-3xl font-bold font-headline">{t('incidents.title')}</h1>
         <Button onClick={() => setIsDialogOpen(true)}>
           <PlusCircle className="mr-2 h-4 w-4" />
-          Nueva Incidencia
+          {t('incidents.newIncident')}
         </Button>
       </div>
       
-      {isLoading && <p>Cargando incidencias...</p>}
+      {isLoading && <p>Cargando...</p>}
 
       {!isLoading && incidents?.length === 0 && (
         <Card className="text-center py-12">
             <CardHeader>
                 <MessageSquare className="mx-auto h-12 w-12 text-muted-foreground" />
-                <CardTitle>No tiene incidencias</CardTitle>
+                <CardTitle>{t('incidents.noIncidents')}</CardTitle>
             </CardHeader>
             <CardContent>
-                <CardDescription>Cuando cree una nueva incidencia, aparecerá aquí.</CardDescription>
+                <CardDescription>{t('incidents.noIncidentsDesc')}</CardDescription>
             </CardContent>
         </Card>
       )}
@@ -110,13 +112,13 @@ export default function IncidentsPage() {
                     )}
                 </div>
                  <p className="text-sm text-muted-foreground mt-2">
-                    Reportado: {incident.dateReported ? new Date(incident.dateReported.seconds * 1000).toLocaleDateString('es-ES') : 'N/A'}
+                    {t('incidents.reported')}: {incident.dateReported ? new Date(incident.dateReported.seconds * 1000).toLocaleDateString(language === 'es' ? 'es-ES' : 'en-US') : 'N/A'}
                 </p>
             </CardContent>
             <CardFooter>
               <Button asChild className="w-full">
                 <Link href={`/incidents/${incident.id}`}>
-                  Ver Chat <ArrowRight className="ml-2 h-4 w-4" />
+                  {t('incidents.viewChat')} <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
             </CardFooter>
@@ -127,14 +129,14 @@ export default function IncidentsPage() {
        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Crear Nueva Incidencia</DialogTitle>
+            <DialogTitle>{t('incidents.createDialogTitle')}</DialogTitle>
             <DialogDescription>
-              Describa su problema a continuación. Un agente se pondrá en contacto en breve.
+              {t('incidents.createDialogDesc')}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="title">Asunto</Label>
+              <Label htmlFor="title">{t('incidents.subject')}</Label>
               <Input
                 id="title"
                 value={newIncidentTitle}
@@ -143,22 +145,22 @@ export default function IncidentsPage() {
               />
             </div>
              <div className="space-y-2">
-              <Label htmlFor="category">Categoría</Label>
+              <Label htmlFor="category">{t('incidents.category')}</Label>
                <Select value={newIncidentCategory} onValueChange={setNewIncidentCategory}>
                   <SelectTrigger id="category">
-                      <SelectValue placeholder="Seleccione una categoría" />
+                      <SelectValue placeholder={t('incidents.selectCategory')} />
                   </SelectTrigger>
                   <SelectContent>
-                      <SelectItem value="Seguimiento del pedido">Seguimiento del pedido</SelectItem>
-                      <SelectItem value="Estado de la entrega">Estado de la entrega</SelectItem>
-                      <SelectItem value="Albarán">Albarán</SelectItem>
-                      <SelectItem value="Mercancía">Mercancía</SelectItem>
-                      <SelectItem value="Otro">Otro</SelectItem>
+                      <SelectItem value="Seguimiento del pedido">{t('incidents.categories.tracking')}</SelectItem>
+                      <SelectItem value="Estado de la entrega">{t('incidents.categories.delivery')}</SelectItem>
+                      <SelectItem value="Albarán">{t('incidents.categories.note')}</SelectItem>
+                      <SelectItem value="Mercancía">{t('incidents.categories.goods')}</SelectItem>
+                      <SelectItem value="Otro">{t('incidents.categories.other')}</SelectItem>
                   </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="description">Descripción</Label>
+              <Label htmlFor="description">{t('incidents.description')}</Label>
               <Textarea
                 id="description"
                 value={newIncidentDescription}
@@ -170,9 +172,11 @@ export default function IncidentsPage() {
           </div>
           <DialogFooter>
             <DialogClose asChild>
-                <Button variant="outline">Cancelar</Button>
+                <Button variant="outline">{t('incidents.cancel')}</Button>
             </DialogClose>
-            <Button onClick={handleCreateIncident} disabled={!newIncidentTitle || !newIncidentDescription || !newIncidentCategory}>Crear Incidencia</Button>
+            <Button onClick={handleCreateIncident} disabled={!newIncidentTitle || !newIncidentDescription || !newIncidentCategory}>
+              {t('incidents.create')}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

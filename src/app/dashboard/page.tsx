@@ -7,20 +7,15 @@ import { Button } from '@/components/ui/button';
 import { LogOut, FilePlus, Search, Box, Truck, FileText, MessageSquare, Building, User as UserIcon } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { useLanguage } from '@/context/language-context';
 
 type UserProfile = {
   name: string;
   company: string;
 };
 
-const options = [
-    { title: "Contratación", icon: <FilePlus className="size-8 text-primary" />, href: "#" },
-    { title: "Seguimiento", icon: <Search className="size-8 text-primary" />, href: "/tracking" },
-    { title: "Recogida", icon: <Box className="size-8 text-primary" />, href: "#" },
-    { title: "Entrega", icon: <Truck className="size-8 text-primary" />, href: "#" },
-];
-
 export default function DashboardPage() {
+  const { t } = useLanguage();
   const [user, setUser] = useState<UserProfile | null>(null);
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
@@ -54,6 +49,13 @@ export default function DashboardPage() {
     return <div className="container mx-auto px-4 py-8">Cargando...</div>;
   }
 
+  const options = [
+    { title: t('dashboard.contracting'), icon: <FilePlus className="size-8 text-primary" />, href: "#" },
+    { title: t('dashboard.tracking'), icon: <Search className="size-8 text-primary" />, href: "/tracking" },
+    { title: t('dashboard.pickup'), icon: <Box className="size-8 text-primary" />, href: "#" },
+    { title: t('dashboard.delivery'), icon: <Truck className="size-8 text-primary" />, href: "#" },
+  ];
+
   return (
     <div className="container mx-auto max-w-5xl px-4 py-12 md:py-20">
         <div className="flex flex-col md:flex-row gap-8">
@@ -79,7 +81,7 @@ export default function DashboardPage() {
                     <CardFooter className='flex-col gap-4'>
                         <Button onClick={handleLogout} variant="destructive" className="w-full">
                             <LogOut className="mr-2 h-4 w-4" />
-                            Cerrar Sesión
+                            {t('dashboard.logout')}
                         </Button>
                     </CardFooter>
                 </Card>
@@ -88,26 +90,26 @@ export default function DashboardPage() {
             <section className='md:w-2/3 lg:w-3/4'>
                 <div className='space-y-8'>
                     <div>
-                        <h2 className="text-2xl font-bold font-headline mb-4">Accesos Directos</h2>
+                        <h2 className="text-2xl font-bold font-headline mb-4">{t('dashboard.shortcuts')}</h2>
                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <Button onClick={() => router.push('/documents')} size="lg" className="h-auto py-4 justify-start">
                                 <FileText className="mr-4 h-6 w-6 flex-shrink-0" />
                                 <div className='text-left'>
-                                    <p className='font-bold'>Mis Documentos</p>
-                                    <p className='font-normal text-sm text-primary-foreground/80'>Facturas y albaranes</p>
+                                    <p className='font-bold'>{t('dashboard.myDocuments')}</p>
+                                    <p className='font-normal text-sm text-primary-foreground/80'>{t('dashboard.myDocumentsDesc')}</p>
                                 </div>
                             </Button>
                             <Button onClick={() => router.push('/incidents')} size="lg" className="h-auto py-4 justify-start">
                                 <MessageSquare className="mr-4 h-6 w-6 flex-shrink-0" />
                                  <div className='text-left'>
-                                    <p className='font-bold'>Mis Incidencias</p>
-                                    <p className='font-normal text-sm text-primary-foreground/80'>Reportar y consultar</p>
+                                    <p className='font-bold'>{t('dashboard.myIncidents')}</p>
+                                    <p className='font-normal text-sm text-primary-foreground/80'>{t('dashboard.myIncidentsDesc')}</p>
                                 </div>
                             </Button>
                         </div>
                     </div>
                     <div>
-                        <h2 className="text-2xl font-bold font-headline mb-4">Operaciones</h2>
+                        <h2 className="text-2xl font-bold font-headline mb-4">{t('dashboard.operations')}</h2>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                             {options.map(option => (
                                 <Card key={option.title} className="text-center hover:shadow-lg transition-shadow">

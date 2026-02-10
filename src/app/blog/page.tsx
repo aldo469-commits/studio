@@ -1,3 +1,5 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { blogPosts } from '@/lib/data';
@@ -7,13 +9,15 @@ import { ArrowRight, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useLanguage } from '@/context/language-context';
 
 export default function BlogPage() {
+  const { t, language } = useLanguage();
   const featuredPost = blogPosts[0];
   const otherPosts = blogPosts.slice(1);
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('es-ES', {
+    return new Date(dateString).toLocaleDateString(language === 'es' ? 'es-ES' : 'en-US', {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
@@ -25,9 +29,9 @@ export default function BlogPage() {
   return (
     <div className="container mx-auto px-4 py-8 md:py-12">
       <header className="text-center mb-12">
-        <h1 className="text-4xl md:text-5xl font-bold font-headline">Blog de EJA GlobalTrans</h1>
+        <h1 className="text-4xl md:text-5xl font-bold font-headline">{t('blog.title')}</h1>
         <p className="mt-4 text-lg text-muted-foreground max-w-3xl mx-auto">
-          Noticias, tendencias y análisis del sector de la logística y el transporte.
+          {t('blog.subtitle')}
         </p>
       </header>
 
@@ -68,7 +72,7 @@ export default function BlogPage() {
             </div>
              <Button asChild className="mt-6 w-fit">
                 <Link href={`/blog/${featuredPost.slug}`}>
-                    Leer más <ArrowRight className="ml-2"/>
+                    {t('blog.readMore')} <ArrowRight className="ml-2"/>
                 </Link>
             </Button>
           </div>
@@ -77,7 +81,7 @@ export default function BlogPage() {
       
       {/* Other Posts */}
       <section>
-        <h2 className="text-3xl font-bold font-headline mb-8 text-center">Más Artículos</h2>
+        <h2 className="text-3xl font-bold font-headline mb-8 text-center">{t('blog.morePosts')}</h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {otherPosts.map((post) => {
             const postImage = PlaceHolderImages.find(p => p.id === post.image);

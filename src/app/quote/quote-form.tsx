@@ -11,8 +11,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { useLanguage } from '@/context/language-context';
 
 export function QuoteForm() {
+  const { t } = useLanguage();
+
   return (
     <form
       action="https://formspree.io/f/mldqnpvo"
@@ -20,63 +23,63 @@ export function QuoteForm() {
       className="space-y-6"
     >
       <fieldset className="space-y-4">
-        <legend className="font-headline text-lg font-semibold mb-2 border-b pb-2">Información de Contacto</legend>
+        <legend className="font-headline text-lg font-semibold mb-2 border-b pb-2">{t('quotePage.form.contactLegend')}</legend>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="space-y-2">
-            <Label htmlFor="fullName">Nombre Completo *</Label>
+            <Label htmlFor="fullName">{t('quotePage.form.fullName')}</Label>
             <Input id="fullName" name="fullName" placeholder="John Doe" required />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="companyName">Nombre de la Empresa</Label>
+            <Label htmlFor="companyName">{t('quotePage.form.company')}</Label>
             <Input id="companyName" name="companyName" placeholder="ACME Inc." />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="email">Correo Electrónico *</Label>
+            <Label htmlFor="email">{t('quotePage.form.email')}</Label>
             <Input id="email" type="email" name="email" placeholder="su@email.com" required />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="phone">Teléfono *</Label>
+            <Label htmlFor="phone">{t('quotePage.form.phone')}</Label>
             <Input id="phone" type="tel" name="phone" placeholder="+34 600 000 000" required />
           </div>
         </div>
       </fieldset>
       
       <fieldset className="space-y-4">
-        <legend className="font-headline text-lg font-semibold mb-2 border-b pb-2">Detalles del Envío</legend>
+        <legend className="font-headline text-lg font-semibold mb-2 border-b pb-2">{t('quotePage.form.shipmentLegend')}</legend>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="space-y-2">
-                <Label htmlFor="origin">Ciudad de Origen *</Label>
+                <Label htmlFor="origin">{t('quotePage.form.origin')}</Label>
                 <Input id="origin" name="origin" placeholder="Madrid" required />
             </div>
             <div className="space-y-2">
-                <Label htmlFor="destination">Ciudad de Destino *</Label>
+                <Label htmlFor="destination">{t('quotePage.form.destination')}</Label>
                 <Input id="destination" name="destination" placeholder="Nueva York" required />
             </div>
         </div>
         <div className="space-y-2">
-            <Label htmlFor="shipmentType">Tipo de Envío *</Label>
+            <Label htmlFor="shipmentType">{t('quotePage.form.type')}</Label>
             <Select name="shipmentType" required>
                 <SelectTrigger id="shipmentType">
-                    <SelectValue placeholder="Seleccione un tipo de envío" />
+                    <SelectValue placeholder={t('quotePage.form.typePlaceholder')} />
                 </SelectTrigger>
                 <SelectContent>
-                    <SelectItem value="Terrestre">Transporte Terrestre</SelectItem>
-                    <SelectItem value="Marítimo">Transporte Marítimo</SelectItem>
-                    <SelectItem value="Aéreo">Transporte Aéreo</SelectItem>
-                    <SelectItem value="Logística y Almacén">Logística y Almacén</SelectItem>
-                    <SelectItem value="Otro">Otro</SelectItem>
+                    <SelectItem value="Terrestre">{t('quotePage.form.types.land')}</SelectItem>
+                    <SelectItem value="Marítimo">{t('quotePage.form.types.sea')}</SelectItem>
+                    <SelectItem value="Aéreo">{t('quotePage.form.types.air')}</SelectItem>
+                    <SelectItem value="Logística y Almacén">{t('quotePage.form.types.logistics')}</SelectItem>
+                    <SelectItem value="Otro">{t('quotePage.form.types.other')}</SelectItem>
                 </SelectContent>
             </Select>
         </div>
         <div className="space-y-2">
-            <Label htmlFor="notes">Notas Adicionales</Label>
-            <Textarea id="notes" name="notes" placeholder="Ej. tipo de mercancía, peso, dimensiones, etc." rows={4} />
+            <Label htmlFor="notes">{t('quotePage.form.notes')}</Label>
+            <Textarea id="notes" name="notes" placeholder={t('quotePage.form.notesPlaceholder')} rows={4} />
         </div>
       </fieldset>
       
       <div>
         <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
-            Solicitar Cotización
+            {t('quotePage.form.submit')}
         </Button>
       </div>
     </form>

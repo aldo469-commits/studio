@@ -1,11 +1,15 @@
+'use client';
+
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { services } from '@/lib/data';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { useLanguage } from '@/context/language-context';
 
 export default function ServicesPage() {
+  const { t } = useLanguage();
   const heroImage = PlaceHolderImages.find(p => p.id === 'services-hero');
 
   return (
@@ -23,7 +27,7 @@ export default function ServicesPage() {
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative container mx-auto px-4 h-full flex items-center justify-center">
           <h1 className="text-4xl md:text-5xl font-headline font-bold text-white text-center">
-            Nuestros Servicios
+            {t('servicesPage.heroTitle')}
           </h1>
         </div>
       </section>
@@ -31,9 +35,9 @@ export default function ServicesPage() {
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="font-headline text-3xl md:text-4xl font-bold">Soluciones Logísticas a su Medida</h2>
+            <h2 className="font-headline text-3xl md:text-4xl font-bold">{t('servicesPage.title')}</h2>
             <p className="mt-2 text-lg text-muted-foreground max-w-3xl mx-auto">
-              Desde el transporte local hasta la logística global compleja, tenemos la experiencia para llevar su negocio más lejos.
+              {t('servicesPage.subtitle')}
             </p>
           </div>
           
@@ -71,12 +75,12 @@ export default function ServicesPage() {
 
         <section className="py-16 md:py-24 bg-primary text-primary-foreground">
             <div className="container mx-auto px-4 text-center">
-                <h2 className="font-headline text-3xl md:text-4xl font-bold">¿Listo para optimizar su logística?</h2>
+                <h2 className="font-headline text-3xl md:text-4xl font-bold">{t('servicesPage.ctaTitle')}</h2>
                 <p className="mt-4 max-w-2xl mx-auto text-lg text-primary-foreground/80">
-                Contáctenos hoy y descubra cómo nuestras soluciones pueden impulsar su negocio.
+                {t('servicesPage.ctaSubtitle')}
                 </p>
                 <Button asChild size="lg" className="mt-8 bg-accent hover:bg-accent/90 text-accent-foreground">
-                    <Link href="/quote">Obtener una Cotización Gratuita</Link>
+                    <Link href="/quote">{t('servicesPage.ctaButton')}</Link>
                 </Button>
             </div>
       </section>

@@ -11,8 +11,11 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
+import { useLanguage } from '@/context/language-context';
 
 export function ContactForm() {
+  const { t } = useLanguage();
+
   return (
     <form
       action="https://formspree.io/f/mldqnpvo"
@@ -21,38 +24,38 @@ export function ContactForm() {
     >
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="space-y-2">
-          <Label htmlFor="name">Su Nombre</Label>
+          <Label htmlFor="name">{t('contactPage.form.name')}</Label>
           <Input id="name" name="name" placeholder="John Doe" required />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="email">Su Correo Electrónico</Label>
+          <Label htmlFor="email">{t('contactPage.form.email')}</Label>
           <Input id="email" type="email" name="email" placeholder="su@email.com" required />
         </div>
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="subject">Asunto</Label>
+        <Label htmlFor="subject">{t('contactPage.form.subject')}</Label>
         <Select name="subject" required>
           <SelectTrigger id="subject">
-            <SelectValue placeholder="Seleccione un asunto" />
+            <SelectValue placeholder={t('contactPage.form.subjectPlaceholder')} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="Consulta General">Consulta General</SelectItem>
-            <SelectItem value="Soporte Técnico">Soporte Técnico</SelectItem>
-            <SelectItem value="Solicitud de Presupuesto">Solicitud de Presupuesto</SelectItem>
-            <SelectItem value="Prensa">Prensa</SelectItem>
+            <SelectItem value="Consulta General">{t('contactPage.form.subjects.general')}</SelectItem>
+            <SelectItem value="Soporte Técnico">{t('contactPage.form.subjects.support')}</SelectItem>
+            <SelectItem value="Solicitud de Presupuesto">{t('contactPage.form.subjects.quote')}</SelectItem>
+            <SelectItem value="Prensa">{t('contactPage.form.subjects.press')}</SelectItem>
           </SelectContent>
         </Select>
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="message">Su Mensaje</Label>
-        <Textarea id="message" name="message" placeholder="Escriba aquí su consulta..." rows={6} required />
+        <Label htmlFor="message">{t('contactPage.form.message')}</Label>
+        <Textarea id="message" name="message" placeholder={t('contactPage.form.messagePlaceholder')} rows={6} required />
       </div>
 
       <div>
         <Button type="submit" className="w-full sm:w-auto bg-accent hover:bg-accent/90 text-accent-foreground">
-            Enviar Mensaje
+            {t('contactPage.form.submit')}
         </Button>
       </div>
     </form>
